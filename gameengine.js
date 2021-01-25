@@ -5,13 +5,19 @@ class GameEngine {
         this.entities = [];
         this.showOutlines = false;
         this.ctx = null;
-        this.surfaceWidth = null;
-        this.surfaceHeight = null;
-		
-		// Controls
+		/*
         this.click = null;
         this.mouse = null;
         this.wheel = null;
+		*/
+		this.forward = false;
+		this.backward = false;
+		this.left = false;
+		this.right = false;
+		this.space = false;
+		this.enterexit = false;
+        this.surfaceWidth = null;
+        this.surfaceHeight = null;
     };
 
     init(ctx) {
@@ -33,13 +39,14 @@ class GameEngine {
     startInput() {
         var that = this;
 
+		/*
+		// Mouse Controls
         var getXandY = function (e) {
             var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
             var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top;
 
             return { x: x, y: y };
         }
-
         this.ctx.canvas.addEventListener("mousemove", function (e) {
             //console.log(getXandY(e));
             that.mouse = getXandY(e);
@@ -62,6 +69,62 @@ class GameEngine {
             that.rightclick = getXandY(e);
             e.preventDefault();
         }, false);
+		*/
+		
+		// Keyboard Controls
+		this.ctx.canvas.addEventListener("keydown", function (e) {
+			console.log("KeyDown");
+			switch (e.code) {
+				case "KeyW":
+				case "ArrowUp":
+					that.forward = true;
+					break;
+				case "KeyS":
+				case "ArrowDown":
+					that.backward = true;
+					break;
+				case "KeyA":
+				case "ArrowLeft":
+					that.left = true;
+					break;
+				case "KeyD":
+				case "ArrowRight":
+					that.right = true;
+					break;
+				case "Space":
+					that.space = true;
+					break;
+				case "KeyE":
+					that.enterexit = !that.enterexit;
+					console.log("E");
+					break;
+			}
+		}, false);
+		
+		this.ctx.canvas.addEventListener("keyup", function (e) {
+			console.log("KeyUp");
+			switch (e.code) {
+				case "KeyW":
+				case "ArrowUp":
+					that.forward = false;
+					break;
+				case "KeyS":
+				case "ArrowDown":
+					that.backward = false;
+					break;
+				case "KeyA":
+				case "ArrowLeft":
+					that.left = false;
+					break;
+				case "KeyD":
+				case "ArrowRight":
+					that.right = false;
+					break;
+				case "Space":
+					that.space = false;
+					break;
+			}
+		}, false);
     };
 
     addEntity(entity) {

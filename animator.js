@@ -4,6 +4,9 @@ class Animator {
 
         this.elapsedTime = 0;
         this.totalTime = this.frameCount * this.frameDuration;
+
+        this.cache = [];
+
     };
 
     drawFrame(tick, ctx, x, y, scale) {
@@ -27,6 +30,10 @@ class Animator {
             this.width * scale,
             this.height * scale);
 
+       // if (PARAMS.DEBUG) {
+        //    ctx.strokeStyle = 'Green';
+        //    ctx.strokeRect(x, y, this.width * scale, this.height * scale);
+        //}
     };
 
     currentFrame() {
