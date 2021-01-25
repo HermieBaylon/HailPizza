@@ -34,16 +34,24 @@ class DriverCar {
 		}
 		if (this.active) {
 			// Turning
-			if (this.game.left && (this.game.forward || this.game.backward) && !this.game.space) {
-				this.direction -= this.TURN_SPEED;
-				if (this.direction < 0) {	// Correct to range of 0 - 359
-					this.direction += 360;
-				}
-			} else if (this.game.right && (this.game.forward || this.game.backward) && !this.game.space) {
-				this.direction += this.TURN_SPEED;
-				if (this.direction > 359) {	// Correct to range of 0 - 359
-					this.direction -= 360;
-				}
+			if (this.game.left && !this.game.space) {
+				 if (this.currentSpeed > 0) {
+					this.direction -= this.TURN_SPEED;
+				 } else if (this.currentSpeed < 0) {
+					this.direction += this.TURN_SPEED / 2;
+				 }
+			} else if (this.game.right && !this.game.space) {
+				 if (this.currentSpeed > 0) {
+					this.direction += this.TURN_SPEED;
+				 } else if (this.currentSpeed < 0) {
+					this.direction -= this.TURN_SPEED / 2;
+				 }
+			}
+			// correct to range 0-359
+			if (this.direction > 359) {
+				this.direction = this.direction - 360;
+			} else if (this.direction < 0) {
+				this.direction = this.direction + 360;
 			}
 			// Acceleration/Deceleration
 			if (this.game.space) {
@@ -61,7 +69,7 @@ class DriverCar {
 				}
 			} else if (this.game.backward) {
 				if (this.currentSpeed > -this.MAX_SPEED / 2) {
-					this.currentSpeed -= this.ACCELERATION;
+					this.currentSpeed -= this.ACCELERATION / 2;
 				} else {
 					this.currentSpeed = -this.MAX_SPEED / 2;
 				}
