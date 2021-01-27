@@ -3,8 +3,6 @@ var gameEngine = new GameEngine();
 var ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload("./assets/bgproto.png");
-ASSET_MANAGER.queueDownload("./assets/driver.png");
-ASSET_MANAGER.queueDownload("./assets/drivercar.png");
 ASSET_MANAGER.queueDownload("./assets/streetlight.png");
 ASSET_MANAGER.queueDownload("./assets/streetlight02.png");
 ASSET_MANAGER.queueDownload("./assets/fence.png");
@@ -22,13 +20,12 @@ ASSET_MANAGER.queueDownload("./assets/buildings/parasol.png");
 ASSET_MANAGER.queueDownload("./assets/buildings/bench.png");
 ASSET_MANAGER.queueDownload("./assets/buildings/bench2.png");
 ASSET_MANAGER.queueDownload("./assets/buildings/roof.png");
-//ASSET_MANAGER.queueDownload("./assets/pedestrian01.png");
-//ASSET_MANAGER.queueDownload("./assets/pedestrian02.png");
-//ASSET_MANAGER.queueDownload("./assets/pedestrian03.png");
-//ASSET_MANAGER.queueDownload("./assets/car01.png");
-//ASSET_MANAGER.queueDownload("./assets/car02.png");
-//ASSET_MANAGER.queueDownload("./assets/car03.png");
-//ASSET_MANAGER.queueDownload("./assets/building01.png");
+
+ASSET_MANAGER.queueDownload("./assets/npcs.png");
+ASSET_MANAGER.queueDownload("./assets/npccars.png");
+
+ASSET_MANAGER.queueDownload("./assets/driver.png");
+ASSET_MANAGER.queueDownload("./assets/drivercar.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
@@ -39,7 +36,7 @@ ASSET_MANAGER.downloadAll(function () {
 	var fence = new Fence(gameEngine, 128, 600);
 	var fence2 = new Fence(gameEngine, 128-65, 600);	
 	var fence3 = new Fence(gameEngine, 128+65, 600);
-	var fence4 = new Fence(gameEngine, 128-2*65, 600);			
+	var fence4 = new Fence(gameEngine, 128-2*65, 600);
 	var streetlight = new Streetlight(gameEngine, 116, 104);
 	var house1a = new House1(gameEngine, 0, 0);
 	var house1b = new House1(gameEngine, 530, 0);
@@ -69,6 +66,16 @@ ASSET_MANAGER.downloadAll(function () {
 	var roofc = new Roof(gameEngine, 115, 295);
 
 	// NPCs
+	var npccars = [];
+	npccars.push(new Car(gameEngine, 50, 130, 0));
+	npccars.push(new Car(gameEngine, 75, 190, 1));
+	npccars.push(new Car(gameEngine, 150, 130, 2));
+	npccars.push(new Car(gameEngine, 175, 190, 3));
+	npccars.push(new Car(gameEngine, 250, 130, 4));
+	npccars.push(new Car(gameEngine, 275, 190, 5));
+	var npcs = [];
+	npcs.push(new Pedestrian(gameEngine, 120, 110, 0));
+	npcs.push(new Pedestrian(gameEngine, 170, 110, 1));
 	
 	// Player
 	var driver = new Driver(gameEngine, 462, 384);
@@ -81,7 +88,7 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(fence);
 	gameEngine.addEntity(fence2);
 	gameEngine.addEntity(fence3);
-	gameEngine.addEntity(fence4);
+	gameEngine.addEntity(fence4);			// Hermie, these can be done in arrays to condense code the way I do NPCs below. -Marc
 	// gameEngine.addEntity(streetlight);
 	gameEngine.addEntity(house1a);
 	gameEngine.addEntity(house1b);
@@ -111,6 +118,14 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(parasol2);
 	
 	// NPCs
+	for (var i = 0; i < npccars.length; i++)
+	{
+		gameEngine.addEntity(npccars[i]);
+	}
+	for (var i = 0; i < npcs.length; i++)
+	{
+		gameEngine.addEntity(npcs[i]);
+	}
 	
 	// Player
 	gameEngine.addEntity(driver);
