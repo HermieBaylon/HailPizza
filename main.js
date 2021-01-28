@@ -80,6 +80,8 @@ ASSET_MANAGER.downloadAll(function () {
 	npcs.push(new Pedestrian(gameEngine, 120, 110, 0, -1));
 	npcs.push(new Pedestrian(gameEngine, 170, 110, 1, 1));
 	npcs.push(new Pedestrian(gameEngine, 300, 250, 1, -1));
+	npcs.push(new Pedestrian(gameEngine, 300, 510, 0, 1));
+	npcs.push(new Pedestrian(gameEngine, 50, 572, 1, -1));
 	npcs.push(new Pedestrian(gameEngine, 10, 572, 0, 1));
 	npcs.push(new Pedestrian(gameEngine, 20, 572, 0, -1));
 	
