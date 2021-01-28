@@ -66,7 +66,7 @@ class Car {
 	
 	update() {
 		// TODO
-		var randomVersion = Math.floor(Math.random() * 5) + 1;
+		var randomVersion = Math.floor(Math.random() * 5) + 0;
 		var speed = 5;
 		this.x = this.x + this.dir * speed;
 		var rightEdge = 1024;
