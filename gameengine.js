@@ -93,16 +93,18 @@ class GameEngine {
 					that.right = true;
 					break;
 				case "Space":
-					that.space = true;
+					if (!that.space) {
+						that.space = true;
+						setTimeout(function () {
+							that.space = false;
+							console.log('Jump End');
+						}, 300)
+					}
 					break;
 				case "KeyE":
 					that.enterexit = !that.enterexit;
 					console.log("E");
 					break;
-				case "KeyR":
-                    			that.jump = true;
-                    			console.log("R");
-                    			break;
 			}
 		}, false);
 		
@@ -126,11 +128,8 @@ class GameEngine {
 					that.right = false;
 					break;
 				case "Space":
-					that.space = false;
+					//that.space = false;
 					break;
-				case "KeyR":
-                    			that.jump = false;
-                    			break;
 			}
 		}, false);
     };
