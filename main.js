@@ -41,7 +41,6 @@ ASSET_MANAGER.downloadAll(function () {
 	buildings.push(new House1(gameEngine, 530, 0));
 	buildings.push(new House2(gameEngine, 180, 580));
 	buildings.push(new House3(gameEngine, 180, 10));
-	buildings.push(new House3(gameEngine, 180, 400));
 	buildings.push(new House4(gameEngine, 330, 0));
 	buildings.push(new House4(gameEngine, 370, 600));
 	buildings.push(new House4(gameEngine, 540, 600));
@@ -54,8 +53,6 @@ ASSET_MANAGER.downloadAll(function () {
 	buildings.push(new Building(gameEngine, 10, 275));
 
 	var nonBuildings = [];
-	nonBuildings.push(new Parasol(gameEngine, 680, 370));
-	nonBuildings.push(new Parasol(gameEngine, 145, 280));
 	nonBuildings.push(new Bench(gameEngine, 200, 280));
 	nonBuildings.push(new Bench(gameEngine, 100, 280));
 	nonBuildings.push(new Bench2(gameEngine, 200, 330));
@@ -66,6 +63,8 @@ ASSET_MANAGER.downloadAll(function () {
 	nonBuildings.push(new Fence(gameEngine, 128-65, 600));
 	nonBuildings.push(new Fence(gameEngine, 128+65, 600));
 	nonBuildings.push(new Fence(gameEngine, 128-2*65, 600));
+	nonBuildings.push(new Parasol(gameEngine, 680, 370));
+	nonBuildings.push(new Parasol(gameEngine, 145, 280));
 
 	// NPCs
 	var npccars = [];
@@ -77,8 +76,14 @@ ASSET_MANAGER.downloadAll(function () {
 	npccars.push(new Car(gameEngine, 275, 190, 5));
 
 	var npcs = [];
-	npcs.push(new Pedestrian(gameEngine, 120, 110, 0));
-	npcs.push(new Pedestrian(gameEngine, 170, 110, 1));
+	npcs.push(new Pedestrian(gameEngine, 20, 10, 1, -1));
+	npcs.push(new Pedestrian(gameEngine, 120, 110, 0, -1));
+	npcs.push(new Pedestrian(gameEngine, 170, 110, 1, 1));
+	npcs.push(new Pedestrian(gameEngine, 300, 250, 1, -1));
+	npcs.push(new Pedestrian(gameEngine, 300, 510, 0, 1));
+	npcs.push(new Pedestrian(gameEngine, 50, 572, 1, -1));
+	npcs.push(new Pedestrian(gameEngine, 10, 572, 0, 1));
+	npcs.push(new Pedestrian(gameEngine, 20, 572, 0, -1));
 	
 	// Player
 	var driver = new Driver(gameEngine, 462, 384);
@@ -88,14 +93,6 @@ ASSET_MANAGER.downloadAll(function () {
 	///// Draw all entities 
 	gameEngine.init(ctx);
 	gameEngine.addEntity(bg);
-
-	for (var i = 0; i < buildings.length; i++) {
-		gameEngine.addEntity(buildings[i]);
-	}
-
-	for (var i = 0; i < nonBuildings.length; i++) {
-		gameEngine.addEntity(nonBuildings[i]);
-	}
 	
 	// NPCs
 	for (var i = 0; i < npccars.length; i++)
@@ -105,6 +102,14 @@ ASSET_MANAGER.downloadAll(function () {
 	for (var i = 0; i < npcs.length; i++)
 	{
 		gameEngine.addEntity(npcs[i]);
+	}
+
+	for (var i = 0; i < buildings.length; i++) {
+		gameEngine.addEntity(buildings[i]);
+	}
+
+	for (var i = 0; i < nonBuildings.length; i++) {
+		gameEngine.addEntity(nonBuildings[i]);
 	}
 	
 	// Player
