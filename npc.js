@@ -1,6 +1,7 @@
 class Pedestrian {
-	constructor(game, x, y, version) {	// version is an integer in range 0 - 1
+	constructor(game, x, y, version, dir) {	// version is an integer in range 0 - 1
 		// Constants
+		this.dir = dir;
 		this.RUN_SPEED = 3;
 		this.PIVOT_SPEED = 3;
 		this.WIDTH = 19;	// Square animation box, HEIGHT == WIDTH
@@ -13,16 +14,30 @@ class Pedestrian {
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/npcs.png");
 		
 		// Animations
-		this.standing = new AngleAnimator(this.spritesheet,
-		0, this.version * this.WIDTH,
-			this.WIDTH, this.WIDTH, 12, 0.3, 0, this.direction, false, true);	// Standing
+		// this.standing = new AngleAnimator(this.spritesheet,
+		// 0, this.version * this.WIDTH,
+		// 	this.WIDTH, this.WIDTH, 12, 0.3, 0, this.direction, false, true);	// Standing
+		// this.walking = new AngleAnimator(this.spritesheet,
+		// 228, this.version * this.WIDTH,
+		// 	this.WIDTH, this.WIDTH, 8, 0.3, 0, this.direction, false, true);	// Walking
+		this.standing = new AngleAnimator(this.spritesheet, 0, this.version * this.WIDTH,
+			this.WIDTH / 15, this.WIDTH / 15, 12, 0.3, 0, this.direction, false, true);	// Standing
 		this.walking = new AngleAnimator(this.spritesheet,
 		228, this.version * this.WIDTH,
 			this.WIDTH, this.WIDTH, 8, 0.3, 0, this.direction, false, true);	// Walking
 	};
 	
 	update() {
-		// TODO
+		this.x = this.x + this.dir;
+		//this.x = this.x + -1;
+		var rightEdge = 1024;
+		var leftEdge = 0;
+		if (this.dir == 1 && this.x >= rightEdge) {
+			this.x = 0;
+		}
+		if (this.dir == -1 && this.x <= leftEdge) {
+			this.x = rightEdge;
+		}
 	};
 	
 	draw(ctx) {
