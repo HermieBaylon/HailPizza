@@ -68,12 +68,12 @@ ASSET_MANAGER.downloadAll(function () {
 
 	// NPCs
 	var npccars = [];
-	npccars.push(new Car(gameEngine, 50, 130, 0));
-	npccars.push(new Car(gameEngine, 75, 190, 1));
-	npccars.push(new Car(gameEngine, 150, 130, 2));
-	npccars.push(new Car(gameEngine, 175, 190, 3));
-	npccars.push(new Car(gameEngine, 250, 130, 4));
-	npccars.push(new Car(gameEngine, 275, 190, 5));
+	npccars.push(new Car(gameEngine, 50, 130, 0, 1));
+	npccars.push(new Car(gameEngine, 75, 190, 1, -1));
+	// npccars.push(new Car(gameEngine, 150, 130, 2));
+	// npccars.push(new Car(gameEngine, 175, 190, 3));
+	// npccars.push(new Car(gameEngine, 250, 130, 4));
+	// npccars.push(new Car(gameEngine, 275, 190, 5));
 
 	var npcs = [];
 	npcs.push(new Pedestrian(gameEngine, 20, 10, 1, -1));
