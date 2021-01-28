@@ -16,6 +16,7 @@ class GameEngine {
 		this.right = false;
 		this.space = false;
 		this.enterexit = false;
+	    	this.jump = false;
         this.surfaceWidth = null;
         this.surfaceHeight = null;
     };
@@ -98,6 +99,10 @@ class GameEngine {
 					that.enterexit = !that.enterexit;
 					console.log("E");
 					break;
+				case "KeyR":
+                    			that.jump = true;
+                    			console.log("R");
+                    			break;
 			}
 		}, false);
 		
@@ -123,6 +128,10 @@ class GameEngine {
 				case "Space":
 					that.space = false;
 					break;
+				case "KeyR":
+                    			that.jump = true;
+                    			console.log("R");
+                    			break;
 			}
 		}, false);
     };
