@@ -41,8 +41,8 @@ class Pedestrian {
 	};
 	
 	draw(ctx) {
-		this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);
-		this.walking.drawFrame(this.game.clockTick, this.direction, ctx, this.x + 19, this.y, 1);	// TODO states
+		//this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);
+		this.walking.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);	// TODO states
 	};
 };
 
