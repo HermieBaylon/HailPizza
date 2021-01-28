@@ -29,7 +29,6 @@ class Pedestrian {
 	
 	update() {
 		this.x = this.x + this.dir;
-		//this.x = this.x + -1;
 		var rightEdge = 1024;
 		var leftEdge = 0;
 		if (this.dir == 1 && this.x >= rightEdge) {
@@ -47,8 +46,9 @@ class Pedestrian {
 };
 
 class Car {
-	constructor(game, x, y, version) {	// version is an integer in range 0 - 5
+	constructor(game, x, y, version, dir) {	// version is an integer in range 0 - 5
 		// Constants
+		this.dir = dir;
 		this.ACCELERATION = 1;
 		this.FRICTION = 0.5;
 		this.MAX_SPEED = 10;
@@ -66,6 +66,19 @@ class Car {
 	
 	update() {
 		// TODO
+		var randomVersion = Math.floor(Math.random() * 5) + 1;
+		var speed = 5;
+		this.x = this.x + this.dir * speed;
+		var rightEdge = 1024;
+		var leftEdge = 0;
+		if (this.dir == 1 && this.x >= rightEdge) {
+			this.version = randomVersion;
+			this.x = 0;
+		}
+		if (this.dir == -1 && this.x + this.WIDTH <= leftEdge) {
+			this.version = randomVersion;
+			this.x = rightEdge;
+		}
 	};
 	
 	draw(ctx) {
