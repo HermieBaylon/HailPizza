@@ -129,8 +129,7 @@ class GameEngine {
 					that.space = false;
 					break;
 				case "KeyR":
-                    			that.jump = true;
-                    			console.log("R");
+                    			that.jump = false;
                     			break;
 			}
 		}, false);
