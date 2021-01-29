@@ -89,7 +89,6 @@ ASSET_MANAGER.downloadAll(function () {
 	var driver = new Driver(gameEngine, 462, 384);
 	var drivercar = new DriverCar(gameEngine, 562, 384);
 
-
 	///// Draw all entities 
 	gameEngine.init(ctx);
 	gameEngine.addEntity(bg);
@@ -115,5 +114,8 @@ ASSET_MANAGER.downloadAll(function () {
 	// Player
 	gameEngine.addEntity(driver);
 	gameEngine.addEntity(drivercar);
+	
+	new SceneManager(gameEngine);
+	
 	gameEngine.start();
 });

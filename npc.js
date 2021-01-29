@@ -41,7 +41,7 @@ class Pedestrian {
 	
 	draw(ctx) {
 		//this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);
-		this.walking.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);	// TODO states
+		this.walking.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);	// TODO states
 	};
 };
 
@@ -84,6 +84,6 @@ class Car {
 	draw(ctx) {
 		ctx.drawImage(this.spritesheet,
 		(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
-		this.WIDTH, this.HEIGHT, this.x, this.y, 70, 64);
+		this.WIDTH, this.HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, 70, 64);
 	};
 };
