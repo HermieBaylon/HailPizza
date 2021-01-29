@@ -18,7 +18,10 @@ class Driver {
 		this.running = new AngleAnimator(this.spritesheet, 0, 0,
 			this.WIDTH, this.WIDTH, 12, 0.05, 1, this.direction, false, true);	// Running
 		this.jumping = new AngleAnimator(this.spritesheet, 0, 0,
-			this.WIDTH, this.WIDTH, 12, 1, 1, this.direction, false, true);	// Jumping
+			this.WIDTH, this.WIDTH, 12, 0.7, 1, this.direction, false, true);	// Jumping
+			
+		// Assign initial focus
+		this.game.player = this;
 	};
 	
 	update() {
@@ -28,6 +31,9 @@ class Driver {
 			this.active = false;
 		}
 		if (this.active) {
+			// Affirm focus
+			this.game.player = this;
+			
 			// Turning
 			if (this.game.left && !this.game.space) {
 				this.direction -= this.PIVOT_SPEED;
@@ -57,11 +63,11 @@ class Driver {
 	
 	draw(ctx) {
 		if ((this.game.forward || this.game.backward) && this.active){
-			this.running.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);
+			this.running.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		} else if (this.game.space) {
-			this.jumping.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);
+			this.jumping.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1.2);
 		} else {
-			this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);
+			this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		}
 	};
 };

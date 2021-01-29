@@ -33,6 +33,9 @@ class DriverCar {
 			this.active = false;
 		}
 		if (this.active) {
+			// Affirm focus
+			this.game.player = this;
+			
 			// Turning
 			if (this.game.left && !this.game.space) {
 				 if (this.currentSpeed > 0) {
@@ -89,9 +92,9 @@ class DriverCar {
 	
 	draw(ctx) {
 		if (this.game.forward || this.game.backward){
-			this.driving.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);
+			this.driving.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		} else {
-			this.driving.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);
+			this.driving.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		}
 	};
 };
