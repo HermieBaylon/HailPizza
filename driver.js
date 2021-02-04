@@ -9,6 +9,7 @@ class Driver {
 		Object.assign(this, { game, x, y });
 		this.direction = 0; // 0 - 359, with 0 = right 
 		this.active = true;
+		this.jumpFlag = false;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/driver.png");
 		
@@ -35,20 +36,26 @@ class Driver {
 			// Affirm focus
 			this.game.player = this;
 			
-			// Turning
-			if (this.game.left && !this.game.space) {
-				this.direction -= this.PIVOT_SPEED;
-				if (this.direction < 0) {	// Correct to range of 0 - 359
-					this.direction += 360;
-				}
-			} else if (this.game.right && !this.game.space) {
-				this.direction += this.PIVOT_SPEED;
-				if (this.direction > 359) {	// Correct to range of 0 - 359
-					this.direction -= 360;
-				}
+			// Jumping
+			var that = this;
+			if (this.game.space && !this.jumpFlag) {
+				this.jumpFlag = true;
+				setTimeout(function () {
+					that.jumpFlag = false;
+					console.log('Jump End');
+				}, 300)
 			}
+			
+			// Turning
+			if (this.game.left && !this.jumpFlag) {
+				this.direction -= this.PIVOT_SPEED;
+			} else if (this.game.right && !this.jumpFlag) {
+				this.direction += this.PIVOT_SPEED;
+			}
+			// Normalize to range integers 0-359
+			this.direction = (Math.floor(this.direction) % 360 + 360) % 360;
 			// Movement
-			if(this.game.space){
+			if(this.jumpFlag){
 				this.x += (this.JUMP_SPEED * Math.cos((Math.PI / 180) * this.direction));
 				this.y += (this.JUMP_SPEED * Math.sin((Math.PI / 180) * this.direction));
 			} else if (this.game.forward) {
@@ -65,7 +72,7 @@ class Driver {
 	draw(ctx) {
 		if ((this.game.forward || this.game.backward) && this.active){
 			this.running.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
-		} else if (this.game.space) {
+		} else if (this.jumpFlag) {
 			this.jumping.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1.2);
 		} else {
 			this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);

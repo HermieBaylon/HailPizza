@@ -30,13 +30,13 @@ class AngleAnimator {
        // Calculate Angle
 	   if (angle < 0 || angle > 359) return;
 
-        if (!this.cache[angle][frame]) {
+        if (!this.cache[Math.floor(angle)][frame]) {
            let radians = angle / 360 * 2 * Math.PI;
            let offscreenCanvas = document.createElement('canvas');
 
             offscreenCanvas.width = this.width;
             offscreenCanvas.height = this.height;
-
+			
             let offscreenCtx = offscreenCanvas.getContext('2d');
 
             offscreenCtx.save();
@@ -50,13 +50,13 @@ class AngleAnimator {
             this.width * scale,
             this.height * scale);
             offscreenCtx.restore();
-            this.cache[angle][frame] = offscreenCanvas;
+            this.cache[Math.floor(angle)][frame] = offscreenCanvas;
         }
         var xOffset = this.width / 2;
         var yOffset = this.height / 2;
 	   
 	   // Draw to Field
-        ctx.drawImage(this.cache[angle][frame], x - xOffset, y - yOffset);
+        ctx.drawImage(this.cache[Math.floor(angle)][frame], x - xOffset, y - yOffset);
     };
 
     currentFrame() {

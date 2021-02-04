@@ -12,6 +12,8 @@ class SceneManager {
 		
 		// HUD animations
 		//
+		
+		// Effects
 	}
 	
 	update() { // TODO replace with constants
