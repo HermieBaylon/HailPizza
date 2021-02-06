@@ -6,10 +6,12 @@ class GameEngine {
         this.showOutlines = false;
         this.ctx = null;
 		/*
+		// Mouse Controls
         this.click = null;
         this.mouse = null;
         this.wheel = null;
 		*/
+		// Keyboard Controls
 		this.forward = false;
 		this.backward = false;
 		this.left = false;
@@ -29,7 +31,7 @@ class GameEngine {
     };
 
     start() {
-        var that = this;
+		var that = this;
         (function gameLoop() {
             that.loop();
             requestAnimFrame(gameLoop, that.ctx.canvas);
@@ -73,7 +75,7 @@ class GameEngine {
 		
 		// Keyboard Controls
 		this.ctx.canvas.addEventListener("keydown", function (e) {
-			console.log("KeyDown");
+			//console.log("KeyDown");
 			switch (e.code) {
 				case "KeyW":
 				case "ArrowUp":
@@ -92,23 +94,23 @@ class GameEngine {
 					that.right = true;
 					break;
 				case "Space":
-					if (!that.space) {
-						that.space = true;
-						setTimeout(function () {
-							that.space = false;
-							console.log('Jump End');
-						}, 300)
-					}
+					that.space = true;
 					break;
 				case "KeyE":
 					that.enterexit = !that.enterexit;
-					console.log("E");
+					if (that.enterexit) {
+						that.audio.play();
+						that.audio.returnVolume();
+					} else {
+						that.audio.lowerVolume();
+					}
+					//console.log("E");
 					break;
 			}
 		}, false);
 		
 		this.ctx.canvas.addEventListener("keyup", function (e) {
-			console.log("KeyUp");
+			//console.log("KeyUp");
 			switch (e.code) {
 				case "KeyW":
 				case "ArrowUp":
@@ -127,7 +129,7 @@ class GameEngine {
 					that.right = false;
 					break;
 				case "Space":
-					//that.space = false;
+					that.space = false;
 					break;
 			}
 		}, false);

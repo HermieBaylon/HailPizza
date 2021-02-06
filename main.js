@@ -2,7 +2,7 @@ var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload("./assets/bgproto.png");
+ASSET_MANAGER.queueDownload("./assets/bgtile00.png");
 ASSET_MANAGER.queueDownload("./assets/streetlight.png");
 ASSET_MANAGER.queueDownload("./assets/streetlight02.png");
 ASSET_MANAGER.queueDownload("./assets/fence.png");
@@ -27,6 +27,8 @@ ASSET_MANAGER.queueDownload("./assets/npccars.png");
 ASSET_MANAGER.queueDownload("./assets/driver.png");
 ASSET_MANAGER.queueDownload("./assets/drivercar.png");
 
+ASSET_MANAGER.queueDownload("./assets/exhaustflame.png");
+
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
@@ -34,7 +36,13 @@ ASSET_MANAGER.downloadAll(function () {
 	var streetlight = new Streetlight(gameEngine, 116, 104);
 
 	// Background
-	var bg = new Background(gameEngine, 0, 0);	
+	var bgTiles = [];
+	for (var i = -1; i <= 1; i++) {
+		for (var j = -1; j <= 1; j++) {
+			bgTiles.push(new Background(gameEngine, i * PARAMS.TILE_WIDTH, j * PARAMS.TILE_WIDTH));		
+		}
+	}
+	
 
 	var buildings = [];
 	buildings.push(new House1(gameEngine, 0, 0));
@@ -86,13 +94,14 @@ ASSET_MANAGER.downloadAll(function () {
 	npcs.push(new Pedestrian(gameEngine, 20, 572, 0, -1));
 	
 	// Player
-	var driver = new Driver(gameEngine, 462, 384);
-	var drivercar = new DriverCar(gameEngine, 562, 384);
+	var driver = new Driver(gameEngine, 465, 478);
+	var drivercar = new DriverCar(gameEngine, 465, 538);
 
 	///// Draw all entities 
 	gameEngine.init(ctx);
-	gameEngine.addEntity(bg);
-	
+	for (var i = 0; i < bgTiles.length; i++) {
+		gameEngine.addEntity(bgTiles[i]);
+	}
 	// NPCs
 	for (var i = 0; i < npccars.length; i++)
 	{
@@ -116,6 +125,7 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(drivercar);
 	
 	new SceneManager(gameEngine);
+	new AudioManager(gameEngine);
 	
 	gameEngine.start();
 });

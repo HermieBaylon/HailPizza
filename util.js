@@ -29,5 +29,8 @@ window.requestAnimFrame = (function () {
 
 const PARAMS = {
 	PAGE_WIDTH: 1024,
-	PAGE_HEIGHT: 768
+	PAGE_HEIGHT: 768,
+	TILE_WIDTH: 1280,
+	X_AXIS: 0,
+	Y_AXIS: 270
 };
