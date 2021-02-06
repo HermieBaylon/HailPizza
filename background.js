@@ -9,7 +9,8 @@ class Background {
 		//
 	}
 	
-	draw(ctx) 
-		ctx.drawImage(this.spritesheet, 0, 0, PARAMS.TILE_WIDTH, PARAMS.TILE_WIDTH ,this.x - this.game.camera.x, this.y - this.game.camera.y, PARAMS.TILE_WIDTH, PARAMS.TILE_WIDTH);
+	draw(ctx) {
+		ctx.drawImage(this.spritesheet, 0, 0, PARAMS.TILE_WIDTH, PARAMS.TILE_WIDTH
+		,this.x - this.game.camera.x, this.y - this.game.camera.y, PARAMS.TILE_WIDTH, PARAMS.TILE_WIDTH);
 	}
 }
