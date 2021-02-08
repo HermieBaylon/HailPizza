@@ -13,10 +13,12 @@ class DriverCar {
 		this.DRAG = 0.5;
 		this.TURN_DRAG = this.ACCELERATION + 0.1;
 		this.BRAKE_DRAG = this.DRAG / 2;
+		this.LOG_LENGTH = 10;
 
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
 		this.direction = 0; // 0 - 359, with 0 = right facing
+		this.directionLog = [];
 		this.currentSpeed = 0;
 		this.driftFlag = false;
 		this.driftSpeed = this.currentSpeed;
@@ -66,21 +68,37 @@ class DriverCar {
 			}
 			
 			// Turning
-			if (this.game.left && !this.game.right) {
+			let difference = 0;	// Log direction for reference in direction correction
+			if (this.directionLog.length > this.LOG_LENGTH) difference = (this.directionLog.shift() - this.direction);
+			if (difference > 180) difference -= 360;
+			if (difference < -180) difference += 360;
+			this.directionLog.push(this.direction);
+			
+			if (this.game.left && !this.game.right) {									// Turning Left
 				if (this.driftFlag) {
 					this.direction -= this.DRIFT_TURN_SPEED * (this.driftSpeed / this.MAX_SPEED);
 				} else {
 					this.direction -= this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
 					if (this.currentSpeed > (this.MAX_SPEED * (3 / 4))) this.currentSpeed -= this.DRAG;
 				}
-			} else if (!this.game.left && this.game.right) {
+			} else if (!this.game.left && this.game.right) {							// Turning Right
 				if (this.driftFlag) {
 					this.direction += this.DRIFT_TURN_SPEED * (this.driftSpeed / this.MAX_SPEED);
 				} else {
 					this.direction += this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
 					if (this.currentSpeed > (this.MAX_SPEED * (3 / 4))) this.currentSpeed -= this.DRAG;
 				}
+			} else {																	// Direction correction to roads TODO only when on road
+				if ((this.direction % 90) <= this.TURN_SPEED)  this.direction -= (this.direction % 90);
+				if (90 - (this.direction % 90) <= this.TURN_SPEED)  this.direction += 90 - (this.direction % 90);
+				if ((difference > 0) && (this.direction % 90) < 30) {
+					this.direction -= this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
+				}
+				if ((difference < 0) && 90 - (this.direction % 90) < 30) {
+					this.direction += this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
+				}
 			}
+			
 			// Normalize to range integers 0-359
 			this.direction = (Math.floor(this.direction) % 360 + 360) % 360;
 			
