@@ -156,7 +156,6 @@ class GameEngine {
             if (!entity.removeFromWorld) {
                 entity.update();
             }
-		this.camera.update();
         }
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
@@ -164,6 +163,7 @@ class GameEngine {
                 this.entities.splice(i, 1);
             }
         }
+		this.camera.update();
     };
 
     loop() {

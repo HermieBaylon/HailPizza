@@ -28,10 +28,10 @@ class AudioManager {
 	}
 	
 	lowerVolume() {
-		this.songs[this.selection].volume = 0.2;
+		this.songs[this.selection].volume = 0.03;
 	}
 	
 	returnVolume() {
-		this.songs[this.selection].volume = 1;
+		this.songs[this.selection].volume = 0.1;
 	}
 };

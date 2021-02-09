@@ -88,7 +88,7 @@ class Driver {
 		
 		if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 2), this.y - this.game.camera.y - (this.WIDTH / 2), this.BB.width, this.BB.height);
+            ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 2), this.BB.y - this.game.camera.y - (this.WIDTH / 2), this.BB.width, this.BB.height);
         }
 	};
 };

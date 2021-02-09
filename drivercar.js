@@ -19,7 +19,7 @@ class DriverCar {
 
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
-		this.direction = 0; // 0 - 359, with 0 = right facing
+		this.direction = 30; // 0 - 359, with 0 = right facing
 		this.directionLog = [];
 		this.currentSpeed = 0;
 		this.driftFlag = false;
@@ -50,7 +50,7 @@ class DriverCar {
 	};
 	
 	updateBB(){
-		this.BB = new AngleBoundingBox(this.x, this.y, this.BB_WIDTH, this.BB_HEIGHT, this.direction);
+		this.BB = new AngleBoundingBox(this.x, this.y, this.WIDTH, this.HEIGHT, this.direction);
 	}
 	
 	update() {
@@ -194,7 +194,28 @@ class DriverCar {
 		}
 		
 		if (PARAMS.DEBUG) {
-            //this.BB.drawRotatedRect(ctx, this.game.camera); // TODO Doesn't draw correctly
-        }
+			/* TODO
+			let radians = this.direction * (Math.PI / 180);
+
+			ctx.save();
+
+			ctx.beginPath();
+			ctx.translate( (this.WIDTH / 2), (this.HEIGHT / 2) );
+			ctx.rotate(radians);
+
+			ctx.strokeStyle = 'Red';
+			ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 1),
+							this.BB.y - this.game.camera.y - (this.HEIGHT / 1),
+								this.BB.width, this.BB.height);
+			
+			ctx.restore();
+			
+			// HUD
+			ctx.strokeStyle = 'White';
+			ctx.font = "30px Arial";
+			let BBCoordText = "(" + Math.floor(this.BB.x) + ","
+				+ Math.floor(this.BB.y) + "); Facing " + this.BB.direction;
+				ctx.strokeText(BBCoordText, 50, 90);
+		} */
 	};
 };

@@ -25,6 +25,13 @@ class SceneManager {
 	}
 	
 	draw(ctx) {
+		let coordText = "(" + Math.floor(this.game.player.x) + ","
+			+ Math.floor(this.game.player.y) + "); Facing " + this.game.player.direction;
 		
+        if (PARAMS.DEBUG){
+			ctx.strokeStyle = 'White';
+			ctx.font = "30px Arial";
+			ctx.strokeText(coordText, 50, 50);
+		}
 	}
 }
