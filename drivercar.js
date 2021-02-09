@@ -173,6 +173,15 @@ class DriverCar {
 	
 	draw(ctx) {
 		// Car animation
+		// Enter car Animation
+		if (this.game.enterexit){
+			this.entering.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
+			this.entering.loop = false;
+			if (this.entering.isDone()) {
+                this.idling.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1); 
+            }
+        }
+
 		if (!this.active) {
 			this.idling.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		} else if (this.game.space){
