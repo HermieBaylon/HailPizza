@@ -28,6 +28,7 @@ ASSET_MANAGER.queueDownload("./assets/driver.png");
 ASSET_MANAGER.queueDownload("./assets/drivercar.png");
 
 ASSET_MANAGER.queueDownload("./assets/exhaustflame.png");
+ASSET_MANAGER.queueDownload("./assets/health.PNG");
 
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
