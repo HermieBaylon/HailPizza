@@ -13,6 +13,9 @@ class Driver {
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/driver.png");
 		
+		// Initialize bounding box
+		this.updateBB();
+		
 		// Animations
 		this.standing = new AngleAnimator(this.spritesheet, 0, 21,
 			this.WIDTH, this.WIDTH, 5, 0.3, 1, this.direction, false, true);	// Standing
@@ -24,6 +27,10 @@ class Driver {
 		// Assign initial focus
 		this.game.player = this;
 	};
+	
+	updateBB(){
+		this.BB = new BoundingBox(this.x, this.y, this.WIDTH, this.WIDTH);
+	}
 	
 	update() {
 		if (!this.game.enterexit){
@@ -64,7 +71,9 @@ class Driver {
 				this.x -= ((this.RUN_SPEED / 2) * Math.cos((Math.PI / 180) * this.direction));
 				this.y -= ((this.RUN_SPEED / 2) * Math.sin((Math.PI / 180) * this.direction));
 			}
-			
+		
+			// Update bounding box
+			this.updateBB();
 		}
 	};
 	
@@ -76,5 +85,10 @@ class Driver {
 		} else {
 			this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		}
+		
+		if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 2), this.y - this.game.camera.y - (this.WIDTH / 2), this.BB.width, this.BB.height);
+        }
 	};
 };

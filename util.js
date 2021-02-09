@@ -28,6 +28,7 @@ window.requestAnimFrame = (function () {
 // add global parameters here
 
 const PARAMS = {
+	DEBUG: true,
 	PAGE_WIDTH: 1024,
 	PAGE_HEIGHT: 768,
 	TILE_WIDTH: 1280,

@@ -37,11 +37,23 @@ class Pedestrian {
 		if (this.dir == -1 && this.x <= leftEdge) {
 			this.x = rightEdge;
 		}
+		
+		// Update bounding box
+		this.updateBB();
+	};
+	
+	updateBB(){
+		this.BB = new BoundingBox(this.x, this.y, this.WIDTH, this.WIDTH);
 	};
 	
 	draw(ctx) {
 		//this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);
 		this.walking.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);	// TODO states
+		
+		if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 2), this.y - this.game.camera.y - (this.WIDTH / 2), this.BB.width, this.BB.height);
+        }
 	};
 };
 
@@ -62,7 +74,14 @@ class Car {
 		this.version = version;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/npccars.png");
+		
+		// Initialize bounding box
+		this.updateBB();
 	};
+	
+	updateBB(){
+		this.BB = new AngleBoundingBox(this.x, this.y, this.BB_WIDTH, this.BB_HEIGHT, this.direction);
+	}
 	
 	update() {
 		// TODO
@@ -79,11 +98,22 @@ class Car {
 			this.version = randomVersion;
 			this.x = rightEdge;
 		}
+		
+		// Update bounding box
+		this.updateBB();
 	};
+	
+	updateBB(){
+		this.BB = new BoundingBox(this.x, this.y, this.WIDTH, this.WIDTH);
+	}
 	
 	draw(ctx) {
 		ctx.drawImage(this.spritesheet,
 		(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
 		this.WIDTH, this.HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, 70, 64);
+		
+		if (PARAMS.DEBUG) {
+            //this.BB.drawRotatedRect(ctx, this.game.camera); // TODO Doesn't draw correctly
+        }
 	};
 };

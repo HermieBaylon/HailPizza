@@ -3,6 +3,8 @@ class DriverCar {
 		// Constants
 		this.WIDTH = 70;
 		this.HEIGHT = 64;
+		this.BB_WIDTH = 60;
+		this.BB_HEIGHT = 36;
 		
 		this.ACCELERATION = 0.5;
 		this.REVERSE = this.ACCELERATION / 2;
@@ -28,6 +30,9 @@ class DriverCar {
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/drivercar.png");
 		
+		// Initialize bounding box
+		this.updateBB();
+		
 		// Animations
 		this.driving = new AngleAnimator(this.spritesheet, 426, 0,
 			this.WIDTH, this.HEIGHT, 1, 1, 1, this.direction, false, true);		// Driving
@@ -43,6 +48,10 @@ class DriverCar {
 		this.flame = new AngleAnimator(ASSET_MANAGER.getAsset("./assets/exhaustflame.png"), 0, 0,
 			210, 210, 5, 0.1, 0, (this.direction + 180) % 360, false, true);	// Exhaust Flame
 	};
+	
+	updateBB(){
+		this.BB = new AngleBoundingBox(this.x, this.y, this.BB_WIDTH, this.BB_HEIGHT, this.direction);
+	}
 	
 	update() {
 		if (this.game.enterexit){
@@ -157,6 +166,9 @@ class DriverCar {
 			this.x += (this.currentSpeed * Math.cos((Math.PI / 180) * this.direction));
 			this.y += (this.currentSpeed * Math.sin((Math.PI / 180) * this.direction));
 		}
+		
+		// Update bounding box
+		this.updateBB();
 	};
 	
 	draw(ctx) {
@@ -180,5 +192,9 @@ class DriverCar {
 		if (this.burnoutFlag) {
 			this.flame.drawFrame(this.game.clockTick, (this.direction + 270) % 360, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		}
+		
+		if (PARAMS.DEBUG) {
+            //this.BB.drawRotatedRect(ctx, this.game.camera); // TODO Doesn't draw correctly
+        }
 	};
 };
