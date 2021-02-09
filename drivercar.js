@@ -215,7 +215,7 @@ class DriverCar {
 			ctx.font = "30px Arial";
 			let BBCoordText = "(" + Math.floor(this.BB.x) + ","
 				+ Math.floor(this.BB.y) + "); Facing " + this.BB.direction;
-				ctx.strokeText(BBCoordText, 50, 90);
-		} */
+				ctx.strokeText(BBCoordText, 50, 90);*/
+		} 
 	};
 };
