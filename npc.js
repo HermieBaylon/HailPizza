@@ -60,22 +60,45 @@ class Pedestrian {
 class Car {
 	constructor(game, x, y, version, direction) {	// version is an integer in range 0 - 5
 		// Constants
-		this.ACCELERATION = 1;
+		this.ACCELERATION = 0.1;
 		this.FRICTION = 0.5;
-		this.MAX_SPEED = 10;
+		this.MAX_SPEED = 4;
 		this.TURN_SPEED = 2;
 		this.WIDTH = 70;
 		this.HEIGHT = 64;
 		this.PAGE_WIDTH = 210;
 		this.BB_WIDTH = 60;
 		this.BB_HEIGHT = 36;
+		this.DRAG = 0.1;
 		
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
 		this.direction = direction; // 0 - 359, with 0 = right 
+		this.currentSpeed = 0;
+		
 		this.version = version;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/npccars.png");
+		
+		this.driving = new AngleAnimator(this.spritesheet,
+			(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
+			this.WIDTH, this.HEIGHT, 1, 1, 1, this.direction, false, true);		// Driving
+		
+		// TODO AI decisions for driving.
+		this.driveFlag = true;
+		var that = this;
+		setTimeout(function () {
+			that.right = true;
+			console.log("start turning");
+		}, 800)
+		setTimeout(function () {
+			that.right = false;
+			console.log("stop turning");
+		}, 1700)
+		setTimeout(function () {
+			that.driveFlag = false;
+			console.log("stop driving");
+		}, 5500)
 		
 		// Initialize bounding box
 		this.updateBB();
@@ -86,29 +109,47 @@ class Car {
 	}
 	
 	update() {
-		// TODO
-		var randomVersion = Math.floor(Math.random() * 5) + 0;
-		var speed = 5;
-		this.x = this.x + this.direction * speed;
-		var rightEdge = 1024;
-		var leftEdge = 0;
-		if (this.direction == 1 && this.x >= rightEdge) {
-			this.version = randomVersion;
-			this.x = 0;
+		if (this.driveFlag) {
+			// Acceleration/Deceleration
+			if (this.currentSpeed < this.MAX_SPEED) {	// Normal Acceleration
+				this.currentSpeed += this.ACCELERATION;
+			} else if (this.currentSpeed > this.MAX_SPEED){ // Overspeeding
+				this.currentSpeed -= this.ACCELERATION / 2;
+			} else {
+				this.currentSpeed = this.MAX_SPEED;
+			}
+			
+			// Turning
+			if (this.left) {			// Turning Left
+				this.direction -= this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
+			} else if (this.right) {	// Turning Right
+				this.direction += this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
+			}
+		} else if (this.currentSpeed >= this.DRAG){		// Drag
+			this.currentSpeed -= this.DRAG;
+		} else if (this.currentSpeed <= -this.DRAG){
+			this.currentSpeed += this.DRAG;
+		} else {
+			this.currentSpeed = 0;
 		}
-		if (this.direction == -1 && this.x + this.WIDTH <= leftEdge) {
-			this.version = randomVersion;
-			this.x = rightEdge;
-		}
+		
+		// Normalize to range integers 0-359
+		this.direction = (Math.floor(this.direction) % 360 + 360) % 360;
+		
+		// Movement
+		this.x += (this.currentSpeed * Math.cos((Math.PI / 180) * this.direction));
+		this.y += (this.currentSpeed * Math.sin((Math.PI / 180) * this.direction));
 		
 		// Update bounding box
 		this.updateBB();
 	};
 	
 	draw(ctx) {
-		ctx.drawImage(this.spritesheet,
-		(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
-		this.WIDTH, this.HEIGHT, this.x - this.game.camera.x - (this.WIDTH / 2), this.y - this.game.camera.y - (this.HEIGHT / 2), 70, 64);
+		this.driving.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
+		
+		//ctx.drawImage(this.spritesheet,
+		//(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
+		//this.WIDTH, this.HEIGHT, this.x - this.game.camera.x - (this.WIDTH / 2), this.y - this.game.camera.y - (this.HEIGHT / 2), 70, 64);
 		// this.idling.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		
 		if (PARAMS.DEBUG) {
