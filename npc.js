@@ -65,6 +65,14 @@ class Pedestrian {
 		if (this.dead) {
 			this.removeFromWorld = true;
 		}
+		
+		// Collision
+		var that = this;
+		this.game.entities.forEach(function (entity) {
+			if (entity.BB && that.BB.collide(entity.BB)) {
+				// do stuff
+			};
+		});
 	};
 	
 	updateBB(){
@@ -182,8 +190,7 @@ class Car {
             if (entity.BB && that.BB.collide(entity.BB)) {
 				if (entity instanceof Pedestrian) { // squish pedestrians
 						entity.dead = true;
-						console.log("dead");
-					}
+				}
 			};
 		});
 	};

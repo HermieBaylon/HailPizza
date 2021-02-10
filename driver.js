@@ -75,6 +75,29 @@ class Driver {
 			// Update bounding box
 			this.updateBB();
 		}
+		
+		// Collision
+		var that = this;
+		this.game.entities.forEach(function (entity) {
+			if (entity.BB && that.BB.collide(entity.BB)) {
+				if (entity instanceof Building) {	// hit building
+					if(that.jumpFlag){
+						that.jumpFlag = false;
+						that.x -= (that.JUMP_SPEED * Math.cos((Math.PI / 180) * that.direction));
+						that.y -= (that.JUMP_SPEED * Math.sin((Math.PI / 180) * that.direction));
+					} else if (that.game.forward) {
+						that.x -= (that.RUN_SPEED * Math.cos((Math.PI / 180) * that.direction));
+						that.y -= (that.RUN_SPEED * Math.sin((Math.PI / 180) * that.direction));
+					}
+					console.log("boom");
+				}
+				if (entity instanceof Pedestrian) {	// push npc
+					// face npc away
+					// move him forward
+					console.log("move, foo");
+				}
+			};
+		});
 	};
 	
 	draw(ctx) {

@@ -176,9 +176,17 @@ class DriverCar {
 		this.game.entities.forEach(function (entity) {
             if (entity.BB && that.BB.collide(entity.BB)) {
 				if (entity instanceof Pedestrian) { // squish pedestrians
-						entity.dead = true;
-						console.log("dead");
-					}
+					entity.dead = true;
+					console.log("dead");
+				}
+				if (entity instanceof Building) {	// hit building
+					that.currentSpeed = -10 * that.DRAG;
+					console.log("boom (building)");
+				}
+				if (entity instanceof Car) {	// hit building
+					that.currentSpeed = -10 * that.DRAG;
+					console.log("boom (car)");
+				}
 			};
 		});
 	};
