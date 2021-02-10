@@ -195,24 +195,24 @@ class DriverCar {
 		
 		if (PARAMS.DEBUG) {
 			//TODO
-			let radians = (this.direction + 45) * (Math.PI / 180);
-			let xOffset = (this.BB.width / 2) * Math.cos(radians);
-			let yOffset = -(this.BB.height / 2) * Math.sin(radians);
+			//let radians = (this.direction + 45) * (Math.PI / 180);
+			//let xOffset = (this.BB.width / 2) * Math.cos(radians);
+			//let yOffset = -(this.BB.height / 2) * Math.sin(radians);
 			
 			// Draw 4 Bounding Boxes to represent corners
-			ctx.strokeStyle = 'White';
-			ctx.strokeRect(this.BB.x - this.game.camera.x - xOffset,
-							this.BB.y - this.game.camera.y + yOffset,
-								1, 1);
+			//ctx.strokeStyle = 'White';
+			//ctx.strokeRect(this.BB.x - this.game.camera.x - xOffset,
+			//				this.BB.y - this.game.camera.y + yOffset,
+			//					1, 1);
 			//ctx.strokeRect(this.BB.x - this.game.camera.x + xOffset,
 			//				this.BB.y - this.game.camera.y - yOffset,
 			//					1, 1);
 			//ctx.strokeRect(this.BB.x - this.game.camera.x - xOffset,
 			//				this.BB.y - this.game.camera.y + yOffset,
 			//					1, 1);
-			ctx.strokeRect(this.BB.x - this.game.camera.x + xOffset,
-							this.BB.y - this.game.camera.y - yOffset,
-								1, 1);
+			//ctx.strokeRect(this.BB.x - this.game.camera.x + xOffset,
+			//				this.BB.y - this.game.camera.y - yOffset,
+			//					1, 1);
 			
 			// HUD
 			let BBCoordText = //"(" + Math.floor(this.BB.x) + ","
