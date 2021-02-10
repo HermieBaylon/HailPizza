@@ -224,15 +224,15 @@ class DriverCar {
 			//					1, 1);
 			
 			// HUD
-			let BBCoordText = //"(" + Math.floor(this.BB.x) + ","
+			//let BBCoordText = //"(" + Math.floor(this.BB.x) + ","
 				//+ Math.floor(this.BB.y) + "); Facing " + this.BB.direction + 
-				"OFFSET: (" + Math.floor(xOffset) + "," + Math.floor(yOffset) + ")";
+				//"OFFSET: (" + Math.floor(xOffset) + "," + Math.floor(yOffset) + ")";
 				
 			ctx.strokeStyle = 'White';
 			ctx.font = "30px Arial";
-			ctx.strokeText(BBCoordText, 50, 90);
+			//ctx.strokeText(BBCoordText, 50, 90);
 			ctx.strokeStyle = 'Black';
-			ctx.fillText(BBCoordText, 50, 90);
+			//ctx.fillText(BBCoordText, 50, 90);
 		} 
 	};
 };
