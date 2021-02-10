@@ -15,8 +15,18 @@ class AudioManager {
 		this.songs.push(new Audio('music/pepperoni.mp3'));
 	}
 	
+	update() {
+		if (document.getElementById("myMusic").checked) {
+			PARAMS.AUDIO = true;
+			//Wif (this.songs[this.selection].paused) this.songs[this.selection].play();
+		} else {
+			PARAMS.AUDIO = false;
+			this.songs[this.selection].pause();
+		}
+	}
+	
 	play() {
-		if (document.getElementById("myCheck").checked) {
+		if (PARAMS.AUDIO) {
 			this.songs[this.selection].pause();
 			this.selection = (this.selection + 1) % this.songs.length;
 			this.songs[this.selection].play();

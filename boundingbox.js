@@ -6,25 +6,41 @@ class Point {
 	
 	isLeft(oth) {
 		var returnFlag = false;
-		if (this.x < oth.x) returnFlag = true;
+		if (oth instanceof Point) {
+			if (this.x < oth.x) returnFlag = true;
+		} else {
+			if (this.x < oth) returnFlag = true;
+		}
 		return returnFlag;
 	}
 	
 	isRight(oth) {
 		var returnFlag = false;
-		if (this.x < oth.x) returnFlag = true;
+		if (oth instanceof Point) {
+			if (this.x > oth.x) returnFlag = true;
+		} else {
+			if (this.x > oth) returnFlag = true;
+		}
 		return returnFlag;
 	}
 	
 	isAbove(oth) {
 		var returnFlag = false;
-		if (this.y < oth.y) returnFlag = true;
+		if (oth instanceof Point) {
+			if (this.y < oth.y) returnFlag = true;
+		} else {
+			if (this.y < oth) returnFlag = true;
+		}
 		return returnFlag;
 	}
 	
 	isBelow(oth) {
 		var returnFlag = false;
-		if (this.y > oth.y) returnFlag = true;
+		if (oth instanceof Point) {
+			if (this.y > oth.y) returnFlag = true;
+		} else {
+			if (this.y > oth) returnFlag = true;
+		}
 		return returnFlag;
 	}
 }
@@ -80,7 +96,7 @@ class AngleBoundingBox {
     };
 
     collide(oth) {
-        if (this.right > oth.left && this.left < oth.right && this.top < oth.bottom && this.bottom > oth.top) return true;
+        if (this.right.isRight(oth.left) && this.left.isLeft(oth.right) && this.top.isAbove(oth.bottom) && this.bottom.isBelow(oth.top)) return true;
         return false;
     };
 };

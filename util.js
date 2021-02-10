@@ -29,6 +29,7 @@ window.requestAnimFrame = (function () {
 
 const PARAMS = {
 	DEBUG: true,
+	AUDIO: true,
 	PAGE_WIDTH: 1024,
 	PAGE_HEIGHT: 768,
 	TILE_WIDTH: 1280,

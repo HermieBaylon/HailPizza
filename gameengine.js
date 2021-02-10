@@ -152,6 +152,12 @@ class GameEngine {
     };
 
     update() {
+		if (document.getElementById("myDebug").checked) {
+			PARAMS.DEBUG = true;
+		} else {
+			PARAMS.DEBUG = false;
+		}
+		
         var entitiesCount = this.entities.length;
 
         for (var i = 0; i < entitiesCount; i++) {
@@ -168,6 +174,7 @@ class GameEngine {
             }
         }
 		this.camera.update();
+		this.audio.update();
     };
 
     loop() {

@@ -9,6 +9,7 @@ class Pedestrian {
 		Object.assign(this, { game, x, y });
 		this.direction = direction; // 0 - 359, with 0 = right 
 		this.version = version;
+		this.dead = false;
 		this.left = false;
 		this.right = false;
 		this.forward = false;
@@ -59,6 +60,11 @@ class Pedestrian {
 		
 		// Update bounding box
 		this.updateBB();
+		
+		// death
+		if (this.dead) {
+			this.removeFromWorld = true;
+		}
 	};
 	
 	updateBB(){
@@ -169,6 +175,17 @@ class Car {
 		
 		// Update bounding box
 		this.updateBB();
+		
+		// Collision
+		var that = this;
+		this.game.entities.forEach(function (entity) {
+            if (entity.BB && that.BB.collide(entity.BB)) {
+				if (entity instanceof Pedestrian) { // squish pedestrians
+						entity.dead = true;
+						console.log("dead");
+					}
+			};
+		});
 	};
 	
 	draw(ctx) {

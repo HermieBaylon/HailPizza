@@ -101,10 +101,10 @@ class DriverCar {
 			} else {																	// Direction correction to roads TODO only when on road
 				if ((this.direction % 90) <= this.TURN_SPEED)  this.direction -= (this.direction % 90);
 				if (90 - (this.direction % 90) <= this.TURN_SPEED)  this.direction += 90 - (this.direction % 90);
-				if ((difference > 0) && (this.direction % 90) < 30) {
+				if (this.currentSpeed > 0 && (difference > 0) && (this.direction % 90) < 30) {
 					this.direction -= this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
 				}
-				if ((difference < 0) && 90 - (this.direction % 90) < 30) {
+				if (this.currentSpeed > 0 && (difference < 0) && 90 - (this.direction % 90) < 30) {
 					this.direction += this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
 				}
 			}
@@ -170,6 +170,17 @@ class DriverCar {
 		
 		// Update bounding box
 		this.updateBB();
+		
+		// Collision
+		var that = this;
+		this.game.entities.forEach(function (entity) {
+            if (entity.BB && that.BB.collide(entity.BB)) {
+				if (entity instanceof Pedestrian) { // squish pedestrians
+						entity.dead = true;
+						console.log("dead");
+					}
+			};
+		});
 	};
 	
 	draw(ctx) {
