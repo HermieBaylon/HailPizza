@@ -94,7 +94,7 @@ ASSET_MANAGER.downloadAll(function () {
 	npcs.push(new Pedestrian(gameEngine, 20, 572, 0, -1));
 	
 	// Player
-	var driver = new Driver(gameEngine, 100, 50);
+	var driver = new Driver(gameEngine, 0, 0);
 	var drivercar = new DriverCar(gameEngine, 0, 0);
 
 	///// Draw all entities 

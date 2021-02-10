@@ -50,7 +50,7 @@ class DriverCar {
 	};
 	
 	updateBB(){
-		this.BB = new AngleBoundingBox(this.x, this.y, this.WIDTH, this.HEIGHT, this.direction);
+		this.BB = new AngleBoundingBox(this.x, this.y, this.BB_WIDTH, this.BB_HEIGHT, this.direction);
 	}
 	
 	update() {
@@ -194,28 +194,36 @@ class DriverCar {
 		}
 		
 		if (PARAMS.DEBUG) {
-			/* TODO
-			let radians = this.direction * (Math.PI / 180);
-
-			ctx.save();
-
-			ctx.beginPath();
-			ctx.translate( (this.WIDTH / 2), (this.HEIGHT / 2) );
-			ctx.rotate(radians);
-
-			ctx.strokeStyle = 'Red';
-			ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 1),
-							this.BB.y - this.game.camera.y - (this.HEIGHT / 1),
-								this.BB.width, this.BB.height);
+			//TODO
+			let radians = (this.direction + 45) * (Math.PI / 180);
+			let xOffset = (this.BB.width / 2) * Math.cos(radians);
+			let yOffset = -(this.BB.height / 2) * Math.sin(radians);
 			
-			ctx.restore();
+			// Draw 4 Bounding Boxes to represent corners
+			ctx.strokeStyle = 'White';
+			ctx.strokeRect(this.BB.x - this.game.camera.x - xOffset,
+							this.BB.y - this.game.camera.y + yOffset,
+								1, 1);
+			//ctx.strokeRect(this.BB.x - this.game.camera.x + xOffset,
+			//				this.BB.y - this.game.camera.y - yOffset,
+			//					1, 1);
+			//ctx.strokeRect(this.BB.x - this.game.camera.x - xOffset,
+			//				this.BB.y - this.game.camera.y + yOffset,
+			//					1, 1);
+			ctx.strokeRect(this.BB.x - this.game.camera.x + xOffset,
+							this.BB.y - this.game.camera.y - yOffset,
+								1, 1);
 			
 			// HUD
+			let BBCoordText = //"(" + Math.floor(this.BB.x) + ","
+				//+ Math.floor(this.BB.y) + "); Facing " + this.BB.direction + 
+				"OFFSET: (" + Math.floor(xOffset) + "," + Math.floor(yOffset) + ")";
+				
 			ctx.strokeStyle = 'White';
 			ctx.font = "30px Arial";
-			let BBCoordText = "(" + Math.floor(this.BB.x) + ","
-				+ Math.floor(this.BB.y) + "); Facing " + this.BB.direction;
-				ctx.strokeText(BBCoordText, 50, 90);
-		} */
+			ctx.strokeText(BBCoordText, 50, 90);
+			ctx.strokeStyle = 'Black';
+			ctx.fillText(BBCoordText, 50, 90);
+		}
 	};
 };
