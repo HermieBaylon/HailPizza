@@ -1,42 +1,61 @@
 class Pedestrian {
-	constructor(game, x, y, version, dir) {	// version is an integer in range 0 - 1
+	constructor(game, x, y, version, direction) {	// version is an integer in range 0 - 1
 		// Constants
-		this.dir = dir;
-		this.RUN_SPEED = 3;
+		this.RUN_SPEED = 1;
 		this.PIVOT_SPEED = 3;
 		this.WIDTH = 19;	// Square animation box, HEIGHT == WIDTH
 		this.PAGE_WIDTH = 210;
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
-		this.direction = 0; // 0 - 359, with 0 = right 
+		this.direction = direction; // 0 - 359, with 0 = right 
 		this.version = version;
+		this.left = false;
+		this.right = false;
+		this.forward = false;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/npcs.png");
 		
 		// Animations
-		// this.standing = new AngleAnimator(this.spritesheet,
-		// 0, this.version * this.WIDTH,
-		// 	this.WIDTH, this.WIDTH, 12, 0.3, 0, this.direction, false, true);	// Standing
-		// this.walking = new AngleAnimator(this.spritesheet,
-		// 228, this.version * this.WIDTH,
-		// 	this.WIDTH, this.WIDTH, 8, 0.3, 0, this.direction, false, true);	// Walking
-		this.standing = new AngleAnimator(this.spritesheet, 0, this.version * this.WIDTH,
-			this.WIDTH / 15, this.WIDTH / 15, 12, 0.3, 0, this.direction, false, true);	// Standing
-		this.walking = new AngleAnimator(this.spritesheet,
-		228, this.version * this.WIDTH,
-			this.WIDTH, this.WIDTH, 8, 0.3, 0, this.direction, false, true);	// Walking
+		 this.standing = new AngleAnimator(this.spritesheet,
+		 0, this.version * this.WIDTH,
+		 	this.WIDTH, this.WIDTH, 12, 0.3, 0, this.direction, false, true);	// Standing
+		 this.walking = new AngleAnimator(this.spritesheet,
+		 228, this.version * this.WIDTH,
+		 	this.WIDTH, this.WIDTH, 8, 0.3, 0, this.direction, false, true);	// Walking
+		
+		// TODO AI
+		this.forward = true;
+		var that = this;
+		setTimeout(function () {
+			that.right = true;
+			console.log("ped start turning");
+		}, 5200)
+		setTimeout(function () {
+			that.right = false;
+			console.log("ped stop turning");
+		}, 5700)
+		setTimeout(function () {
+			that.forward = false;
+			console.log("ped stop walking");
+		}, 8500)
+		// END TODO
 	};
 	
 	update() {
-		this.x = this.x + this.dir;
-		var rightEdge = 1024;
-		var leftEdge = 0;
-		if (this.dir == 1 && this.x >= rightEdge) {
-			this.x = 0;
+		// Turning
+		if (this.left) {
+			this.direction -= this.PIVOT_SPEED;
+		} else if (this.right) {
+			this.direction += this.PIVOT_SPEED;
 		}
-		if (this.dir == -1 && this.x <= leftEdge) {
-			this.x = rightEdge;
-		}
+		// Normalize to range integers 0-359
+		this.direction = (Math.floor(this.direction) % 360 + 360) % 360;
+		
+		// Movement
+		if (this.forward) {
+				this.x += (this.RUN_SPEED * Math.cos((Math.PI / 180) * this.direction));
+				this.y += (this.RUN_SPEED * Math.sin((Math.PI / 180) * this.direction));
+			}
 		
 		// Update bounding box
 		this.updateBB();
@@ -47,8 +66,11 @@ class Pedestrian {
 	};
 	
 	draw(ctx) {
-		//this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x, this.y, 1);
-		this.walking.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);	// TODO states
+		if (this.forward){
+			this.walking.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
+		} else {
+			this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
+		}
 		
 		if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
@@ -56,6 +78,7 @@ class Pedestrian {
         }
 	};
 };
+
 
 class Car {
 	constructor(game, x, y, version, direction) {	// version is an integer in range 0 - 5
@@ -75,6 +98,9 @@ class Car {
 		Object.assign(this, { game, x, y });
 		this.direction = direction; // 0 - 359, with 0 = right 
 		this.currentSpeed = 0;
+		this.forward = false;
+		this.left = false;
+		this.right = false;
 		
 		this.version = version;
 		
@@ -85,7 +111,7 @@ class Car {
 			this.WIDTH, this.HEIGHT, 1, 1, 1, this.direction, false, true);		// Driving
 		
 		// TODO AI decisions for driving.
-		this.driveFlag = true;
+		this.forward = true;
 		var that = this;
 		setTimeout(function () {
 			that.right = true;
@@ -96,9 +122,10 @@ class Car {
 			console.log("stop turning");
 		}, 1700)
 		setTimeout(function () {
-			that.driveFlag = false;
+			that.forward = false;
 			console.log("stop driving");
 		}, 5500)
+		// END TODO
 		
 		// Initialize bounding box
 		this.updateBB();
@@ -109,7 +136,7 @@ class Car {
 	}
 	
 	update() {
-		if (this.driveFlag) {
+		if (this.forward) {
 			// Acceleration/Deceleration
 			if (this.currentSpeed < this.MAX_SPEED) {	// Normal Acceleration
 				this.currentSpeed += this.ACCELERATION;
