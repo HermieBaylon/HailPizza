@@ -97,6 +97,7 @@ class GameEngine {
 					that.space = true;
 					break;
 				case "KeyE":
+					that.keyE = true;
 					that.enterexit = !that.enterexit;
 					if (that.enterexit) {
 						that.audio.play();
@@ -130,6 +131,9 @@ class GameEngine {
 					break;
 				case "Space":
 					that.space = false;
+					break;
+				case "KeyE":
+					that.keyE = false;
 					break;
 			}
 		}, false);

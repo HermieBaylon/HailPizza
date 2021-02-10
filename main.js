@@ -38,8 +38,8 @@ ASSET_MANAGER.downloadAll(function () {
 
 	// Background
 	var bgTiles = [];
-	for (var i = -1; i <= 1; i++) {
-		for (var j = -1; j <= 1; j++) {
+	for (var i = 0; i <= 2; i++) {
+		for (var j = 0; j <= 2; j++) {
 			bgTiles.push(new Background(gameEngine, i * PARAMS.TILE_WIDTH, j * PARAMS.TILE_WIDTH));		
 		}
 	}
@@ -95,8 +95,8 @@ ASSET_MANAGER.downloadAll(function () {
 	npcs.push(new Pedestrian(gameEngine, 20, 572, 0, -1));
 	
 	// Player
-	var driver = new Driver(gameEngine, 0, 0);
-	var drivercar = new DriverCar(gameEngine, 0, 0);
+	var driver = new Driver(gameEngine, 32, 32);
+	var drivercar = new DriverCar(gameEngine, 32, 288);
 
 	///// Draw all entities 
 	gameEngine.init(ctx);
@@ -106,7 +106,7 @@ ASSET_MANAGER.downloadAll(function () {
 	// NPCs
 	for (var i = 0; i < npccars.length; i++)
 	{
-		//gameEngine.addEntity(npccars[i]);
+		gameEngine.addEntity(npccars[i]);
 	}
 	for (var i = 0; i < npcs.length; i++)
 	{

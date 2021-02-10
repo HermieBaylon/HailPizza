@@ -19,7 +19,7 @@ class DriverCar {
 
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
-		this.direction = 30; // 0 - 359, with 0 = right facing
+		this.direction = 0; // 0 - 359, with 0 = right facing
 		this.directionLog = [];
 		this.currentSpeed = 0;
 		this.driftFlag = false;
@@ -27,6 +27,7 @@ class DriverCar {
 		this.driftDirection = this.direction;
 		this.burnoutFlag = false;
 		this.active = false;
+		this.enterFlag = false;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/drivercar.png");
 		
@@ -37,9 +38,9 @@ class DriverCar {
 		this.driving = new AngleAnimator(this.spritesheet, 426, 0,
 			this.WIDTH, this.HEIGHT, 1, 1, 1, this.direction, false, true);		// Driving
 		this.entering = new AngleAnimator(this.spritesheet, 0, 0,
-			this.WIDTH, this.HEIGHT, 7, 0.5, 1, this.direction, false, true);	// Enter
+			this.WIDTH, this.HEIGHT, 7, 0.05, 1, this.direction, false, false);	// Enter
 		this.exiting = new AngleAnimator(this.spritesheet, 426, 0,
-			this.WIDTH, this.HEIGHT, 7, 0.5, 1, this.direction, true, true);	// Exit
+			this.WIDTH, this.HEIGHT, 7, 0.5, 1, this.direction, true, false);	// Exit
 		this.idling = new AngleAnimator(this.spritesheet, 0, 0,
 			this.WIDTH, this.HEIGHT, 1, 1, 1, this.direction, false, true);		// idle
 		this.braking = new AngleAnimator(this.spritesheet, 0, this.HEIGHT,
@@ -172,17 +173,22 @@ class DriverCar {
 	};
 	
 	draw(ctx) {
+		if (this.game.keyE) {
+			this.enterFlag = true;
+		}
+		
 		// Car animation
-		// Enter car Animation
-		if (this.game.enterexit){
+		if (this.active && this.enterFlag) {
 			this.entering.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
-			this.entering.loop = false;
 			if (this.entering.isDone()) {
-                this.idling.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1); 
-            }
-        }
-
-		if (!this.active) {
+				this.enterFlag = false;
+				this.entering = new AngleAnimator(this.spritesheet, 0, 0,
+					this.WIDTH, this.HEIGHT, 7, 0.05, 1, this.direction, false, false);
+				console.log('Door Done');
+			}
+		//} else if (!this.active && this.enterFlag) {
+			//TODO EXIT VEHICLE
+		} else if (!this.active) {
 			this.idling.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		} else if (this.game.space){
 			this.braking.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
@@ -203,36 +209,14 @@ class DriverCar {
 		}
 		
 		if (PARAMS.DEBUG) {
-			//TODO
-			//let radians = (this.direction + 45) * (Math.PI / 180);
-			//let xOffset = (this.BB.width / 2) * Math.cos(radians);
-			//let yOffset = -(this.BB.height / 2) * Math.sin(radians);
-			
-			// Draw 4 Bounding Boxes to represent corners
-			//ctx.strokeStyle = 'White';
-			//ctx.strokeRect(this.BB.x - this.game.camera.x - xOffset,
-			//				this.BB.y - this.game.camera.y + yOffset,
-			//					1, 1);
-			//ctx.strokeRect(this.BB.x - this.game.camera.x + xOffset,
-			//				this.BB.y - this.game.camera.y - yOffset,
-			//					1, 1);
-			//ctx.strokeRect(this.BB.x - this.game.camera.x - xOffset,
-			//				this.BB.y - this.game.camera.y + yOffset,
-			//					1, 1);
-			//ctx.strokeRect(this.BB.x - this.game.camera.x + xOffset,
-			//				this.BB.y - this.game.camera.y - yOffset,
-			//					1, 1);
-			
-			// HUD
-			//let BBCoordText = //"(" + Math.floor(this.BB.x) + ","
-				//+ Math.floor(this.BB.y) + "); Facing " + this.BB.direction + 
-				//"OFFSET: (" + Math.floor(xOffset) + "," + Math.floor(yOffset) + ")";
-				
-			ctx.strokeStyle = 'White';
-			ctx.font = "30px Arial";
-			//ctx.strokeText(BBCoordText, 50, 90);
-			ctx.strokeStyle = 'Black';
-			//ctx.fillText(BBCoordText, 50, 90);
+			// Draw 4 Bounding Box points to represent corners
+			ctx.strokeStyle = 'Red';
+			for (var i = 0; i < this.BB.points.length; i++) {
+				ctx.beginPath();
+				ctx.moveTo(this.BB.points[i].x - this.game.camera.x, this.BB.points[i].y - this.game.camera.y);
+				ctx.lineTo(this.BB.points[(i-1 + 4) % 4].x - this.game.camera.x, this.BB.points[(i-1 + 4) % 4].y - this.game.camera.y);
+				ctx.stroke();
+			}
 		} 
 	};
 };

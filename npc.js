@@ -58,9 +58,8 @@ class Pedestrian {
 };
 
 class Car {
-	constructor(game, x, y, version, dir) {	// version is an integer in range 0 - 5
+	constructor(game, x, y, version, direction) {	// version is an integer in range 0 - 5
 		// Constants
-		this.dir = dir;
 		this.ACCELERATION = 1;
 		this.FRICTION = 0.5;
 		this.MAX_SPEED = 10;
@@ -68,9 +67,12 @@ class Car {
 		this.WIDTH = 70;
 		this.HEIGHT = 64;
 		this.PAGE_WIDTH = 210;
+		this.BB_WIDTH = 60;
+		this.BB_HEIGHT = 36;
+		
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
-		this.direction = 0; // 0 - 359, with 0 = right 
+		this.direction = direction; // 0 - 359, with 0 = right 
 		this.version = version;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/npccars.png");
@@ -87,14 +89,14 @@ class Car {
 		// TODO
 		var randomVersion = Math.floor(Math.random() * 5) + 0;
 		var speed = 5;
-		this.x = this.x + this.dir * speed;
+		this.x = this.x + this.direction * speed;
 		var rightEdge = 1024;
 		var leftEdge = 0;
-		if (this.dir == 1 && this.x >= rightEdge) {
+		if (this.direction == 1 && this.x >= rightEdge) {
 			this.version = randomVersion;
 			this.x = 0;
 		}
-		if (this.dir == -1 && this.x + this.WIDTH <= leftEdge) {
+		if (this.direction == -1 && this.x + this.WIDTH <= leftEdge) {
 			this.version = randomVersion;
 			this.x = rightEdge;
 		}
@@ -103,17 +105,21 @@ class Car {
 		this.updateBB();
 	};
 	
-	updateBB(){
-		this.BB = new BoundingBox(this.x, this.y, this.WIDTH, this.WIDTH);
-	}
-	
 	draw(ctx) {
 		ctx.drawImage(this.spritesheet,
 		(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
-		this.WIDTH, this.HEIGHT, this.x - this.game.camera.x, this.y - this.game.camera.y, 70, 64);
+		this.WIDTH, this.HEIGHT, this.x - this.game.camera.x - (this.WIDTH / 2), this.y - this.game.camera.y - (this.HEIGHT / 2), 70, 64);
+		// this.idling.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		
 		if (PARAMS.DEBUG) {
-            //this.BB.drawRotatedRect(ctx, this.game.camera); // TODO Doesn't draw correctly
+			// Draw 4 Bounding Box points to represent corners
+			ctx.strokeStyle = 'Red';
+			for (var i = 0; i < this.BB.points.length; i++) {
+				ctx.beginPath();
+				ctx.moveTo(this.BB.points[i].x - this.game.camera.x, this.BB.points[i].y - this.game.camera.y);
+				ctx.lineTo(this.BB.points[(i-1 + 4) % 4].x - this.game.camera.x, this.BB.points[(i-1 + 4) % 4].y - this.game.camera.y);
+				ctx.stroke();
+			}
         }
 	};
 };

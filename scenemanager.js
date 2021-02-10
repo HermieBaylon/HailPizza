@@ -68,14 +68,23 @@ class SceneManager {
 		//this.three.drawFrame(this.game.clockTick,ctx, 7, 8, 0.3);
 		//this.two.drawFrame(this.game.clockTick,ctx, 7, 8, 0.3);
 		//this.one.drawFrame(this.game.clockTick,ctx, 7, 8, 0.3)
-
-		let coordText = "(" + Math.floor(this.game.player.x) + ","
-			+ Math.floor(this.game.player.y) + "); Facing " + this.game.player.direction;
 		
         if (PARAMS.DEBUG){
+			/*let coordText = "(" + Math.floor(this.game.player.x) + ","
+				+ Math.floor(this.game.player.y) + "); Facing " + this.game.player.direction;
+			
+			let coordText2 = "L:(" +  Math.floor(this.game.player.BB.left.x) + "," +  Math.floor(this.game.player.BB.left.y) + ")"
+							+ "T:(" +  Math.floor(this.game.player.BB.top.x) + "," +  Math.floor(this.game.player.BB.top.y) + ")"
+							+ "R:(" +  Math.floor(this.game.player.BB.right.x) + "," +  Math.floor(this.game.player.BB.right.y) + ")"
+							+ "B:(" +  Math.floor(this.game.player.BB.bottom.x) + "," +  Math.floor(this.game.player.BB.bottom.y) + ")";
+			
 			ctx.strokeStyle = 'White';
 			ctx.font = "30px Arial";
 			ctx.strokeText(coordText, 50, 50);
+			ctx.strokeText(coordText2, 50, 100);
+			ctx.strokeStyle = 'Black';
+			ctx.fillText(coordText, 50, 50);
+			ctx.fillText(coordText2, 50, 100);*/ // HUD text for checking bounding edges on driver car
 		}
 	}
 };
