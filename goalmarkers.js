@@ -1,3 +1,6 @@
+/**
+* Hello
+*/
 class StartMission {
 	constructor(game, x, y) {
 		// constants
