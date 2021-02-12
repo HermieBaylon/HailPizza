@@ -68,7 +68,11 @@ class GoalPost {
 	};
 	
 	update() {
-		// TODO
+        this.elapsedTime += this.game.clockTick;
+
+        if (this.game.click && this.game.driver.collide(this, this.game.click)) {           
+                loadChat(this.chats[this.game.driver.state]);
+        };
 	};
 	
 	draw(ctx) {

@@ -24,6 +24,12 @@ ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
 
+
+	// Mission Start
+	document.getElementByID("message").addEventListener("click", function (e) {
+		if (currentChat.message.state) driver.state = currentChat.message.state;
+	
+	}};
 	// Background
 	var bgTiles = [];
 	for (var i = 0; i <= 2; i++) {

@@ -13,6 +13,19 @@ function hsl(h, s, l) {
     return "hsl(" + h + "," + s + "%," + l + "%)";
 };
 
+var currentChat
+function loadChat(chat){
+
+	if (!chat) chat = { message: "", resp1: };
+	
+	currentChat = chat;
+	
+	var chatBox = document.getElementById("message");
+	chatBox.innerHTML = chat.message;
+	
+	
+};
+
 // creates an alias for requestAnimationFrame for backwards compatibility
 window.requestAnimFrame = (function () {
     return window.requestAnimationFrame ||

@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="./angleanimator.js"></script>
 	<script type="text/javascript" src="./gameengine.js"></script>
     <script type="text/javascript" src="./goalmarkers.js"></script>
+    <script type="text/javascript" src="./chat.js"></script>
     <script type="text/javascript" src="./boundingbox.js"></script>
     <script type="text/javascript" src="./util.js"></script>
     <script type="text/javascript" src="./main.js"></script>
@@ -22,9 +23,15 @@
     <script type="text/javascript" src="./npc.js"></script>
 </head>
 <body>
+    <div class = "container" style = "display: flex; width: 1200px">
     <canvas id="gameWorld" width="1024" height="768" style="background: white; border: 1px solid black" tabindex ="0" autofocus></canvas>
-	 </br> <input type="checkbox" id="myMusic" checked> Toggle music. </br>
-	<input type="checkbox" id="myDebug"> Toggle Debug. </br>
+	 <div>
+	 <div class = "chat" id = "message"></div>
+	 </div>
+  </div>
+    <canvas id="gameWorld" width="1024" height="768" style="background: white; border: 1px solid black" tabindex ="0" autofocus></canvas>
+	 <br /> <input type="checkbox" id="myMusic" checked> Toggle music.
+	<input type="checkbox" id="myDebug"> Toggle Debug. <br/>
 	
  WASD = movement, E = switch driver/ car, space to jump/brake.
 	
