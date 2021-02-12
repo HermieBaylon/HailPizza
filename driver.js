@@ -88,6 +88,9 @@ class Driver {
 					} else if (that.game.forward) {
 						that.x -= (that.RUN_SPEED * Math.cos((Math.PI / 180) * that.direction));
 						that.y -= (that.RUN_SPEED * Math.sin((Math.PI / 180) * that.direction));
+					}else if (that.game.backward) {
+						that.x += (that.RUN_SPEED * Math.cos((Math.PI / 180) * that.direction));
+						that.y += (that.RUN_SPEED * Math.sin((Math.PI / 180) * that.direction));
 					}
 					console.log("boom");
 				}

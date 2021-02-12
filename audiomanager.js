@@ -18,7 +18,7 @@ class AudioManager {
 	update() {
 		if (document.getElementById("myMusic").checked) {
 			PARAMS.AUDIO = true;
-			//Wif (this.songs[this.selection].paused) this.songs[this.selection].play();
+			//if (this.songs[this.selection].paused) this.songs[this.selection].play();
 		} else {
 			PARAMS.AUDIO = false;
 			this.songs[this.selection].pause();
@@ -28,7 +28,7 @@ class AudioManager {
 	play() {
 		if (PARAMS.AUDIO) {
 			this.songs[this.selection].pause();
-			this.selection = (this.selection + 1) % this.songs.length;
+			this.selection = Math.floor(Math.random() * this.songs.length);
 			this.songs[this.selection].play();
 		}
 	}

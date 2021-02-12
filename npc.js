@@ -107,14 +107,21 @@ class Car {
 		this.BB_WIDTH = 60;
 		this.BB_HEIGHT = 36;
 		this.DRAG = 0.1;
+		this.PUSH_DRAG = this.DRAG * 2;
+		this.MAX_SPIN_SPEED = this.TURN_SPEED * 2;
+		this.SPIN_DRAG = this.DRAG * 5;
 		
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
 		this.direction = direction; // 0 - 359, with 0 = right 
 		this.currentSpeed = 0;
+		this.spinSpeed = 0;
 		this.forward = false;
 		this.left = false;
 		this.right = false;
+		
+		this.pushDirection = 0;
+		this.pushSpeed = 0;
 		
 		this.version = version;
 		
@@ -174,12 +181,31 @@ class Car {
 			this.currentSpeed = 0;
 		}
 		
+		// Handle spinning
+		if (this.spinSpeed !== 0) {
+			this.direction += this.spinSpeed;
+			this.spinSpeed = Math.sign(this.spinSpeed) * (Math.abs(this.spinSpeed) - this.SPIN_DRAG);
+			if (Math.abs(this.spinSpeed) < 2) this.spinSpeed = 0;
+		}
+		
 		// Normalize to range integers 0-359
 		this.direction = (Math.floor(this.direction) % 360 + 360) % 360;
+		this.pushDirection = (Math.floor(this.pushDirection) % 360 + 360) % 360;
 		
 		// Movement
 		this.x += (this.currentSpeed * Math.cos((Math.PI / 180) * this.direction));
 		this.y += (this.currentSpeed * Math.sin((Math.PI / 180) * this.direction));
+		
+		// Handle pushes
+		if (this.pushSpeed >= this.DRAG){
+			this.pushSpeed -= this.DRAG;
+		} else if (this.pushSpeed <= -this.DRAG){
+			this.pushSpeed += this.DRAG;
+		} else {
+			this.pushSpeed = 0;
+		}
+		this.x += (this.pushSpeed * Math.cos((Math.PI / 180) * this.pushDirection));
+		this.y += (this.pushSpeed * Math.sin((Math.PI / 180) * this.pushDirection));
 		
 		// Update bounding box
 		this.updateBB();
@@ -190,6 +216,14 @@ class Car {
             if (entity.BB && that.BB.collide(entity.BB)) {
 				if (entity instanceof Pedestrian) { // squish pedestrians
 						entity.dead = true;
+				}
+				if (entity instanceof Car && entity !== that) { // push other cars TODO
+					// Update other cars push
+					//entity.pushDirection = that.pushDirection;
+					//entity.pushSpeed = Math.max(that.pushSpeed / 2, 10 * that.PUSH_DRAG);
+					// Update this cars push
+					//that.pushDirection = that.pushDirection + 180;
+					//that.pushSpeed = Math.max(that.pushSpeed / 2, 10 * that.PUSH_DRAG);
 				}
 			};
 		});

@@ -180,12 +180,27 @@ class DriverCar {
 					console.log("dead");
 				}
 				if (entity instanceof Building) {	// hit building
-					that.currentSpeed = -10 * that.DRAG;
+					if (that.game.forward) {
+						that.currentSpeed = -Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					} else if (that.game.backward) {
+						that.currentSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					}
 					console.log("boom (building)");
 				}
-				if (entity instanceof Car) {	// hit building
-					that.currentSpeed = -10 * that.DRAG;
-					console.log("boom (car)");
+				if (entity instanceof Car) {	// hit car
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					// Stop drivercar
+					that.currentSpeed = 0;
+					// push car
+					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					entity.pushDirection = angle;
+					//entity.spinSpeed = 5;	// TODO calculate spinning
+					//console.log("boom (car)");
 				}
 			};
 		});
