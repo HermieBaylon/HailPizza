@@ -97,15 +97,6 @@ ASSET_MANAGER.downloadAll(function () {
 	npccars.push(new Car(gameEngine, 2845, 3840, 1, 0, 4));
 	npccars.push(new Car(gameEngine, 3355, 3840, 1, 0, 4));
 
-	// // npccars.push(new Car(gameEngine, 160, 350, 0, 0, 1));
-	// // npccars.push(new Car(gameEngine, 3800, 415, 0, 180, 1));
-	// // npccars.push(new Car(gameEngine, 350, -100, 1, 0, 2));
-	// // npccars.push(new Car(gameEngine, 415, 3800, 1, 180, 2));
-	// // npccars.push(new Car(gameEngine, 0, 480, 0, 0, 3));
-	// // npccars.push(new Car(gameEngine, 3840, 795, 0, 180, 3));
-	// // npccars.push(new Car(gameEngine, 480, 3840, 1, 0, 4));
-	// // npccars.push(new Car(gameEngine, 285, 0, 1, 180, 4));
-
 	var npcs = [];
 	npcs.push(new Pedestrian(gameEngine, 224, 576, 1, 0));
 	npcs.push(new Pedestrian(gameEngine, 544, 696, 0, 180));
