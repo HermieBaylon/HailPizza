@@ -26,6 +26,11 @@ class Driver {
 			
 		// Assign initial focus
 		this.game.player = this;
+
+		// HUD avariables
+		this.FULL_HEALTH_POINT = 6;
+		this.healthPoint = this.FULL_HEALTH_POINT;
+		this.healthBar = new HealthBar(this);
 	};
 	
 	updateBB(){
@@ -78,8 +83,10 @@ class Driver {
 		
 		// Collision
 		var that = this;
+		var car = null;
+
 		this.game.entities.forEach(function (entity) {
-			if (entity.BB && that.BB.collide(entity.BB)) {
+			if (entity !== that && entity.BB && entity.BB.collide(that.BB)) {
 				if (entity instanceof Building) {	// hit building
 					if(that.jumpFlag){
 						that.jumpFlag = false;
@@ -95,6 +102,12 @@ class Driver {
 					// face npc away
 					// move him forward
 					console.log("move, foo");
+				}
+				if (entity instanceof Car) {	// damaged by car
+					that.x += (that.RUN_SPEED * Math.cos((Math.PI / 180) * that.direction + 180));
+					that.y += (that.RUN_SPEED * Math.sin((Math.PI / 180) * that.direction + 180));
+					that.healthPoint -= 1;
+					console.log("damaged (car)");
 				}
 			};
 		});
@@ -113,5 +126,6 @@ class Driver {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 2), this.BB.y - this.game.camera.y - (this.WIDTH / 2), this.BB.width, this.BB.height);
         }
+        this.healthBar.draw(ctx);
 	};
 };
