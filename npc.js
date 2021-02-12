@@ -150,74 +150,7 @@ class Car {
 	}
 	
 	update() {
-
-		var backgroundWidth = 1280 * 3;
-		var backgroundHeight = 1280 * 3;
-
-		if (this.movePattern == 1) {
-			if (this.direction == 0) {
-				if (this.x >= backgroundWidth) {
-					this.x = 0;
-				}
-			}
-			if (this.direction == 180) {
-				if (this.x < 0) {
-					this.x = backgroundWidth;
-				}
-			}
-		} else if (this.movePattern == 2) {
-			if (this.direction == 90) {	//previously 0
-				if (this.y > backgroundHeight) {
-					this.y = 0;
-				}
-			}
-			if (this.direction == 270) { //reviously 180
-				if (this.y < 0) {
-					this.y = backgroundHeight;
-				}
-			}
-
-		} else if (this.movePattern == 3) {
-
-			if (this.isBackwards) {
-				if (this.y < 0) {
-					console.log("HEY I AM LESS THAN ZERO");
-					this.direction = 180;
-					this.x = this.originX + this.WIDTH + 15;
-					this.y = this.originY;
-					this.generateRandomVersion();
-			 		this.horizontalToVertical();
-				}
-			} else {
-				if (this.y > backgroundHeight) {
-					this.direction = 0;
-					this.x = this.originX - this.WIDTH - 10;
-					this.y = this.originY;
-					this.generateRandomVersion();
-			 		this.horizontalToVertical();
-				}
-			}
-
-		} else if (this.movePattern == 4) {
-
-			if (this.isBackwards) {
-				if (this.x < 0) {
-					this.direction = 90;
-					this.x = this.originX;
-					this.y = this.originY - this.HEIGHT - 20;
-					this.generateRandomVersion();
-					this.verticalToHorizontal();
-				}
-			} else {
-				if (this.x > backgroundWidth) {
-					this.direction = 270;
-					this.x = this.originX;
-					this.y = this.originY + this.HEIGHT + 20;
-					this.generateRandomVersion();
-					this.verticalToHorizontal();
-				}
-			}
-		}
+		this.updateCar();
 
 		if (this.forward) {
 			// Acceleration/Deceleration
@@ -366,6 +299,75 @@ class Car {
 		var random = Math.floor(Math.random() * 5);
 		console.log(this.version);
 		this.version = random;
+	}
+
+	updateCar() {
+		var backgroundWidth = 1280 * 3;
+		var backgroundHeight = 1280 * 3;
+		if (this.movePattern == 1) {
+			if (this.direction == 0) {
+				if (this.x >= backgroundWidth) {
+					this.x = 0;
+				}
+			}
+			if (this.direction == 180) {
+				if (this.x < 0) {
+					this.x = backgroundWidth;
+				}
+			}
+		} else if (this.movePattern == 2) {
+			if (this.direction == 90) {	//previously 0
+				if (this.y > backgroundHeight) {
+					this.y = 0;
+				}
+			}
+			if (this.direction == 270) { //reviously 180
+				if (this.y < 0) {
+					this.y = backgroundHeight;
+				}
+			}
+
+		} else if (this.movePattern == 3) {
+
+			if (this.isBackwards) {
+				if (this.y < 0) {
+					console.log("HEY I AM LESS THAN ZERO");
+					this.direction = 180;
+					this.x = this.originX + this.WIDTH + 15;
+					this.y = this.originY;
+					this.generateRandomVersion();
+			 		this.horizontalToVertical();
+				}
+			} else {
+				if (this.y > backgroundHeight) {
+					this.direction = 0;
+					this.x = this.originX - this.WIDTH - 10;
+					this.y = this.originY;
+					this.generateRandomVersion();
+			 		this.horizontalToVertical();
+				}
+			}
+
+		} else if (this.movePattern == 4) {
+
+			if (this.isBackwards) {
+				if (this.x < 0) {
+					this.direction = 90;
+					this.x = this.originX;
+					this.y = this.originY - this.HEIGHT - 20;
+					this.generateRandomVersion();
+					this.verticalToHorizontal();
+				}
+			} else {
+				if (this.x > backgroundWidth) {
+					this.direction = 270;
+					this.x = this.originX;
+					this.y = this.originY + this.HEIGHT + 20;
+					this.generateRandomVersion();
+					this.verticalToHorizontal();
+				}
+			}
+		}
 	}
 
 	// horizontalToVertical() {
