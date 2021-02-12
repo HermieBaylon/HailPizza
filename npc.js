@@ -97,6 +97,7 @@ class Pedestrian {
 class Car {
 	constructor(game, x, y, version, direction, movePattern) {	// version is an integer in range 0 - 5
 		// Constants
+		this.NUM_VERSIONS = 6;
 		this.ACCELERATION = 0.1;
 		this.FRICTION = 0.5;
 		this.MAX_SPEED = 4;
@@ -123,6 +124,7 @@ class Car {
 		this.forward = false;
 		this.left = false;
 		this.right = false;
+		this.backward = false;
 		this.isBackwards = (this.direction == 180);
 		
 		this.pushDirection = 0;
@@ -132,11 +134,18 @@ class Car {
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/npccars.png");
 		
-		this.driving = new AngleAnimator(this.spritesheet,
-			(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
-			this.WIDTH, this.HEIGHT, 1, 1, 1, this.direction, false, true);		// Driving
+		//this.driving = new AngleAnimator(this.spritesheet,
+		//	(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
+		//	this.WIDTH, this.HEIGHT, 1, 1, 1, this.direction, false, true);
+			
+		// Create array of version animations
+		this.driving = [];
+		for (var i = 0; i < this.NUM_VERSIONS; i++) {
+			this.driving.push(new AngleAnimator(this.spritesheet,
+			(i * this.WIDTH) % this.PAGE_WIDTH, Math.floor((i * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
+			this.WIDTH, this.HEIGHT, 1, 1, 1, this.direction, false, true));
+		}
 		
-		// TODO AI decisions for driving.
 		// Movements
 		if (this.movePattern == 1) {
 			this.straightHorizontal();
@@ -147,7 +156,6 @@ class Car {
 		} else if (this.movePattern == 4) {
 			this.verticalToHorizontal();
 		}
-		// END TODO
 		
 		// Initialize bounding box
 		this.updateBB();
@@ -155,6 +163,9 @@ class Car {
 	
 	updateBB(){
 		this.BB = new AngleBoundingBox(this.x, this.y, this.BB_WIDTH, this.BB_HEIGHT, this.direction);
+		this.nextBB = new AngleBoundingBox(this.x + (this.WIDTH * Math.cos((Math.PI / 180) * this.direction)),
+											this.y + (this.WIDTH * Math.sin((Math.PI / 180) * this.direction)),
+											this.BB_WIDTH, this.BB_HEIGHT, this.direction);
 	}
 	
 	update() {
@@ -175,6 +186,14 @@ class Car {
 				this.direction -= (this.TURN_SPEED) * ((this.currentSpeed + 2) / this.MAX_SPEED); // +2 turns sharper
 			} else if (this.right) {	// Turning Right
 				this.direction += (this.TURN_SPEED) * ((this.currentSpeed + 2) / this.MAX_SPEED); // +2 turns sharper
+			}
+		} else if (this.backward) {
+			if (this.currentSpeed > -this.MAX_SPEED) {	// Normal Acceleration
+				this.currentSpeed -= this.ACCELERATION;
+			} else if (this.currentSpeed < this.MAX_SPEED){ // Overspeeding
+				this.currentSpeed += this.ACCELERATION / 2;
+			} else {
+				this.currentSpeed = -this.MAX_SPEED;
 			}
 		} else if (this.currentSpeed >= this.DRAG){		// Drag
 			this.currentSpeed -= this.DRAG;
@@ -216,11 +235,41 @@ class Car {
 		// Collision
 		var that = this;
 		this.game.entities.forEach(function (entity) {
+			if (entity.BB && that.nextBB.collide(entity.BB)) {	// Action predictions
+				if (entity instanceof DriverCar) {	// predict car, stop
+					if (that.forward) {
+						that.forward = false;
+						console.log("stopping, reversing car");
+						setTimeout(function () {
+						that.backward = true;
+						}, 1000)
+						setTimeout(function () {
+						that.backward = false;
+						that.forward = true;
+						}, 2000)
+					}
+				}
+			}
             if (entity.BB && that.BB.collide(entity.BB)) {
 				if (entity instanceof Pedestrian) { // squish pedestrians
 						entity.dead = true;
 				}
-				if (entity instanceof Car && entity !== that) { // push other cars TODO
+				if (entity instanceof DriverCar) { // TODO car stops if drivercar is blocking
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					// push drivercar
+					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					entity.pushDirection = angle;
+					//entity.spinSpeed = 5;	// TODO calculate spinning
+					//console.log("boom (car)");
+					//that.forward = false;
+					//that.backward = true;
+				}
+				if (entity instanceof Car && entity !== that) { // push other cars TODO car stops if oth car is blocking
 					// Update other cars push
 					//entity.pushDirection = that.pushDirection;
 					//entity.pushSpeed = Math.max(that.pushSpeed / 2, 10 * that.PUSH_DRAG);
@@ -233,7 +282,7 @@ class Car {
 	};
 	
 	draw(ctx) {
-		this.driving.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
+		this.driving[this.version].drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		
 		//ctx.drawImage(this.spritesheet,
 		//(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
@@ -249,6 +298,11 @@ class Car {
 				ctx.lineTo(this.BB.points[(i-1 + 4) % 4].x - this.game.camera.x, this.BB.points[(i-1 + 4) % 4].y - this.game.camera.y);
 				ctx.stroke();
 			}
+			ctx.strokeStyle = 'Blue';
+			ctx.beginPath();
+			ctx.moveTo(this.nextBB.points[0].x - this.game.camera.x, this.nextBB.points[0].y - this.game.camera.y);
+			ctx.lineTo(this.nextBB.points[3].x - this.game.camera.x, this.nextBB.points[3].y - this.game.camera.y);
+			ctx.stroke();
         }
 	};
 

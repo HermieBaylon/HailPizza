@@ -95,7 +95,7 @@ class Driver {
 					} else if (that.game.forward) {
 						that.x -= (that.RUN_SPEED * Math.cos((Math.PI / 180) * that.direction));
 						that.y -= (that.RUN_SPEED * Math.sin((Math.PI / 180) * that.direction));
-					}else if (that.game.backward) {
+					} else if (that.game.backward) {
 						that.x += (that.RUN_SPEED * Math.cos((Math.PI / 180) * that.direction));
 						that.y += (that.RUN_SPEED * Math.sin((Math.PI / 180) * that.direction));
 					}
@@ -107,10 +107,16 @@ class Driver {
 					console.log("move, foo");
 				}
 				if (entity instanceof Car) {	// damaged by car
-					that.x += (that.RUN_SPEED * Math.cos((Math.PI / 180) * that.direction + 180));
-					that.y += (that.RUN_SPEED * Math.sin((Math.PI / 180) * that.direction + 180));
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(that.y - entity.y) / Math.abs(that.x - entity.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					that.x -= (10 * Math.cos((Math.PI / 180) * angle));
+					that.y -= (10 * Math.sin((Math.PI / 180) * angle));
 					that.healthPoint -= 1;
-					console.log("damaged (car)");
+					console.log("damaged (car)" + angle);
 				}
 			};
 		});

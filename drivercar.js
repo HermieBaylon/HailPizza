@@ -16,6 +16,9 @@ class DriverCar {
 		this.TURN_DRAG = this.ACCELERATION + 0.1;
 		this.BRAKE_DRAG = this.DRAG / 2;
 		this.LOG_LENGTH = 10;
+		this.PUSH_DRAG = this.DRAG * 2;
+		this.MAX_SPIN_SPEED = this.TURN_SPEED * 2;
+		this.SPIN_DRAG = this.DRAG * 5;
 
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
@@ -28,6 +31,9 @@ class DriverCar {
 		this.burnoutFlag = false;
 		this.active = false;
 		this.enterFlag = false;
+		this.spinSpeed = 0;
+		this.pushSpeed = 0;
+		this.pushDirection = this.direction;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/drivercar.png");
 		
@@ -159,6 +165,13 @@ class DriverCar {
 			}
 		}
 		
+		// Handle spinning
+		if (this.spinSpeed !== 0) {
+			this.direction += this.spinSpeed;
+			this.spinSpeed = Math.sign(this.spinSpeed) * (Math.abs(this.spinSpeed) - this.SPIN_DRAG);
+			if (Math.abs(this.spinSpeed) < 2) this.spinSpeed = 0;
+		}
+		
 		// Movement
 		if (this.driftFlag) {
 			this.x += (this.driftSpeed * Math.cos((Math.PI / 180) * this.driftDirection));
@@ -167,6 +180,17 @@ class DriverCar {
 			this.x += (this.currentSpeed * Math.cos((Math.PI / 180) * this.direction));
 			this.y += (this.currentSpeed * Math.sin((Math.PI / 180) * this.direction));
 		}
+		
+		// Handle pushes
+		if (this.pushSpeed >= this.DRAG){
+			this.pushSpeed -= this.DRAG;
+		} else if (this.pushSpeed <= -this.DRAG){
+			this.pushSpeed += this.DRAG;
+		} else {
+			this.pushSpeed = 0;
+		}
+		this.x += (this.pushSpeed * Math.cos((Math.PI / 180) * this.pushDirection));
+		this.y += (this.pushSpeed * Math.sin((Math.PI / 180) * this.pushDirection));
 		
 		// Update bounding box
 		this.updateBB();

@@ -73,7 +73,7 @@ class SceneManager {
 		//this.one.drawFrame(this.game.clockTick,ctx, 7, 8, 0.3)
 		
         if (PARAMS.DEBUG){
-			/*let coordText = "(" + Math.floor(this.game.player.x) + ","
+			let coordText = "(" + Math.floor(this.game.player.x) + ","
 				+ Math.floor(this.game.player.y) + "); Facing " + this.game.player.direction;
 			
 			let coordText2 = "L:(" +  Math.floor(this.game.player.BB.left.x) + "," +  Math.floor(this.game.player.BB.left.y) + ")"
@@ -87,7 +87,7 @@ class SceneManager {
 			ctx.strokeText(coordText2, 50, 100);
 			ctx.strokeStyle = 'Black';
 			ctx.fillText(coordText, 50, 50);
-			ctx.fillText(coordText2, 50, 100);*/ // HUD text for checking bounding edges on driver car
+			ctx.fillText(coordText2, 50, 100); // HUD text for checking bounding edges on driver car
 		}
 	}
 };
