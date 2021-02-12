@@ -1,6 +1,3 @@
-/**
-* Hello
-*/
 class StartMission {
 	constructor(game, x, y) {
 		// constants
@@ -68,11 +65,7 @@ class GoalPost {
 	};
 	
 	update() {
-        this.elapsedTime += this.game.clockTick;
-
-        if (this.game.click && this.game.driver.collide(this, this.game.click)) {           
-                loadChat(this.chats[this.game.driver.state]);
-        };
+		// TODO
 	};
 	
 	draw(ctx) {
