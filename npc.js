@@ -95,7 +95,7 @@ class Pedestrian {
 
 
 class Car {
-	constructor(game, x, y, version, direction) {	// version is an integer in range 0 - 5
+	constructor(game, x, y, version, direction, movePattern) {	// version is an integer in range 0 - 5
 		// Constants
 		this.ACCELERATION = 0.1;
 		this.FRICTION = 0.5;
@@ -107,6 +107,9 @@ class Car {
 		this.BB_WIDTH = 60;
 		this.BB_HEIGHT = 36;
 		this.DRAG = 0.1;
+		this.movePattern = movePattern;
+		this.originX = x;
+		this.originY = y;
 		
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
@@ -115,6 +118,7 @@ class Car {
 		this.forward = false;
 		this.left = false;
 		this.right = false;
+		this.isBackwards = (this.direction == 180);
 		
 		this.version = version;
 		
@@ -125,20 +129,16 @@ class Car {
 			this.WIDTH, this.HEIGHT, 1, 1, 1, this.direction, false, true);		// Driving
 		
 		// TODO AI decisions for driving.
-		this.forward = true;
-		var that = this;
-		setTimeout(function () {
-			that.right = true;
-			console.log("start turning");
-		}, 800)
-		setTimeout(function () {
-			that.right = false;
-			console.log("stop turning");
-		}, 1700)
-		setTimeout(function () {
-			that.forward = false;
-			console.log("stop driving");
-		}, 5500)
+		// Movements
+		if (this.movePattern == 1) {
+			this.straightHorizontal();
+		} else if (this.movePattern == 2) {
+			this.straightVertical();
+		} else if (this.movePattern == 3) {
+			this.horizontalToVertical();
+		} else if (this.movePattern == 4) {
+			this.verticalToHorizontal();
+		}
 		// END TODO
 		
 		// Initialize bounding box
@@ -150,6 +150,75 @@ class Car {
 	}
 	
 	update() {
+
+		var backgroundWidth = 1280 * 3;
+		var backgroundHeight = 1280 * 3;
+
+		if (this.movePattern == 1) {
+			if (this.direction == 0) {
+				if (this.x >= backgroundWidth) {
+					this.x = 0;
+				}
+			}
+			if (this.direction == 180) {
+				if (this.x < 0) {
+					this.x = backgroundWidth;
+				}
+			}
+		} else if (this.movePattern == 2) {
+			if (this.direction == 90) {	//previously 0
+				if (this.y > backgroundHeight) {
+					this.y = 0;
+				}
+			}
+			if (this.direction == 270) { //reviously 180
+				if (this.y < 0) {
+					this.y = backgroundHeight;
+				}
+			}
+
+		} else if (this.movePattern == 3) {
+
+			if (this.isBackwards) {
+				if (this.y < 0) {
+					console.log("HEY I AM LESS THAN ZERO");
+					this.direction = 180;
+					this.x = this.originX + this.WIDTH + 15;
+					this.y = this.originY;
+					this.generateRandomVersion();
+			 		this.horizontalToVertical();
+				}
+			} else {
+				if (this.y > backgroundHeight) {
+					this.direction = 0;
+					this.x = this.originX - this.WIDTH - 10;
+					this.y = this.originY;
+					this.generateRandomVersion();
+			 		this.horizontalToVertical();
+				}
+			}
+
+		} else if (this.movePattern == 4) {
+
+			if (this.isBackwards) {
+				if (this.x < 0) {
+					this.direction = 90;
+					this.x = this.originX;
+					this.y = this.originY - this.HEIGHT - 20;
+					this.generateRandomVersion();
+					this.verticalToHorizontal();
+				}
+			} else {
+				if (this.x > backgroundWidth) {
+					this.direction = 270;
+					this.x = this.originX;
+					this.y = this.originY + this.HEIGHT + 20;
+					this.generateRandomVersion();
+					this.verticalToHorizontal();
+				}
+			}
+		}
+
 		if (this.forward) {
 			// Acceleration/Deceleration
 			if (this.currentSpeed < this.MAX_SPEED) {	// Normal Acceleration
@@ -162,9 +231,9 @@ class Car {
 			
 			// Turning
 			if (this.left) {			// Turning Left
-				this.direction -= this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
+				this.direction -= (this.TURN_SPEED) * ((this.currentSpeed + 2) / this.MAX_SPEED); // +2 turns sharper
 			} else if (this.right) {	// Turning Right
-				this.direction += this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
+				this.direction += (this.TURN_SPEED) * ((this.currentSpeed + 2) / this.MAX_SPEED); // +2 turns sharper
 			}
 		} else if (this.currentSpeed >= this.DRAG){		// Drag
 			this.currentSpeed -= this.DRAG;
@@ -179,8 +248,8 @@ class Car {
 		
 		// Movement
 		this.x += (this.currentSpeed * Math.cos((Math.PI / 180) * this.direction));
-		this.y += (this.currentSpeed * Math.sin((Math.PI / 180) * this.direction));
-		
+		this.y += (this.currentSpeed * Math.sin((Math.PI / 180)	 * this.direction));
+
 		// Update bounding box
 		this.updateBB();
 		
@@ -214,4 +283,129 @@ class Car {
 			}
         }
 	};
+
+	straightHorizontal() {
+		this.forward = true;
+	}
+
+	straightVertical() {
+		if (this.direction == 0) {
+			this.direction = 90;
+		} else if (this.direction == 180) {
+			this.direction = 270;
+		}
+		this.forward = true;
+	}
+
+	horizontalToVertical() {
+
+		var isBackwards = false;
+		if (this.direction == 180) {
+			isBackwards = true;
+		}
+
+		var turningPointsX = [1200, 3350, 6550, 8700, 11900, 14050];
+		var randomIndex = Math.floor(Math.random() * turningPointsX.length);
+		var randomPoint = turningPointsX[randomIndex];
+
+		this.forward = true;
+		var that = this;
+		var travelTime = randomPoint;	
+		var turningTime = travelTime + 600;
+		setTimeout(function () {
+			that.right = true;
+		}, travelTime)
+		setTimeout(function () {
+			if (isBackwards) {
+				that.right = false;
+				that.direction = 270;
+			 } else {
+				that.right = false;
+				that.direction = 90;
+			 }
+			//that.direction = 90;
+		}, turningTime)
+	}
+
+	verticalToHorizontal() {
+
+		var turningPointsY = [1200, 3350, 6550, 8700, 11900, 14050];
+		var randomIndex = Math.floor(Math.random() * turningPointsY.length);
+		var randomPoint = turningPointsY[randomIndex];
+
+		if (this.isBackwards) {
+			this.direction = 90;
+		} else {
+			this.direction = 270;
+		}
+		//this.direction = 270;
+		this.forward = true;
+
+		var that = this;
+		var travelTime = randomPoint;	
+		var turningTime = travelTime + 600;
+
+		var that = this;
+		setTimeout(function () {
+			that.right = true;
+		}, travelTime) //500
+		setTimeout(function () {
+			if (that.isBackwards) {
+				that.right = false;
+				that.direction = 180;
+			 } else {
+				that.right = false;
+				that.direction = 0;
+			 }
+			// that.right = false;
+			// that.direction = 360;
+		}, turningTime)
+	}
+
+	generateRandomVersion() {
+		var random = Math.floor(Math.random() * 5);
+		console.log(this.version);
+		this.version = random;
+	}
+
+	// horizontalToVertical() {
+	// 	this.forward = true;
+	// 	var that = this;
+	// 	if (that.x >= 210) {
+	// 		that.right = true;
+	// 	}
+	// 	if (that.direction >= 89) {
+	// 		that.direction = 90
+	// 		that.right = false;
+	// 	}
+	// }
+
+	// horizontalToVertical() {
+	// 	this.forward = true;
+	// 	var that = this;
+	// 	setTimeout(function () {
+	// 		that.right = true;
+	// 	}, 829.96)	//800 // 829.96
+	// 	setTimeout(function () {
+	// 		that.right = false;
+	// 	}, 1390) //1700
+	// 	// setTimeout(function () {
+	// 	// 	that.forward = false;
+	// 	// 	console.log("stop driving");
+	// 	// }, 5500)
+	// }
+
+	// verticalToHorizontal() {
+	// 	this.direction = 270
+	// 	this.forward = true;
+	// 	var that = this;
+	// 	if (that.y <= 600) {
+	// 		//this.forward = false;
+	// 		this.right = true;
+	// 	}
+	// 	// if (that.direction >= 89) {
+	// 	// 	that.direction = 90
+	// 	// 	that.right = false;
+	// 	// }
+	// }
 };

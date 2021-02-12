@@ -13,6 +13,7 @@ class AngleAnimator {
     };
 
     drawFrame(tick, angle, ctx, x, y, scale) {
+
 		// Animation Tracking
         this.elapsedTime += tick;
 
