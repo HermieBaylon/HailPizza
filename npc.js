@@ -1,5 +1,5 @@
 class Pedestrian {
-	constructor(game, x, y, version, direction) {	// version is an integer in range 0 - 1
+	constructor(game, x, y, version, direction, movePattern) {	// version is an integer in range 0 - 1
 		// Constants
 		this.RUN_SPEED = 1;
 		this.PIVOT_SPEED = 3;
@@ -13,6 +13,8 @@ class Pedestrian {
 		this.left = false;
 		this.right = false;
 		this.forward = false;
+		this.movePattern = movePattern;
+		this.isBackwards = (direction == 180);
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/npcs.png");
 		
@@ -25,24 +27,36 @@ class Pedestrian {
 		 	this.WIDTH, this.WIDTH, 8, 0.3, 0, this.direction, false, true);	// Walking
 		
 		// TODO AI
-		this.forward = true;
-		var that = this;
-		setTimeout(function () {
-			that.right = true;
-			console.log("ped start turning");
-		}, 5200)
-		setTimeout(function () {
-			that.right = false;
-			console.log("ped stop turning");
-		}, 5700)
-		setTimeout(function () {
-			that.forward = false;
-			console.log("ped stop walking");
-		}, 8500)
+		// this.forward = true;
+		// var that = this;
+		// setTimeout(function () {
+		// 	that.right = true;
+		// 	console.log("ped start turning");
+		// }, 5200)
+		// setTimeout(function () {
+		// 	that.right = false;
+		// 	console.log("ped stop turning");
+		// }, 5700)
+		// setTimeout(function () {
+		// 	that.forward = false;
+		// 	console.log("ped stop walking");
+		// }, 8500)
+		if (this.movePattern == 1) {
+			this.straightHorizontal();
+		} else if (this.movePattern == 2) {
+			this.straightVertical();
+		} else if (this.movePattern == 3) {
+			this.horizontalToVertical();
+		} else if (this.movePattern == 4) {
+			this.verticalToHorizontal();
+		}
 		// END TODO
 	};
 	
 	update() {
+
+		this.updatePedestrian();
+
 		// Turning
 		if (this.left) {
 			this.direction -= this.PIVOT_SPEED;
@@ -91,6 +105,154 @@ class Pedestrian {
             ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 2), this.y - this.game.camera.y - (this.WIDTH / 2), this.BB.width, this.BB.height);
         }
 	};
+
+	straightHorizontal() {
+		this.forward = true;
+	}
+
+	straightVertical() {
+		if (this.direction == 0) {
+			this.direction = 90;
+		} else if (this.direction == 180) {
+			this.direction = 270;
+		}
+		this.forward = true;
+	}
+
+	horizontalToVertical() {
+
+		var isBackwards = false;
+		if (this.direction == 180) {
+			isBackwards = true;
+		}
+
+		var turningPointsX = [1200, 3350, 6550, 8700, 11900, 14050];
+		var randomIndex = Math.floor(Math.random() * turningPointsX.length);
+		var randomPoint = turningPointsX[randomIndex];
+
+		this.forward = true;
+		var that = this;
+		var travelTime = randomPoint;	
+		var turningTime = travelTime + 600;
+		setTimeout(function () {
+			that.right = true;
+		}, travelTime)
+		setTimeout(function () {
+			if (isBackwards) {
+				that.right = false;
+				that.direction = 270;
+			 } else {
+				that.right = false;
+				that.direction = 90;
+			 }
+			//that.direction = 90;
+		}, turningTime)
+	}
+
+		verticalToHorizontal() {
+
+		var turningPointsY = [1200, 3350, 6550, 8700, 11900, 14050];
+		var randomIndex = Math.floor(Math.random() * turningPointsY.length);
+		var randomPoint = turningPointsY[randomIndex];
+
+		if (this.isBackwards) {
+			this.direction = 90;
+		} else {
+			this.direction = 270;
+		}
+		//this.direction = 270;
+		this.forward = true;
+
+		var that = this;
+		var travelTime = randomPoint;	
+		var turningTime = travelTime + 600;
+
+		var that = this;
+		setTimeout(function () {
+			that.right = true;
+		}, travelTime) //500
+		setTimeout(function () {
+			if (that.isBackwards) {
+				that.right = false;
+				that.direction = 180;
+			 } else {
+				that.right = false;
+				that.direction = 0;
+			 }
+			// that.right = false;
+			// that.direction = 360;
+		}, turningTime)
+	}
+	
+	updatePedestrian() {
+		var backgroundWidth = 1280 * 3;
+		var backgroundHeight = 1280 * 3;
+		if (this.movePattern == 1) {
+			if (this.direction == 0) {
+				if (this.x >= backgroundWidth) {
+					this.x = 0;
+				}
+			}
+			if (this.direction == 180) {
+				if (this.x < 0) {
+					this.x = backgroundWidth;
+				}
+			}
+		} else if (this.movePattern == 2) {
+			if (this.direction == 90) {	//previously 0
+				if (this.y > backgroundHeight) {
+					this.y = 0;
+				}
+			}
+			if (this.direction == 270) { //reviously 180
+				if (this.y < 0) {
+					this.y = backgroundHeight;
+				}
+			}
+
+		} else if (this.movePattern == 3) {
+
+			if (this.isBackwards) {
+				if (this.y < 0) {
+					console.log("HEY I AM LESS THAN ZERO");
+					this.direction = 180;
+					this.x = this.originX + this.WIDTH + 15;
+					this.y = this.originY;
+					this.generateRandomVersion();
+			 		this.horizontalToVertical();
+				}
+			} else {
+				if (this.y > backgroundHeight) {
+					this.direction = 0;
+					this.x = this.originX - this.WIDTH - 10;
+					this.y = this.originY;
+					this.generateRandomVersion();
+			 		this.horizontalToVertical();
+				}
+			}
+
+		} else if (this.movePattern == 4) {
+
+			if (this.isBackwards) {
+				if (this.x < 0) {
+					this.direction = 90;
+					this.x = this.originX;
+					this.y = this.originY - this.HEIGHT - 20;
+					this.generateRandomVersion();
+					this.verticalToHorizontal();
+				}
+			} else {
+				if (this.x > backgroundWidth) {
+					this.direction = 270;
+					this.x = this.originX;
+					this.y = this.originY + this.HEIGHT + 20;
+					this.generateRandomVersion();
+					this.verticalToHorizontal();
+				}
+			}
+		}
+	}
+	
 };
 
 

@@ -98,9 +98,14 @@ ASSET_MANAGER.downloadAll(function () {
 	npccars.push(new Car(gameEngine, 3355, 3840, 1, 0, 4));
 
 	var npcs = [];
-	npcs.push(new Pedestrian(gameEngine, 224, 576, 1, 0));
-	npcs.push(new Pedestrian(gameEngine, 544, 696, 0, 180));
-	npcs.push(new Pedestrian(gameEngine, 224, 224, 1, 0));
+	var population = 100;//100;
+	var i = 0;
+	for (i = 0; i < population; i++) {
+		var randomX = Math.floor(Math.random() * 3000);
+		var randomY = Math.floor(Math.random() * 3000);
+		var randomMovementPattern = Math.floor(Math.random() * 4) + 1;
+		npcs.push(new Pedestrian(gameEngine, randomX, randomY, 1, 0, randomMovementPattern));
+	}
 	
 	// Goal Markers
 	var goals = [];
