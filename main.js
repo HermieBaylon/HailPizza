@@ -41,68 +41,68 @@ ASSET_MANAGER.downloadAll(function () {
 	var npccars = [];
 	// List of possible starting points
 	// (StraightHorizontalLeft1) --> y = 415, 925, 1695, 2205, 2975, 3485
-	npccars.push(new Car(gameEngine, 200, 415, 1, 0, 1));
-	npccars.push(new Car(gameEngine, 500, 925, 1, 0, 1));
-	npccars.push(new Car(gameEngine, 1000, 1695, 1, 0, 1));
-	npccars.push(new Car(gameEngine, 1500, 2205, 1, 0, 1));
-	npccars.push(new Car(gameEngine, 2000, 2975, 1, 0, 1));
-	npccars.push(new Car(gameEngine, 2500, 3485, 1, 0, 1));
+	npccars.push(new Car(gameEngine, 200, 415, Math.floor(Math.random() * 5), 0, 1));
+	npccars.push(new Car(gameEngine, 500, 925, Math.floor(Math.random() * 5), 0, 1));
+	npccars.push(new Car(gameEngine, 1000, 1695, Math.floor(Math.random() * 5), 0, 1));
+	npccars.push(new Car(gameEngine, 1500, 2205, Math.floor(Math.random() * 5), 0, 1));
+	npccars.push(new Car(gameEngine, 2000, 2975, Math.floor(Math.random() * 5), 0, 1));
+	npccars.push(new Car(gameEngine, 2500, 3485, Math.floor(Math.random() * 5), 0, 1));
 	// (StraightHorizontalRight1) --> y = 350, 860, 1630, 2104, 2910, 3420
-	npccars.push(new Car(gameEngine, 100, 350, 1, 180, 1));
-	npccars.push(new Car(gameEngine, 500, 860, 1, 180, 1));
-	npccars.push(new Car(gameEngine, 1000, 1630, 1, 180, 1));
-	npccars.push(new Car(gameEngine, 1500, 2104, 1, 180, 1));
-	npccars.push(new Car(gameEngine, 2000, 2910, 1, 180, 1));
-	npccars.push(new Car(gameEngine, 2500, 3420, 1, 180, 1));
+	npccars.push(new Car(gameEngine, 100, 350, Math.floor(Math.random() * 5), 180, 1));
+	npccars.push(new Car(gameEngine, 500, 860, Math.floor(Math.random() * 5), 180, 1));
+	npccars.push(new Car(gameEngine, 1000, 1630, Math.floor(Math.random() * 5), 180, 1));
+	npccars.push(new Car(gameEngine, 1500, 2104, Math.floor(Math.random() * 5), 180, 1));
+	npccars.push(new Car(gameEngine, 2000, 2910, Math.floor(Math.random() * 5), 180, 1));
+	npccars.push(new Car(gameEngine, 2500, 3420, Math.floor(Math.random() * 5), 180, 1));
 	// (StraightVerticalUp2) --> x = 415, 925, 1695, 2205, 2975, 3485
-	npccars.push(new Car(gameEngine, 415, 0, 1, 180, 2));
-	npccars.push(new Car(gameEngine, 925, 500, 1, 180, 2));
-	npccars.push(new Car(gameEngine, 1695, 1000, 1, 180, 2));
-	npccars.push(new Car(gameEngine, 2205, 1500, 1, 180, 2));
-	npccars.push(new Car(gameEngine, 2975, 2000, 1, 180, 2));
-	npccars.push(new Car(gameEngine, 3485, 2500, 1, 180, 2));
+	npccars.push(new Car(gameEngine, 415, 0, Math.floor(Math.random() * 5), 180, 2));
+	npccars.push(new Car(gameEngine, 925, 500, Math.floor(Math.random() * 5), 180, 2));
+	npccars.push(new Car(gameEngine, 1695, 1000, Math.floor(Math.random() * 5), 180, 2));
+	npccars.push(new Car(gameEngine, 2205, 1500, Math.floor(Math.random() * 5), 180, 2));
+	npccars.push(new Car(gameEngine, 2975, 2000, Math.floor(Math.random() * 5), 180, 2));
+	npccars.push(new Car(gameEngine, 3485, 2500, Math.floor(Math.random() * 5), 180, 2));
 	// // (StraightVerticalDown2) --> x = 350, 860, 1630, 2104, 2910, 3420
-	npccars.push(new Car(gameEngine, 350, 0, 1, 0, 2));
-	npccars.push(new Car(gameEngine, 860, 500, 1, 0, 2));
-	npccars.push(new Car(gameEngine, 1630, 1000, 1, 0, 2));
-	npccars.push(new Car(gameEngine, 2104, 1500, 1, 0, 2));
-	npccars.push(new Car(gameEngine, 2910, 2000, 1, 0, 2));
-	npccars.push(new Car(gameEngine, 3420, 2500, 1, 0, 2));
+	npccars.push(new Car(gameEngine, 350, 0, Math.floor(Math.random() * 5), 0, 2));
+	npccars.push(new Car(gameEngine, 860, 500, Math.floor(Math.random() * 5), 0, 2));
+	npccars.push(new Car(gameEngine, 1630, 1000, Math.floor(Math.random() * 5), 0, 2));
+	npccars.push(new Car(gameEngine, 2104, 1500, Math.floor(Math.random() * 5), 0, 2));
+	npccars.push(new Car(gameEngine, 2910, 2000, Math.floor(Math.random() * 5), 0, 2));
+	npccars.push(new Car(gameEngine, 3420, 2500, Math.floor(Math.random() * 5), 0, 2));
 	// // (HorizontalToVerticalforward3) --> y = 480, 990, 1760, 2270, 3040, 3550
-	npccars.push(new Car(gameEngine, 0, 480, 1, 0, 3));
-	npccars.push(new Car(gameEngine, 0, 990, 1, 0, 3));
-	npccars.push(new Car(gameEngine, 0, 1760, 1, 0, 3));
-	npccars.push(new Car(gameEngine, 0, 2270, 1, 0, 3));
-	npccars.push(new Car(gameEngine, 0, 3040, 1, 0, 3));
-	npccars.push(new Car(gameEngine, 0, 3550, 1, 0, 3));
+	npccars.push(new Car(gameEngine, 0, 480, Math.floor(Math.random() * 5), 0, 3));
+	npccars.push(new Car(gameEngine, 0, 990, Math.floor(Math.random() * 5), 0, 3));
+	npccars.push(new Car(gameEngine, 0, 1760, Math.floor(Math.random() * 5), 0, 3));
+	npccars.push(new Car(gameEngine, 0, 2270, Math.floor(Math.random() * 5), 0, 3));
+	npccars.push(new Car(gameEngine, 0, 3040, Math.floor(Math.random() * 5), 0, 3));
+	npccars.push(new Car(gameEngine, 0, 3550, Math.floor(Math.random() * 5), 0, 3));
 	// // (HorizontalToVerticalbackward3) --> y = 285, 795, 1565, 2075, 2845, 3355
-	npccars.push(new Car(gameEngine, 3840, 285, 1, 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 795, 1, 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 1565, 1, 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 2075, 1, 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 2845, 1, 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 3355, 1, 180, 3));
+	npccars.push(new Car(gameEngine, 3840, 285, Math.floor(Math.random() * 5), 180, 3));
+	npccars.push(new Car(gameEngine, 3840, 795, Math.floor(Math.random() * 5), 180, 3));
+	npccars.push(new Car(gameEngine, 3840, 1565, Math.floor(Math.random() * 5), 180, 3));
+	npccars.push(new Car(gameEngine, 3840, 2075, Math.floor(Math.random() * 5), 180, 3));
+	npccars.push(new Car(gameEngine, 3840, 2845, Math.floor(Math.random() * 5), 180, 3));
+	npccars.push(new Car(gameEngine, 3840, 3355, Math.floor(Math.random() * 5), 180, 3));
 	// // (VerticalToHorizontalDown4) --> X = 480, 990, 1760, 2270, 3040, 3550
-	npccars.push(new Car(gameEngine, 480, 0, 1, 180, 4));
-	npccars.push(new Car(gameEngine, 990, 0, 1, 180, 4));
-	npccars.push(new Car(gameEngine, 1760, 0, 1, 180, 4));
-	npccars.push(new Car(gameEngine, 2270, 0, 1, 180, 4));
-	npccars.push(new Car(gameEngine, 3040, 0, 1, 180, 4));
-	npccars.push(new Car(gameEngine, 3550, 0, 1, 180, 4));
+	npccars.push(new Car(gameEngine, 480, 0, Math.floor(Math.random() * 5), 180, 4));
+	npccars.push(new Car(gameEngine, 990, 0, Math.floor(Math.random() * 5), 180, 4));
+	npccars.push(new Car(gameEngine, 1760, 0, Math.floor(Math.random() * 5), 180, 4));
+	npccars.push(new Car(gameEngine, 2270, 0, Math.floor(Math.random() * 5), 180, 4));
+	npccars.push(new Car(gameEngine, 3040, 0, Math.floor(Math.random() * 5), 180, 4));
+	npccars.push(new Car(gameEngine, 3550, 0, Math.floor(Math.random() * 5), 180, 4));
 	// // (VerticalToHorizontalbackward4) --> X = 285, 795, 1565, 2075, 2845, 3355
-	npccars.push(new Car(gameEngine, 285, 3840, 1, 0, 4));
-	npccars.push(new Car(gameEngine, 795, 3840, 1, 0, 4));
-	npccars.push(new Car(gameEngine, 1565, 3840, 1, 0, 4));
-	npccars.push(new Car(gameEngine, 2075, 3840, 1, 0, 4));
-	npccars.push(new Car(gameEngine, 2845, 3840, 1, 0, 4));
-	npccars.push(new Car(gameEngine, 3355, 3840, 1, 0, 4));
+	npccars.push(new Car(gameEngine, 285, 3840, Math.floor(Math.random() * 5), 0, 4));
+	npccars.push(new Car(gameEngine, 795, 3840, Math.floor(Math.random() * 5), 0, 4));
+	npccars.push(new Car(gameEngine, 1565, 3840, Math.floor(Math.random() * 5), 0, 4));
+	npccars.push(new Car(gameEngine, 2075, 3840, Math.floor(Math.random() * 5), 0, 4));
+	npccars.push(new Car(gameEngine, 2845, 3840, Math.floor(Math.random() * 5), 0, 4));
+	npccars.push(new Car(gameEngine, 3355, 3840, Math.floor(Math.random() * 5), 0, 4));
 
 	var npcs = [];
-	var population = 100;//100;
+	var population = 10;//100 Anything larger than 20 stops the game somehow
 	var i = 0;
 	for (i = 0; i < population; i++) {
-		var randomX = Math.floor(Math.random() * 3000);
-		var randomY = Math.floor(Math.random() * 3000);
+		var randomX = Math.floor(Math.random() * 3000) + 0;
+		var randomY = Math.floor(Math.random() * 3000) + 0;
 		var randomMovementPattern = Math.floor(Math.random() * 4) + 1;
 		npcs.push(new Pedestrian(gameEngine, randomX, randomY, 1, 0, randomMovementPattern));
 	}
