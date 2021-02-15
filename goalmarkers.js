@@ -9,7 +9,11 @@ class StartMission {
 		this.BB_XBUFFER = (this.WIDTH - this.BB_WIDTH) / 2;
 		this.BB_YBUFFER = (this.HEIGHT - this.BB_HEIGHT) / 2;
 		
+		
 		Object.assign(this, { game, x, y });
+		console.log("Creating shop marker");
+		this.isVisible = true;
+		this.game.shop = this;
 		// TODO
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/exclamation.png");
@@ -27,9 +31,9 @@ class StartMission {
 	};
 	
 	draw(ctx) {
-		ctx.drawImage(this.spritesheet, 0, 0,
-			this.WIDTH, this.WIDTH,
-			this.x - this.game.camera.x, this.y - this.game.camera.y, this.WIDTH / 4, this.WIDTH / 4);
+		if (this.isVisible) ctx.drawImage(this.spritesheet, 0, 0,
+						this.WIDTH, this.WIDTH,
+						this.x - this.game.camera.x, this.y - this.game.camera.y, this.WIDTH / 4, this.WIDTH / 4);
 		
 		if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
@@ -52,6 +56,7 @@ class GoalPost {
 		this.BB_YBUFFER = (this.HEIGHT - this.BB_HEIGHT) / 2;
 		
 		Object.assign(this, { game, x, y });
+		this.isVisible = false;
 		// TODO
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/goal.png");
@@ -69,7 +74,7 @@ class GoalPost {
 	};
 	
 	draw(ctx) {
-		ctx.drawImage(this.spritesheet, 0, 0, this.WIDTH, this.WIDTH, this.x - this.game.camera.x, this.y - this.game.camera.y, this.WIDTH / 4, this.WIDTH / 4);
+		if (this.isVisible) ctx.drawImage(this.spritesheet, 0, 0, this.WIDTH, this.WIDTH, this.x - this.game.camera.x, this.y - this.game.camera.y, this.WIDTH / 4, this.WIDTH / 4);
 		
 		if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';

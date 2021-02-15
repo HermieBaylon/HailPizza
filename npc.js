@@ -31,15 +31,15 @@ class Pedestrian {
 		// var that = this;
 		// setTimeout(function () {
 		// 	that.right = true;
-		// 	console.log("ped start turning");
+		// 	//console.log("ped start turning");
 		// }, 5200)
 		// setTimeout(function () {
 		// 	that.right = false;
-		// 	console.log("ped stop turning");
+		// 	//console.log("ped stop turning");
 		// }, 5700)
 		// setTimeout(function () {
 		// 	that.forward = false;
-		// 	console.log("ped stop walking");
+		// 	//console.log("ped stop walking");
 		// }, 8500)
 		if (this.movePattern == 1) {
 			this.straightHorizontal();
@@ -184,9 +184,15 @@ class Pedestrian {
 		}, turningTime)
 	}
 	
+	generateRandomVersion() {
+		var random = Math.floor(Math.random() * 2);
+		//console.log(this.version);
+		this.version = random;
+	}
+	
 	updatePedestrian() {
-		var backgroundWidth = 1280 * 3;
-		var backgroundHeight = 1280 * 3;
+		var backgroundWidth = 1280 * 5;
+		var backgroundHeight = 1280 * 5;
 		if (this.movePattern == 1) {
 			if (this.direction == 0) {
 				if (this.x >= backgroundWidth) {
@@ -214,7 +220,7 @@ class Pedestrian {
 
 			if (this.isBackwards) {
 				if (this.y < 0) {
-					console.log("HEY I AM LESS THAN ZERO");
+					//console.log("HEY I AM LESS THAN ZERO");
 					this.direction = 180;
 					this.x = this.originX + this.WIDTH + 15;
 					this.y = this.originY;
@@ -401,14 +407,11 @@ class Car {
 				if (entity instanceof DriverCar) {	// predict car, stop
 					if (that.forward) {
 						that.forward = false;
-						console.log("stopping, reversing car");
-						setTimeout(function () {
 						that.backward = true;
-						}, 1000)
 						setTimeout(function () {
-						that.backward = false;
-						that.forward = true;
-						}, 2000)
+							that.backward = false;
+							that.forward = true;
+						}, 1500)
 					}
 				}
 			}
@@ -427,7 +430,7 @@ class Car {
 					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
 					entity.pushDirection = angle;
 					//entity.spinSpeed = 5;	// TODO calculate spinning
-					//console.log("boom (car)");
+					////console.log("boom (car)");
 					//that.forward = false;
 					//that.backward = true;
 				}
@@ -548,13 +551,13 @@ class Car {
 
 	generateRandomVersion() {
 		var random = Math.floor(Math.random() * 5);
-		console.log(this.version);
+		//console.log(this.version);
 		this.version = random;
 	}
 
 	updateCar() {
-		var backgroundWidth = 1280 * 3;
-		var backgroundHeight = 1280 * 3;
+		var backgroundWidth = 1280 * 5;
+		var backgroundHeight = 1280 * 5;
 		if (this.movePattern == 1) {
 			if (this.direction == 0) {
 				if (this.x >= backgroundWidth) {
@@ -582,7 +585,7 @@ class Car {
 
 			if (this.isBackwards) {
 				if (this.y < 0) {
-					console.log("HEY I AM LESS THAN ZERO");
+					//console.log("HEY I AM LESS THAN ZERO");
 					this.direction = 180;
 					this.x = this.originX + this.WIDTH + 15;
 					this.y = this.originY;
@@ -644,7 +647,7 @@ class Car {
 	// 	}, 1390) //1700
 	// 	// setTimeout(function () {
 	// 	// 	that.forward = false;
-	// 	// 	console.log("stop driving");
+	// 	// 	//console.log("stop driving");
 	// 	// }, 5500)
 	// }
 

@@ -26,16 +26,36 @@ ASSET_MANAGER.downloadAll(function () {
 
 	// Background
 	var bgTiles = [];
-	for (var i = 0; i <= 2; i++) {
-		for (var j = 0; j <= 2; j++) {
+	for (var i = 0; i <= 4; i++) {
+		for (var j = 0; j <= 4; j++) {
 			bgTiles.push(new Background(gameEngine, i * PARAMS.TILE_WIDTH, j * PARAMS.TILE_WIDTH));		
 		}
 	}
 	
+	// Goal Markers
+	var goals = [];
+	
+	// Buildings
 	var buildings = [];
-	buildings.push(new Building(gameEngine, 32, 32));
-	buildings.push(new Building(gameEngine, 544, 32));
-	buildings.push(new Building(gameEngine, 1056, 32));
+	for (var k = 0; k < 5; k++) {
+		for (var l = 0; l < 5; l++) {
+			for (var i = 0; i < 20 ; i++) {
+				if ( (i % 8 == 0) || (i % 8 == 2) ) {
+					for (var j = 0; j < 20 ; j++) {
+						if ( (j % 8 == 1) || (j % 8 == 2) ) {
+							buildings.push(new Building (gameEngine, 64 * i + (PARAMS.TILE_WIDTH * k), 64 * j + (PARAMS.TILE_WIDTH * l)));
+						}
+					}
+				}
+			}
+			if (k != l)goals.push(new GoalPost(gameEngine, 64 * 9 + (PARAMS.TILE_WIDTH * k), 64 * 8 + (PARAMS.TILE_WIDTH * l)));
+			if (k == 3 && l == 3) {
+				var shop = new StartMission(gameEngine, 64 * 9 + (PARAMS.TILE_WIDTH * k), 64 * 8 + (PARAMS.TILE_WIDTH * l));
+				goals.push(shop);
+			}
+		}
+	}
+	
 
 	// NPCs
 	var npccars = [];
@@ -107,14 +127,9 @@ ASSET_MANAGER.downloadAll(function () {
 		npcs.push(new Pedestrian(gameEngine, randomX, randomY, 1, 0, randomMovementPattern));
 	}
 	
-	// Goal Markers
-	var goals = [];
-	goals.push(new StartMission(gameEngine, 192, 192));
-	goals.push(new GoalPost(gameEngine, 128, 192));
-	
 	// Player
-	var driver = new Driver(gameEngine, 224, 544);
-	var drivercar = new DriverCar(gameEngine, 32, 288);
+	var driver = new Driver(gameEngine, 1856, 2020, 270);
+	var drivercar = new DriverCar(gameEngine, 1472, 2020, 0);
 
 	///// Draw all entities 
 	gameEngine.init(ctx);

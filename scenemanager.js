@@ -6,6 +6,10 @@ class SceneManager {
 		this.game.camera = this;
 		this.x = 0;
 		this.y = 0;
+		this.displayText = "YOU'RE LATE. AGAIN. GET IN THE CAR.";
+		this.controlText = "W/Up: Forward. S/Down: Backward. A,D/Left,Right: Pivot. E: Enter Vehicle. Space: Jump.";
+		this.tutorialFlag1 = true;
+		this.shopArrowFlag = false;
 		
 		// HUD variables
 		//this.life = 5;
@@ -57,11 +61,11 @@ class SceneManager {
  //    }
 
 	update() { // TODO replace with constants
-		let xMidpoint = 1024 / 2 - 19 / 2;
-		let yMidpoint = 768 / 2 - 19 / 2;
+		let xMidpoint = PARAMS.PAGE_WIDTH / 2;// - 19 / 2;
+		let yMidpoint = PARAMS.PAGE_HEIGHT / 2;// - 19 / 2;
 		
-		this.x = this.game.player.x - xMidpoint;
-		this.y = this.game.player.y - yMidpoint;
+		this.x = Math.min(Math.max(this.game.player.x - xMidpoint, 0), PARAMS.MAP_WIDTH - PARAMS.PAGE_WIDTH);
+		this.y = Math.min(Math.max(this.game.player.y - yMidpoint, 0), PARAMS.MAP_HEIGHT - PARAMS.PAGE_HEIGHT);
 	}
 	
 	draw(ctx) {
@@ -71,6 +75,22 @@ class SceneManager {
 		//this.three.drawFrame(this.game.clockTick,ctx, 7, 8, 0.3);
 		//this.two.drawFrame(this.game.clockTick,ctx, 7, 8, 0.3);
 		//this.one.drawFrame(this.game.clockTick,ctx, 7, 8, 0.3)
+		
+		// Displays whatever text is given.
+		ctx.font = "30px Arial";
+		ctx.textAlign = "center";
+		ctx.strokeStyle = 'White';
+		ctx.strokeText(this.displayText, PARAMS.PAGE_WIDTH / 2, PARAMS.PAGE_HEIGHT - 50);
+		ctx.strokeStyle = 'White';
+		ctx.fillText(this.displayText, PARAMS.PAGE_WIDTH / 2, PARAMS.PAGE_HEIGHT - 50);
+		
+		// controls only appears for prompt of game.
+		ctx.font = "20px Arial";
+		ctx.textAlign = "center";
+		ctx.strokeStyle = 'White';
+		ctx.strokeText(this.controlText, PARAMS.PAGE_WIDTH / 2, 100);
+		ctx.strokeStyle = 'White';
+		ctx.fillText(this.controlText, PARAMS.PAGE_WIDTH / 2, 100);
 		
         if (PARAMS.DEBUG){
 			let coordText = "(" + Math.floor(this.game.player.x) + ","
