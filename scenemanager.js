@@ -85,12 +85,14 @@ class SceneManager {
 		ctx.fillText(this.displayText, PARAMS.PAGE_WIDTH / 2, PARAMS.PAGE_HEIGHT - 50);
 		
 		// controls only appears for prompt of game.
-		ctx.font = "20px Arial";
-		ctx.textAlign = "center";
-		ctx.strokeStyle = 'White';
-		ctx.strokeText(this.controlText, PARAMS.PAGE_WIDTH / 2, 100);
-		ctx.strokeStyle = 'White';
-		ctx.fillText(this.controlText, PARAMS.PAGE_WIDTH / 2, 100);
+		if (this.tutorialFlag1) {
+			ctx.font = "20px Arial";
+			ctx.textAlign = "center";
+			ctx.strokeStyle = 'White';
+			ctx.strokeText(this.controlText, PARAMS.PAGE_WIDTH / 2, 100);
+			ctx.strokeStyle = 'White';
+			ctx.fillText(this.controlText, PARAMS.PAGE_WIDTH / 2, 100);
+		}
 		
         if (PARAMS.DEBUG){
 			let coordText = "(" + Math.floor(this.game.player.x) + ","

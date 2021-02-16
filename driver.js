@@ -10,6 +10,7 @@ class Driver {
 		this.direction = direction; // 0 - 359, with 0 = right 
 		this.active = true;
 		this.jumpFlag = false;
+		this.onMission = false;
 		this.game.driver = this;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/driver.png");
@@ -123,13 +124,32 @@ class Driver {
 					that.healthPoint -= 1;
 					//console.log("damaged (car)" + angle);
 				}
+				if (entity instanceof StartMission) {	// start mission
+					if (that.game.camera.tutorialFlag1) {
+						that.game.camera.tutorialFlag1 = false;
+						that.game.camera.displayText = "Ya got an order, bud. ya got 30 minutes...\n27 minutes ago.";
+					}
+					if (!that.onMission) {
+						that.startMission();
+					}
+				}
+				if (entity instanceof GoalPost) {	// end mission
+					if (that.game.camera.tutorialFlag1) {
+						that.game.camera.tutorialFlag1 = false;
+						that.game.camera.displayText = "Ya got an order, bud. ya got 30 minutes...\n27 minutes ago.";
+					}
+					if (that.onMission && entity.isVisible) {
+						that.endMission();
+					}
+				}
 			};
 			// nextBB collisions
 			if (entity !== that && entity.BB && entity.BB.collide(that.nextBB)) {
 				if (entity instanceof DriverCar && that.game.keyE && that.active && !that.game.blockExit) {	// enter car
-					that.game.camera.tutorialFlag1 = false;
 					that.game.camera.shopArrowFlag = true;
-					that.game.camera.displayText = "FOLLOW THE ARROW. GO TO THE SHOP." + " (" + that.game.shop.x + "," + that.game.shop.y + ")";
+					if (that.game.camera.tutorialFlag1) {
+						that.game.camera.displayText = "FOLLOW THE ARROW. GO TO THE SHOP.";
+					}
 					that.game.camera.controlText = "W/Up: Accelerate. S/Down: Reverse. A,D/Left,Right: Turn. E: Exit Vehicle. Space: Brakes. Power Slide for a boost.";
 					that.x = -1000;	// arbitrary offmap location
 					that.y = -1000;
@@ -163,6 +183,21 @@ class Driver {
 		}
 		this.updateBB();
 	};
+	
+	startMission() {
+		this.onMission = true;
+		this.game.goals[0].isVisible = true;
+	}
+	
+	endMission() {
+		this.onMission = false;
+		this.game.goals[0].isVisible = false;
+		this.game.camera.displayText = "Damn, I was banking on your drunk ass being late again.";
+		var that = this;
+		setTimeout(function () {
+			that.game.camera.displayText = "Fine, I'll pay this time. Tip? fuck outta here.";
+		}, 8000)
+	}
 	
 	draw(ctx) {
 		if ((this.game.forward || this.game.backward) && this.active){

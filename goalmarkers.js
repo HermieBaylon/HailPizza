@@ -11,7 +11,6 @@ class StartMission {
 		
 		
 		Object.assign(this, { game, x, y });
-		console.log("Creating shop marker");
 		this.isVisible = true;
 		this.game.shop = this;
 		// TODO

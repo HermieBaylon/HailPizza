@@ -155,6 +155,7 @@ class DriverCar {
 			
 			// Release control, place driver
 			if (this.game.keyE && !this.game.blockExit) {
+				this.game.camera.controlText = "W/Up: Forward. S/Down: Backward. A,D/Left,Right: Pivot. E: Enter Vehicle. Space: Jump.";
 				// Calculate Exit direction
 				let exitDirection = (Math.floor(this.direction + 270) % 360 + 360) % 360;
 				this.active = false;

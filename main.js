@@ -26,12 +26,6 @@ ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
 
-
-	// Mission Start
-	document.getElementByID("message").addEventListener("click", function (e) {
-		if (currentChat.message.state) driver.state = currentChat.message.state;
-	
-	}};
 	// Background
 	var bgTiles = [];
 	for (var i = 0; i <= 4; i++) {
@@ -47,6 +41,7 @@ ASSET_MANAGER.downloadAll(function () {
 	
 	// Goal Markers
 	var goals = [];
+	var shop = null;
 	
 	// Buildings
 	var buildings = [];
@@ -63,8 +58,7 @@ ASSET_MANAGER.downloadAll(function () {
 			}
 			if (k != l)goals.push(new GoalPost(gameEngine, 64 * 9 + (PARAMS.TILE_WIDTH * k), 64 * 8 + (PARAMS.TILE_WIDTH * l)));
 			if (k == 3 && l == 3) {
-				var shop = new StartMission(gameEngine, 64 * 9 + (PARAMS.TILE_WIDTH * k), 64 * 8 + (PARAMS.TILE_WIDTH * l));
-				goals.push(shop);
+				shop = new StartMission(gameEngine, 64 * 9 + (PARAMS.TILE_WIDTH * k), 64 * 8 + (PARAMS.TILE_WIDTH * l));
 			}
 		}
 	}
@@ -152,6 +146,9 @@ ASSET_MANAGER.downloadAll(function () {
 	for (var i = 0; i < goals.length; i++) {
 		gameEngine.addEntity(goals[i]);
 	}
+	gameEngine.goals = goals;
+	gameEngine.addEntity(shop);
+	
 	
 	// NPCs
 	for (var i = 0; i < npcs.length; i++)
