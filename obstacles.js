@@ -35,10 +35,10 @@ class Fence {
 class Building {
 	constructor(game, x, y) {
 		// constants
-		this.WIDTH = 224;
-		this.HEIGHT = 127;
-		this.BB_WIDTH = 145;
-		this.BB_HEIGHT = 100;
+		this.WIDTH = 128;
+		this.HEIGHT = 64;
+		this.BB_WIDTH = 100;
+		this.BB_HEIGHT = 64;
 		this.BB_XBUFFER = (this.WIDTH - this.BB_WIDTH) / 2;
 		this.BB_YBUFFER = (this.HEIGHT - this.BB_HEIGHT) / 2;
 		
@@ -46,6 +46,9 @@ class Building {
 		// TODO
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/building.png");
+		
+		this.animation = new Animator(this.spritesheet, 0, 0,
+			this.WIDTH, this.HEIGHT, 1, 1, 1, false, true);
 		
 		// Update bounding box
 		this.updateBB();
@@ -60,9 +63,7 @@ class Building {
 	};
 	
 	draw(ctx) {
-		ctx.drawImage(this.spritesheet, 0, 0, 
-			this.WIDTH, this.HEIGHT,
-			this.x - this.game.camera.x, this.y - this.game.camera.y, this.WIDTH, this.HEIGHT);
+		this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 			
 		if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';

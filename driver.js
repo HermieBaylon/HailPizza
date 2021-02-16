@@ -1,5 +1,5 @@
 class Driver {
-	constructor(game, x, y) {
+	constructor(game, x, y, direction) {
 		// Constants
 		this.RUN_SPEED = 3;
 		this.PIVOT_SPEED = 3;
@@ -7,9 +7,10 @@ class Driver {
 		this.WIDTH = 19;	// Square animation box, HEIGHT == WIDTH
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
-		this.direction = 0; // 0 - 359, with 0 = right 
+		this.direction = direction; // 0 - 359, with 0 = right 
 		this.active = true;
 		this.jumpFlag = false;
+		this.game.driver = this;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/driver.png");
 		
@@ -26,18 +27,21 @@ class Driver {
 			
 		// Assign initial focus
 		this.game.player = this;
+
+		// HUD avariables
+		this.FULL_HEALTH_POINT = 6;
+		this.healthPoint = this.FULL_HEALTH_POINT;
+		this.healthBar = new HealthBar(this);
 	};
 	
 	updateBB(){
 		this.BB = new BoundingBox(this.x, this.y, this.WIDTH, this.WIDTH);
+		this.nextBB = new BoundingBox(this.x + (this.WIDTH * Math.cos((Math.PI / 180) * this.direction)),
+											this.y + (this.WIDTH * Math.sin((Math.PI / 180) * this.direction)),
+											this.WIDTH, this.WIDTH);
 	}
 	
 	update() {
-		if (!this.game.enterexit){
-			this.active = true;
-		} else {
-			this.active = false;
-		}
 		if (this.active) {
 			// Affirm focus
 			this.game.player = this;
@@ -48,7 +52,7 @@ class Driver {
 				this.jumpFlag = true;
 				setTimeout(function () {
 					that.jumpFlag = false;
-					console.log('Jump End');
+					//console.log('Jump End');
 				}, 300)
 			}
 			
@@ -78,8 +82,10 @@ class Driver {
 		
 		// Collision
 		var that = this;
+		var car = null;
+
 		this.game.entities.forEach(function (entity) {
-			if (entity.BB && that.BB.collide(entity.BB)) {
+			if (entity !== that && entity.BB && entity.BB.collide(that.BB)) {
 				if (entity instanceof Building) {	// hit building
 					if(that.jumpFlag){
 						that.jumpFlag = false;
@@ -88,16 +94,74 @@ class Driver {
 					} else if (that.game.forward) {
 						that.x -= (that.RUN_SPEED * Math.cos((Math.PI / 180) * that.direction));
 						that.y -= (that.RUN_SPEED * Math.sin((Math.PI / 180) * that.direction));
+					} else if (that.game.backward) {
+						that.x += (that.RUN_SPEED * Math.cos((Math.PI / 180) * that.direction));
+						that.y += (that.RUN_SPEED * Math.sin((Math.PI / 180) * that.direction));
 					}
-					console.log("boom");
+					//console.log("boom");
 				}
 				if (entity instanceof Pedestrian) {	// push npc
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(that.y - entity.y) / Math.abs(that.x - entity.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
 					// face npc away
 					// move him forward
 					console.log("move, foo");
 				}
+				if (entity instanceof Car) {	// damaged by car
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(that.y - entity.y) / Math.abs(that.x - entity.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					that.x -= (10 * Math.cos((Math.PI / 180) * angle));
+					that.y -= (10 * Math.sin((Math.PI / 180) * angle));
+					that.healthPoint -= 1;
+					//console.log("damaged (car)" + angle);
+				}
 			};
+			// nextBB collisions
+			if (entity !== that && entity.BB && entity.BB.collide(that.nextBB)) {
+				if (entity instanceof DriverCar && that.game.keyE && that.active && !that.game.blockExit) {	// enter car
+					that.game.camera.tutorialFlag1 = false;
+					that.game.camera.shopArrowFlag = true;
+					that.game.camera.displayText = "FOLLOW THE ARROW. GO TO THE SHOP." + " (" + that.game.shop.x + "," + that.game.shop.y + ")";
+					that.game.camera.controlText = "W/Up: Accelerate. S/Down: Reverse. A,D/Left,Right: Turn. E: Exit Vehicle. Space: Brakes. Power Slide for a boost.";
+					that.x = -1000;	// arbitrary offmap location
+					that.y = -1000;
+					that.updateBB();
+					that.game.blockExit = true;
+					that.active = false;
+					entity.active = true;
+					setTimeout(function () {
+						that.game.blockExit = false;
+					}, 500)
+				}
+			}
 		});
+		
+		// Keep in bounds
+		if (this.BB.left < 0) {	// Left
+			this.currentSpeed = 0;
+			this.x = this.WIDTH;
+		}
+		if (this.BB.top < 0) {	// Top
+			this.currentSpeed = 0;
+			this.y = this.WIDTH;
+		}
+		if (this.BB.right > PARAMS.MAP_WIDTH) {	// Right
+			this.currentSpeed = 0;
+			this.x = PARAMS.MAP_WIDTH - this.WIDTH;
+		}
+		if (this.BB.bottom > PARAMS.MAP_HEIGHT) {	// Bottom
+			this.currentSpeed = 0;
+			this.y = PARAMS.MAP_HEIGHT - this.WIDTH;
+		}
+		this.updateBB();
 	};
 	
 	draw(ctx) {
@@ -105,13 +169,17 @@ class Driver {
 			this.running.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		} else if (this.jumpFlag) {
 			this.jumping.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1.2);
-		} else {
+		} else if (this.active) {
 			this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		}
 		
 		if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 2), this.BB.y - this.game.camera.y - (this.WIDTH / 2), this.BB.width, this.BB.height);
+			ctx.strokeStyle = 'Blue';
+			ctx.strokeRect(this.nextBB.x - this.game.camera.x - (this.WIDTH / 2), this.nextBB.y - this.game.camera.y - (this.WIDTH / 2), this.nextBB.width, this.nextBB.height);
+			
         }
+        this.healthBar.draw(ctx);
 	};
 };

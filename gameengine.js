@@ -17,9 +17,10 @@ class GameEngine {
 		this.left = false;
 		this.right = false;
 		this.space = false;
-		this.enterexit = false;
+		this.keyE = false;
         this.surfaceWidth = null;
         this.surfaceHeight = null;
+		this.blockExit = false;
     };
 
     init(ctx) {
@@ -98,8 +99,7 @@ class GameEngine {
 					break;
 				case "KeyE":
 					that.keyE = true;
-					that.enterexit = !that.enterexit;
-					if (that.enterexit) {
+					if (that.keyE) {
 						that.audio.play();
 						that.audio.returnVolume();
 					} else {

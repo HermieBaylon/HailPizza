@@ -58,7 +58,11 @@ class BoundingBox {
     };
 
     collide(oth) {
-        if (this.right > oth.left && this.left < oth.right && this.top < oth.bottom && this.bottom > oth.top) return true;
+		if (oth instanceof Point) {
+			if (this.right > oth.x && this.left < oth.x && this.top < oth.y && this.bottom > oth.y) return true;
+		} else {
+			if (this.right > oth.left && this.left < oth.right && this.top < oth.bottom && this.bottom > oth.top) return true;
+		}
         return false;
     };
 };
@@ -96,7 +100,11 @@ class AngleBoundingBox {
     };
 
     collide(oth) {
-        if (this.right.isRight(oth.left) && this.left.isLeft(oth.right) && this.top.isAbove(oth.bottom) && this.bottom.isBelow(oth.top)) return true;
-        return false;
+		if (oth instanceof Point) {
+			if (this.right > oth.x && this.left < oth.x && this.top < oth.y && this.bottom > oth.y) return true;
+		} else {
+			if (this.right.isRight(oth.left) && this.left.isLeft(oth.right) && this.top.isAbove(oth.bottom) && this.bottom.isBelow(oth.top)) return true;
+        }
+		return false;
     };
 };

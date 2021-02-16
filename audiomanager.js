@@ -4,6 +4,7 @@ class AudioManager {
 		
 		this.game.audio = this;
 		this.selection = 0;
+		this.isPlaying = false;
 		
 		// Populate songs list
 		this.songs = [];
@@ -18,7 +19,7 @@ class AudioManager {
 	update() {
 		if (document.getElementById("myMusic").checked) {
 			PARAMS.AUDIO = true;
-			//Wif (this.songs[this.selection].paused) this.songs[this.selection].play();
+			//if (this.songs[this.selection].paused) this.songs[this.selection].play();
 		} else {
 			PARAMS.AUDIO = false;
 			this.songs[this.selection].pause();
@@ -27,14 +28,19 @@ class AudioManager {
 	
 	play() {
 		if (PARAMS.AUDIO) {
-			this.songs[this.selection].pause();
-			this.selection = (this.selection + 1) % this.songs.length;
+			if (this.isPlaying) {
+				this.songs[this.selection].pause();
+			} else {
+				this.isPlaying = true;
+				this.selection = Math.floor(Math.random() * this.songs.length);
+			}
 			this.songs[this.selection].play();
 		}
 	}
 	
 	pause() {
 		this.songs[this.selection].pause();
+		this.isPlaying = false;
 	}
 	
 	lowerVolume() {
@@ -42,6 +48,10 @@ class AudioManager {
 	}
 	
 	returnVolume() {
-		this.songs[this.selection].volume = 0.1;
+		this.songs[this.selection].volume = 0.5;
+	}
+	
+	setVolume(vol) {
+		this.songs[this.selection].volume = vol;
 	}
 };

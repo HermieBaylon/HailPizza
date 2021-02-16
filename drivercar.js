@@ -1,5 +1,5 @@
 class DriverCar {
-	constructor(game, x, y) {
+	constructor(game, x, y, direction) {
 		// Constants
 		this.WIDTH = 70;
 		this.HEIGHT = 64;
@@ -8,7 +8,7 @@ class DriverCar {
 		
 		this.ACCELERATION = 0.5;
 		this.REVERSE = this.ACCELERATION / 2;
-		this.MAX_SPEED = 20;
+		this.MAX_SPEED = 15;
 		this.MAX_REVERSE = this.MAX_SPEED / 2;
 		this.TURN_SPEED = 4;
 		this.DRIFT_TURN_SPEED = this.TURN_SPEED * (1);
@@ -16,10 +16,13 @@ class DriverCar {
 		this.TURN_DRAG = this.ACCELERATION + 0.1;
 		this.BRAKE_DRAG = this.DRAG / 2;
 		this.LOG_LENGTH = 10;
+		this.PUSH_DRAG = this.DRAG * 2;
+		this.MAX_SPIN_SPEED = this.TURN_SPEED * 2;
+		this.SPIN_DRAG = this.DRAG * 5;
 
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
-		this.direction = 0; // 0 - 359, with 0 = right facing
+		this.direction = direction; // 0 - 359, with 0 = right facing
 		this.directionLog = [];
 		this.currentSpeed = 0;
 		this.driftFlag = false;
@@ -28,6 +31,9 @@ class DriverCar {
 		this.burnoutFlag = false;
 		this.active = false;
 		this.enterFlag = false;
+		this.spinSpeed = 0;
+		this.pushSpeed = 0;
+		this.pushDirection = this.direction;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/drivercar.png");
 		
@@ -55,11 +61,8 @@ class DriverCar {
 	}
 	
 	update() {
-		if (this.game.enterexit){
-			this.active = true;
-		} else {
-			this.active = false;
-		}
+		var that = this;
+		
 		if (this.active) {
 			// Affirm focus
 			this.game.player = this;
@@ -69,7 +72,7 @@ class DriverCar {
 				this.driftFlag = true;
 				this.driftSpeed = this.currentSpeed;
 				this.driftDirection = this.direction;
-			} else if (this.driftFlag && !this.game.space) {	// End Drift TODO continue drift if over 45 degrees until stopped.
+			} else if (this.driftFlag && !this.game.space) {	// End Drift
 				if (this.game.forward && (Math.abs(this.driftDirection - this.direction) > 45)) {
 					this.currentSpeed += this.driftSpeed;
 				}
@@ -149,6 +152,23 @@ class DriverCar {
 					this.currentSpeed = 0;
 				}
 			} 
+			
+			// Release control, place driver
+			if (this.game.keyE && !this.game.blockExit) {
+				// Calculate Exit direction
+				let exitDirection = (Math.floor(this.direction + 270) % 360 + 360) % 360;
+				this.active = false;
+				this.game.driver.active = true;
+				this.game.driver.x = this.x + ((this.WIDTH / 3) * Math.cos((Math.PI / 180) * exitDirection));
+				this.game.driver.y = this.y + ((this.WIDTH / 3) * Math.sin((Math.PI / 180) * exitDirection));
+				this.game.player = this.game.driver;
+				this.game.blockExit = true;
+				this.enterFlag = true;
+				//this.game.audio.lowerVolume();
+				setTimeout(function () {
+					that.game.blockExit = false;
+				}, 500)
+			}
 		} else {
 			if (this.currentSpeed >= this.DRAG){		// Uncontrolled, Drag
 				this.currentSpeed -= this.DRAG;
@@ -157,10 +177,26 @@ class DriverCar {
 			} else {
 				this.currentSpeed = 0;
 			}
+			
+			// Audio proximity
+			let distance = (Math.sqrt( Math.pow(this.x - this.game.driver.x,2) + Math.pow(this.y - this.game.driver.y,2) ));
+			if (distance < (this.WIDTH * 3)) {
+				if (!this.game.audio.isPlaying) this.game.audio.play();
+				this.game.audio.setVolume(0.34 - ((distance / (this.WIDTH * 3)) / 3));
+			} else {
+				this.game.audio.pause();
+			}
+		}
+		
+		// Handle spinning
+		if (this.spinSpeed !== 0) {
+			this.direction += this.spinSpeed;
+			this.spinSpeed = Math.sign(this.spinSpeed) * (Math.abs(this.spinSpeed) - this.SPIN_DRAG);
+			if (Math.abs(this.spinSpeed) < 2) this.spinSpeed = 0;
 		}
 		
 		// Movement
-		if (this.driftFlag) {
+		if (this.driftFlag && this.active) {
 			this.x += (this.driftSpeed * Math.cos((Math.PI / 180) * this.driftDirection));
 			this.y += (this.driftSpeed * Math.sin((Math.PI / 180) * this.driftDirection));
 		} else {
@@ -168,27 +204,79 @@ class DriverCar {
 			this.y += (this.currentSpeed * Math.sin((Math.PI / 180) * this.direction));
 		}
 		
+		// Handle pushes
+		if (this.pushSpeed >= this.DRAG){
+			this.pushSpeed -= this.DRAG;
+		} else if (this.pushSpeed <= -this.DRAG){
+			this.pushSpeed += this.DRAG;
+		} else {
+			this.pushSpeed = 0;
+		}
+		this.x += (this.pushSpeed * Math.cos((Math.PI / 180) * this.pushDirection));
+		this.y += (this.pushSpeed * Math.sin((Math.PI / 180) * this.pushDirection));
+		
 		// Update bounding box
 		this.updateBB();
 		
 		// Collision
-		var that = this;
 		this.game.entities.forEach(function (entity) {
             if (entity.BB && that.BB.collide(entity.BB)) {
 				if (entity instanceof Pedestrian) { // squish pedestrians
 					entity.dead = true;
-					console.log("dead");
+					//console.log("dead");
 				}
 				if (entity instanceof Building) {	// hit building
-					that.currentSpeed = -10 * that.DRAG;
-					console.log("boom (building)");
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					
+					// Halt movement
+					that.driftSpeed = 0;
+					that.currentSpeed = 0;
+					// Push
+					that.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					that.pushDirection = angle + 180;
 				}
-				if (entity instanceof Car) {	// hit building
-					that.currentSpeed = -10 * that.DRAG;
-					console.log("boom (car)");
+				if (entity instanceof Car) {	// hit car
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					// Stop drivercar
+					that.currentSpeed = 0;
+					that.driftSpeed = 0;
+					// push car
+					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					entity.pushDirection = angle;
+					//entity.spinSpeed = 5;	// TODO calculate spinning
+					////console.log("boom (car)");
 				}
 			};
 		});
+		
+		// Keep in bounds
+		if (this.BB.left.x < 0) {	// Left
+			this.currentSpeed = 0;
+			this.x = this.WIDTH;
+		}
+		if (this.BB.top.y < 0) {	// Top
+			this.currentSpeed = 0;
+			this.y = this.WIDTH;
+		}
+		if (this.BB.right.x > PARAMS.MAP_WIDTH) {	// Right
+			this.currentSpeed = 0;
+			this.x = PARAMS.MAP_WIDTH - this.WIDTH;
+		}
+		if (this.BB.bottom.y > PARAMS.MAP_HEIGHT) {	// Bottom
+			this.currentSpeed = 0;
+			this.y = PARAMS.MAP_HEIGHT - this.WIDTH;
+		}
+		this.updateBB();
 	};
 	
 	draw(ctx) {
@@ -203,7 +291,6 @@ class DriverCar {
 				this.enterFlag = false;
 				this.entering = new AngleAnimator(this.spritesheet, 0, 0,
 					this.WIDTH, this.HEIGHT, 7, 0.05, 1, this.direction, false, false);
-				console.log('Door Done');
 			}
 		//} else if (!this.active && this.enterFlag) {
 			//TODO EXIT VEHICLE
@@ -217,10 +304,8 @@ class DriverCar {
 		// Burnout animation
 		if ((this.currentSpeed > this.MAX_SPEED + 2) && !this.burnoutFlag) {
 			this.burnoutFlag = true;
-			console.log("BURNOUT, Speed: " + this.currentSpeed);
 		} else if (!(this.currentSpeed > this.MAX_SPEED) && this.burnoutFlag) {
 			this.burnoutFlag = false;
-			console.log("end burnout.");
 		}
 		
 		if (this.burnoutFlag) {
