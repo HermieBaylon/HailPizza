@@ -27,8 +27,8 @@ class SceneManager {
 		//this.two = new Animator(this.spritesheet, 217, 113, 86, 480, 1, 0.3, 8, false, true); // two hp
 		//this.one = new Animator(this.spritesheet, 31, 113, 86, 480, 1, 0.3, 8, false, true); //one hp
 		//this.loadAnimations();
-		game.addEntity(new HealthBar(game, 10, 10));
 		game.addEntity(this);
+		game.addEntity(new HealthBar(game, 10, 10));
 		
 		
 		// Effects
@@ -102,7 +102,7 @@ class SceneManager {
 							+ "B:(" +  Math.floor(this.game.player.BB.bottom.x) + "," +  Math.floor(this.game.player.BB.bottom.y) + ")";
 			
 			ctx.strokeStyle = 'White';
-			ctx.font = "30px Arial";
+			ctx.font = "30px serif";
 			ctx.strokeText(coordText, 50, 50);
 			ctx.strokeText(coordText2, 50, 100);
 			ctx.strokeStyle = 'Black';

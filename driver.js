@@ -101,9 +101,15 @@ class Driver {
 					//console.log("boom");
 				}
 				if (entity instanceof Pedestrian) {	// push npc
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(that.y - entity.y) / Math.abs(that.x - entity.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
 					// face npc away
 					// move him forward
-					//console.log("move, foo");
+					console.log("move, foo");
 				}
 				if (entity instanceof Car) {	// damaged by car
 					// Calculate center to center angle

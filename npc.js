@@ -25,6 +25,9 @@ class Pedestrian {
 		 this.walking = new AngleAnimator(this.spritesheet,
 		 228, this.version * this.WIDTH,
 		 	this.WIDTH, this.WIDTH, 8, 0.3, 0, this.direction, false, true);	// Walking
+		 this.corpse = new AngleAnimator(this.spritesheet,
+		 380, this.version * this.WIDTH,
+		 	this.WIDTH, this.WIDTH, 1, 1, 0, this.direction, false, true);	// Corpse
 		
 		// TODO AI
 		// this.forward = true;
@@ -56,28 +59,29 @@ class Pedestrian {
 	update() {
 
 		this.updatePedestrian();
-
-		// Turning
-		if (this.left) {
-			this.direction -= this.PIVOT_SPEED;
-		} else if (this.right) {
-			this.direction += this.PIVOT_SPEED;
-		}
-		// Normalize to range integers 0-359
-		this.direction = (Math.floor(this.direction) % 360 + 360) % 360;
-		
-		// Movement
-		if (this.forward) {
+		if (!this.dead) {
+			// Turning
+			if (this.left) {
+				this.direction -= this.PIVOT_SPEED;
+			} else if (this.right) {
+				this.direction += this.PIVOT_SPEED;
+			}
+			// Normalize to range integers 0-359
+			this.direction = (Math.floor(this.direction) % 360 + 360) % 360;
+			
+			// Movement
+			if (this.forward) {
 				this.x += (this.RUN_SPEED * Math.cos((Math.PI / 180) * this.direction));
 				this.y += (this.RUN_SPEED * Math.sin((Math.PI / 180) * this.direction));
 			}
+		}
 		
 		// Update bounding box
 		this.updateBB();
 		
 		// death
 		if (this.dead) {
-			this.removeFromWorld = true;
+			//this.removeFromWorld = true;
 		}
 		
 		// Collision
@@ -91,10 +95,15 @@ class Pedestrian {
 	
 	updateBB(){
 		this.BB = new BoundingBox(this.x, this.y, this.WIDTH, this.WIDTH);
+		this.nextBB = new BoundingBox(this.x + (this.WIDTH * Math.cos((Math.PI / 180) * this.direction)),
+											this.y + (this.WIDTH * Math.sin((Math.PI / 180) * this.direction)),
+											this.WIDTH, this.WIDTH);
 	};
 	
 	draw(ctx) {
-		if (this.forward){
+		if (this.dead) {
+			this.corpse.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);	
+		} else if (this.forward){
 			this.walking.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		} else {
 			this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
@@ -103,7 +112,10 @@ class Pedestrian {
 		if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 2), this.y - this.game.camera.y - (this.WIDTH / 2), this.BB.width, this.BB.height);
-        }
+			ctx.strokeStyle = 'Blue';
+			ctx.strokeRect(this.nextBB.x - this.game.camera.x - (this.WIDTH / 2), this.nextBB.y - this.game.camera.y - (this.WIDTH / 2), this.nextBB.width, this.nextBB.height);
+			
+		}
 	};
 
 	straightHorizontal() {
@@ -267,8 +279,8 @@ class Car {
 		// Constants
 		this.NUM_VERSIONS = 6;
 		this.ACCELERATION = 0.1;
-		this.FRICTION = 0.5;
-		this.MAX_SPEED = 4;
+		this.FRICTION = 0.8;
+		this.MAX_SPEED = 3;
 		this.TURN_SPEED = 2;
 		this.WIDTH = 70;
 		this.HEIGHT = 64;
@@ -327,6 +339,36 @@ class Car {
 		
 		// Initialize bounding box
 		this.updateBB();
+		
+		// Collision
+		var that = this;
+		this.game.entities.forEach(function (entity) {
+			if (entity.BB && that.nextBB.collide(entity.BB)) {	// Action predictions
+				if (entity instanceof DriverCar) {	// predict car, stop
+					if (that.forward) {
+						that.forward = false;
+						that.backward = true;
+						setTimeout(function () {
+							that.backward = false;
+							that.forward = true;
+						}, 1500)
+					}
+				}
+				if (entity instanceof Car) {	// predict pedestrian, stop
+					if (that.forward) {
+						that.forward = false;
+						that.backward = true;
+						setTimeout(function () {
+							that.backward = false;
+							that.forward = true;
+						}, 1500)
+					}
+				}
+			}
+            if (entity.BB && that.BB.collide(entity.BB)) {
+				//
+			};
+		});
 	};
 	
 	updateBB(){
@@ -414,10 +456,23 @@ class Car {
 						}, 1500)
 					}
 				}
+				if (entity instanceof Pedestrian && !entity.dead) {	// predict pedestrian, stop
+					if (that.forward) {
+						that.forward = false;
+						that.backward = true;
+						setTimeout(function () {
+							that.backward = false;
+							that.forward = true;
+						}, 1500)
+					}
+				}
 			}
             if (entity.BB && that.BB.collide(entity.BB)) {
 				if (entity instanceof Pedestrian) { // squish pedestrians
 						entity.dead = true;
+						setTimeout(function () {
+							entity.removeFromWorld = true;
+						}, 30000);
 				}
 				if (entity instanceof DriverCar) { // TODO car stops if drivercar is blocking
 					// Calculate center to center angle
@@ -433,14 +488,56 @@ class Car {
 					////console.log("boom (car)");
 					//that.forward = false;
 					//that.backward = true;
+				}if (entity instanceof Building) {	// hit building
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					
+					// Halt movement
+					that.driftSpeed = 0;
+					that.currentSpeed = 0;
+					// Push
+					that.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					that.pushDirection = angle + 180;
+					if (that.forward) {
+						that.forward = false;
+						that.backward = true;
+						that.left = true;
+						setTimeout(function () {
+							that.backward = false;
+							that.forward = true;
+						}, 1500)
+						setTimeout(function () {
+							that.left = false;
+						}, 6000)
+					}
 				}
-				if (entity instanceof Car && entity !== that) { // push other cars TODO car stops if oth car is blocking
-					// Update other cars push
-					//entity.pushDirection = that.pushDirection;
-					//entity.pushSpeed = Math.max(that.pushSpeed / 2, 10 * that.PUSH_DRAG);
-					// Update this cars push
-					//that.pushDirection = that.pushDirection + 180;
-					//that.pushSpeed = Math.max(that.pushSpeed / 2, 10 * that.PUSH_DRAG);
+				if (entity instanceof Car && entity !== that) {	// hit car
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					// Stop drivercar
+					that.currentSpeed = 0;
+					that.driftSpeed = 0;
+					// push car
+					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					entity.pushDirection = angle;
+					//entity.spinSpeed = 5;	// TODO calculate spinning
+					////console.log("boom (car)");
+					if (that.forward && Math.abs(angle - that.direction) < 45) {
+						that.forward = false;
+						that.backward = true;
+						setTimeout(function () {
+							that.backward = false;
+							that.forward = true;
+						}, 1500)
+					}
 				}
 			};
 		});

@@ -3,6 +3,8 @@ var gameEngine = new GameEngine();
 var ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload("./assets/bgtile00.png");
+ASSET_MANAGER.queueDownload("./assets/bgtile01.png");
+ASSET_MANAGER.queueDownload("./assets/bgtile02.png");
 ASSET_MANAGER.queueDownload("./assets/streetlight.png");
 ASSET_MANAGER.queueDownload("./assets/streetlight02.png");
 ASSET_MANAGER.queueDownload("./assets/fence.png");
@@ -28,7 +30,12 @@ ASSET_MANAGER.downloadAll(function () {
 	var bgTiles = [];
 	for (var i = 0; i <= 4; i++) {
 		for (var j = 0; j <= 4; j++) {
-			bgTiles.push(new Background(gameEngine, i * PARAMS.TILE_WIDTH, j * PARAMS.TILE_WIDTH));		
+			if (i == 3 && j == 3) {
+				bgTiles.push(new Background(gameEngine, i * PARAMS.TILE_WIDTH, j * PARAMS.TILE_WIDTH, 2));
+				console.log("alt");
+			} else {
+				bgTiles.push(new Background(gameEngine, i * PARAMS.TILE_WIDTH, j * PARAMS.TILE_WIDTH, 1));
+			}
 		}
 	}
 	
@@ -141,13 +148,13 @@ ASSET_MANAGER.downloadAll(function () {
 	}
 	
 	// NPCs
-	for (var i = 0; i < npccars.length; i++)
-	{
-		gameEngine.addEntity(npccars[i]);
-	}
 	for (var i = 0; i < npcs.length; i++)
 	{
 		gameEngine.addEntity(npcs[i]);
+	}
+	for (var i = 0; i < npccars.length; i++)
+	{
+		gameEngine.addEntity(npccars[i]);
 	}
 	
 	// Player
