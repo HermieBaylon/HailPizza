@@ -162,6 +162,7 @@ class DriverCar {
 				this.game.driver.active = true;
 				this.game.driver.x = this.x + ((this.WIDTH / 3) * Math.cos((Math.PI / 180) * exitDirection));
 				this.game.driver.y = this.y + ((this.WIDTH / 3) * Math.sin((Math.PI / 180) * exitDirection));
+				this.game.driver.direction = this.direction;
 				this.game.player = this.game.driver;
 				this.game.blockExit = true;
 				this.enterFlag = true;
@@ -223,8 +224,19 @@ class DriverCar {
 		this.game.entities.forEach(function (entity) {
             if (entity.BB && that.BB.collide(entity.BB)) {
 				if (entity instanceof Pedestrian) { // squish pedestrians
+				if (that.currentSpeed > that.DRAG || that.driftSpeed > that.DRAG) {
 					entity.dead = true;
 					//console.log("dead");
+				} else {
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					entity.pushDirection = angle;
+				}
 				}
 				if (entity instanceof Building) {	// hit building
 					// Calculate center to center angle
@@ -261,21 +273,11 @@ class DriverCar {
 		});
 		
 		// Keep in bounds
-		if (this.BB.left.x < 0) {	// Left
-			this.currentSpeed = 0;
-			this.x = this.WIDTH;
-		}
-		if (this.BB.top.y < 0) {	// Top
-			this.currentSpeed = 0;
-			this.y = this.WIDTH;
-		}
-		if (this.BB.right.x > PARAMS.MAP_WIDTH) {	// Right
-			this.currentSpeed = 0;
-			this.x = PARAMS.MAP_WIDTH - this.WIDTH;
-		}
-		if (this.BB.bottom.y > PARAMS.MAP_HEIGHT) {	// Bottom
-			this.currentSpeed = 0;
-			this.y = PARAMS.MAP_HEIGHT - this.WIDTH;
+		if (this.BB.left.x < -this.WIDTH || this.BB.top.y < -this.WIDTH
+				|| this.BB.right.x > PARAMS.MAP_WIDTH + this.WIDTH
+				|| this.BB.bottom.y > PARAMS.MAP_HEIGHT + this.WIDTH) {
+			this.direction += 180;
+			this.driftDirection += 180;
 		}
 		this.updateBB();
 	};

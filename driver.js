@@ -12,6 +12,7 @@ class Driver {
 		this.jumpFlag = false;
 		this.onMission = false;
 		this.game.driver = this;
+		this.mission = null;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/driver.png");
 		
@@ -21,8 +22,12 @@ class Driver {
 		// Animations
 		this.standing = new AngleAnimator(this.spritesheet, 0, 21,
 			this.WIDTH, this.WIDTH, 5, 0.3, 1, this.direction, false, true);	// Standing
+		this.pizzaStand = new AngleAnimator(this.spritesheet, 0, 60,
+			this.WIDTH, this.WIDTH, 5, 0.3, 1, this.direction, false, true);	// Standing w/ Pizza
 		this.running = new AngleAnimator(this.spritesheet, 0, 0,
 			this.WIDTH, this.WIDTH, 12, 0.05, 1, this.direction, false, true);	// Running
+		this.pizzaRun = new AngleAnimator(this.spritesheet, 0, 40,
+			this.WIDTH, this.WIDTH, 12, 0.05, 1, this.direction, false, true);	// Running w/ Pizza
 		this.jumping = new AngleAnimator(this.spritesheet, 0, 0,
 			this.WIDTH, this.WIDTH, 12, 0.7, 1, this.direction, false, true);	// Jumping
 			
@@ -125,21 +130,15 @@ class Driver {
 					//console.log("damaged (car)" + angle);
 				}
 				if (entity instanceof StartMission) {	// start mission
-					if (that.game.camera.tutorialFlag1) {
-						that.game.camera.tutorialFlag1 = false;
-						that.game.camera.displayText = "Ya got an order, bud. ya got 30 minutes...\n27 minutes ago.";
-					}
 					if (!that.onMission) {
 						that.startMission();
 					}
 				}
 				if (entity instanceof GoalPost) {	// end mission
-					if (that.game.camera.tutorialFlag1) {
-						that.game.camera.tutorialFlag1 = false;
-						that.game.camera.displayText = "Ya got an order, bud. ya got 30 minutes...\n27 minutes ago.";
-					}
 					if (that.onMission && entity.isVisible) {
-						that.endMission();
+						console.log("complete goal");
+						entity.isVisible = false;
+						that.goal();
 					}
 				}
 			};
@@ -149,6 +148,8 @@ class Driver {
 					that.game.camera.shopArrowFlag = true;
 					if (that.game.camera.tutorialFlag1) {
 						that.game.camera.displayText = "FOLLOW THE ARROW. GO TO THE SHOP.";
+						that.game.shopArrow.isVisible = true;
+
 					}
 					that.game.camera.controlText = "W/Up: Accelerate. S/Down: Reverse. A,D/Left,Right: Turn. E: Exit Vehicle. Space: Brakes. Power Slide for a boost.";
 					that.x = -1000;	// arbitrary offmap location
@@ -185,27 +186,70 @@ class Driver {
 	};
 	
 	startMission() {
+		if (this.game.camera.tutorialFlag1) {
+			this.game.camera.tutorialFlag1 = false;
+			this.mission = new Mission (this.game);
+			this.mission.keyFill("tut1");
+		} else if (this.game.camera.tutorialFlag2) {
+			this.game.camera.tutorialFlag2 = false;
+			this.mission = new Mission (this.game);
+			this.mission.keyFill("tut2");
+		} else {
+			this.mission = new Mission (this.game);
+			this.mission.randomFill();
+		}
+		this.game.shopArrow.isVisible = false;
+		this.game.camera.displayText = this.mission.startText;
 		this.onMission = true;
-		this.game.goals[0].isVisible = true;
+		for (var i = 0; i < this.mission.numOrders; i ++) { // TODO make random
+			this.randGoalPost();
+		}
+	}
+	
+	randGoalPost(){
+		var rand = Math.floor(Math.random() * this.game.goals.length);
+		console.log(rand);
+		if (!this.game.goals[rand].isVisible) {
+			this.game.goals[rand].isVisible = true;
+		} else {
+			this.randGoalPost();
+		}
+	}
+	
+	goal(){
+		this.game.camera.displayText = this.mission.finishText1;
+		var that = this;
+		setTimeout(function () {
+			that.game.camera.displayText = that.mission.finishText2;
+		}, 6000)
+		setTimeout(function () {
+			that.game.camera.displayText = "";
+		}, 12000)
+		this.mission.numOrders--;
+		// TODO decrement pizza counter
+		if (this.mission.numOrders <= 0) this.endMission();
 	}
 	
 	endMission() {
+		this.game.shopArrow.isVisible = true;
 		this.onMission = false;
-		this.game.goals[0].isVisible = false;
-		this.game.camera.displayText = "Damn, I was banking on your drunk ass being late again.";
-		var that = this;
-		setTimeout(function () {
-			that.game.camera.displayText = "Fine, I'll pay this time. Tip? fuck outta here.";
-		}, 8000)
 	}
 	
 	draw(ctx) {
 		if ((this.game.forward || this.game.backward) && this.active){
-			this.running.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
-		} else if (this.jumpFlag) {
+			if (this.onMission) {
+				this.pizzaRun.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
+			} else {
+				this.running.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
+			}
+			} else if (this.jumpFlag) {
 			this.jumping.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1.2);
 		} else if (this.active) {
-			this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
+			if (this.onMission) {
+				this.pizzaStand.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
+			} else {
+				this.standing.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
+			}
 		}
 		
 		if (PARAMS.DEBUG) {

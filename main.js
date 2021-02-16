@@ -21,6 +21,8 @@ ASSET_MANAGER.queueDownload("./assets/health.PNG");
 
 ASSET_MANAGER.queueDownload("./assets/exclamation.png");
 ASSET_MANAGER.queueDownload("./assets/goal.png");
+ASSET_MANAGER.queueDownload("./assets/arrow01.png");
+ASSET_MANAGER.queueDownload("./assets/arrow02.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
@@ -137,6 +139,9 @@ ASSET_MANAGER.downloadAll(function () {
 	// Player
 	var driver = new Driver(gameEngine, 1856, 2020, 270);
 	var drivercar = new DriverCar(gameEngine, 1472, 2020, 0);
+	
+	var shopArrow = new Arrow(gameEngine, driver.x, driver.y, shop.x, shop.y, 0);
+	gameEngine.shopArrow = shopArrow;
 
 	///// Draw all entities 
 	gameEngine.init(ctx);
@@ -163,6 +168,7 @@ ASSET_MANAGER.downloadAll(function () {
 	// Player
 	gameEngine.addEntity(driver);
 	gameEngine.addEntity(drivercar);
+	gameEngine.addEntity(shopArrow);
 	
 	// Obstacles
 	for (var i = 0; i < buildings.length; i++) {

@@ -9,6 +9,7 @@ class SceneManager {
 		this.displayText = "YOU'RE LATE. AGAIN. GET IN THE CAR.";
 		this.controlText = "W/Up: Forward. S/Down: Backward. A,D/Left,Right: Pivot. E: Enter Vehicle. Space: Jump.";
 		this.tutorialFlag1 = true;
+		this.tutorialFlag2 = true;
 		this.shopArrowFlag = false;
 		
 		// HUD variables
