@@ -2,7 +2,7 @@ class DriverCar {
 	constructor(game, x, y, direction) {
 		// Constants
 		this.WIDTH = 70;
-		this.HEIGHT = 64;
+		this.HEIGHT = PARAMS.GRID_WIDTH;
 		this.BB_WIDTH = 60;
 		this.BB_HEIGHT = 36;
 		

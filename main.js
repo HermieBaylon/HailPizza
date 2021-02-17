@@ -52,14 +52,14 @@ ASSET_MANAGER.downloadAll(function () {
 				if ( (i % 8 == 0) || (i % 8 == 2) ) {
 					for (var j = 0; j < 20 ; j++) {
 						if ( (j % 8 == 1) || (j % 8 == 2) ) {
-							buildings.push(new Building (gameEngine, 64 * i + (PARAMS.TILE_WIDTH * k), 64 * j + (PARAMS.TILE_WIDTH * l)));
+							buildings.push(new Building (gameEngine, PARAMS.GRID_WIDTH * i + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * j + (PARAMS.TILE_WIDTH * l)));
 						}
 					}
 				}
 			}
-			if (k != l)goals.push(new GoalPost(gameEngine, 64 * 9 + (PARAMS.TILE_WIDTH * k), 64 * 8 + (PARAMS.TILE_WIDTH * l)));
+			if (k != l)goals.push(new GoalPost(gameEngine, PARAMS.GRID_WIDTH * 9 + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * 8 + (PARAMS.TILE_WIDTH * l)));
 			if (k == 3 && l == 3) {
-				shop = new StartMission(gameEngine, 64 * 9 + (PARAMS.TILE_WIDTH * k), 64 * 8 + (PARAMS.TILE_WIDTH * l));
+				shop = new StartMission(gameEngine, PARAMS.GRID_WIDTH * 9 + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * 8 + (PARAMS.TILE_WIDTH * l));
 			}
 		}
 	}

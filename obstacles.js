@@ -35,10 +35,10 @@ class Fence {
 class Building {
 	constructor(game, x, y) {
 		// constants
-		this.WIDTH = 128;
-		this.HEIGHT = 64;
+		this.WIDTH = PARAMS.GRID_WIDTH * 2;
+		this.HEIGHT = PARAMS.GRID_WIDTH;
 		this.BB_WIDTH = 100;
-		this.BB_HEIGHT = 64;
+		this.BB_HEIGHT = PARAMS.GRID_WIDTH;
 		this.BB_XBUFFER = (this.WIDTH - this.BB_WIDTH) / 2;
 		this.BB_YBUFFER = (this.HEIGHT - this.BB_HEIGHT) / 2;
 		

@@ -288,7 +288,7 @@ class Car {
 		this.MAX_SPEED = 3;
 		this.TURN_SPEED = 2;
 		this.WIDTH = 70;
-		this.HEIGHT = 64;
+		this.HEIGHT = PARAMS.GRID_WIDTH;
 		this.PAGE_WIDTH = 210;
 		this.BB_WIDTH = 60;
 		this.BB_HEIGHT = 36;
@@ -558,7 +558,7 @@ class Car {
 		
 		//ctx.drawImage(this.spritesheet,
 		//(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
-		//this.WIDTH, this.HEIGHT, this.x - this.game.camera.x - (this.WIDTH / 2), this.y - this.game.camera.y - (this.HEIGHT / 2), 70, 64);
+		//this.WIDTH, this.HEIGHT, this.x - this.game.camera.x - (this.WIDTH / 2), this.y - this.game.camera.y - (this.HEIGHT / 2), 70, PARAMS.GRID_WIDTH);
 		// this.idling.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		
 		if (PARAMS.DEBUG) {
