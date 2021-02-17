@@ -5,6 +5,7 @@ class Driver {
 		this.PIVOT_SPEED = 3;
 		this.JUMP_SPEED = 5;
 		this.WIDTH = 19;	// Square animation box, HEIGHT == WIDTH
+		this.DRAG = 0.5;
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
 		this.direction = direction; // 0 - 359, with 0 = right 
@@ -13,6 +14,8 @@ class Driver {
 		this.onMission = false;
 		this.game.driver = this;
 		this.mission = null;
+		this.pushSpeed = 0;
+		this.pushDirection = this.direction;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/driver.png");
 		
@@ -41,9 +44,9 @@ class Driver {
 	};
 	
 	updateBB(){
-		this.BB = new BoundingBox(this.x, this.y, this.WIDTH, this.WIDTH);
-		this.nextBB = new BoundingBox(this.x + (this.WIDTH * Math.cos((Math.PI / 180) * this.direction)),
-											this.y + (this.WIDTH * Math.sin((Math.PI / 180) * this.direction)),
+		this.BB = new BoundingBox(this.x - this.WIDTH / 2, this.y - this.WIDTH / 2, this.WIDTH, this.WIDTH);
+		this.nextBB = new BoundingBox(this.x + (this.WIDTH * Math.cos((Math.PI / 180) * this.direction)) - this.WIDTH / 2,
+											this.y + (this.WIDTH * Math.sin((Math.PI / 180) * this.direction)) - this.WIDTH / 2,
 											this.WIDTH, this.WIDTH);
 	}
 	
@@ -82,6 +85,17 @@ class Driver {
 				this.y -= ((this.RUN_SPEED / 2) * Math.sin((Math.PI / 180) * this.direction));
 			}
 		
+			// Handle pushes
+			if (this.pushSpeed >= this.DRAG){
+				this.pushSpeed -= this.DRAG;
+			} else if (this.pushSpeed <= -this.DRAG){
+				this.pushSpeed += this.DRAG;
+			} else {
+				this.pushSpeed = 0;
+			}
+			this.x += (this.pushSpeed * Math.cos((Math.PI / 180) * this.pushDirection));
+			this.y += (this.pushSpeed * Math.sin((Math.PI / 180) * this.pushDirection));
+		
 			// Update bounding box
 			this.updateBB();
 		}
@@ -93,18 +107,10 @@ class Driver {
 		this.game.entities.forEach(function (entity) {
 			if (entity !== that && entity.BB && entity.BB.collide(that.BB)) {
 				if (entity instanceof Building) {	// hit building
-					if(that.jumpFlag){
-						that.jumpFlag = false;
-						that.x -= (that.JUMP_SPEED * Math.cos((Math.PI / 180) * that.direction));
-						that.y -= (that.JUMP_SPEED * Math.sin((Math.PI / 180) * that.direction));
-					} else if (that.game.forward) {
-						that.x -= (that.RUN_SPEED * Math.cos((Math.PI / 180) * that.direction));
-						that.y -= (that.RUN_SPEED * Math.sin((Math.PI / 180) * that.direction));
-					} else if (that.game.backward) {
-						that.x += (that.RUN_SPEED * Math.cos((Math.PI / 180) * that.direction));
-						that.y += (that.RUN_SPEED * Math.sin((Math.PI / 180) * that.direction));
-					}
-					//console.log("boom");
+					if (entity.BB.top < that.BB.bottom && entity.BB.top > that.y) that.y = entity.BB.top - that.WIDTH / 2;
+					if (entity.BB.bottom > that.BB.top && entity.BB.bottom < that.y) that.y = entity.BB.bottom + that.WIDTH / 2;
+					if (entity.BB.left < that.BB.right && entity.BB.left > that.x) that.x = entity.BB.left - that.WIDTH / 2;
+					if (entity.BB.right > that.BB.left && entity.BB.right < that.x) that.x = entity.BB.right + that.WIDTH / 2;
 				}
 				if (entity instanceof Pedestrian) {	// push npc
 					// Calculate center to center angle
@@ -254,9 +260,9 @@ class Driver {
 		
 		if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 2), this.BB.y - this.game.camera.y - (this.WIDTH / 2), this.BB.width, this.BB.height);
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
 			ctx.strokeStyle = 'Blue';
-			ctx.strokeRect(this.nextBB.x - this.game.camera.x - (this.WIDTH / 2), this.nextBB.y - this.game.camera.y - (this.WIDTH / 2), this.nextBB.width, this.nextBB.height);
+			ctx.strokeRect(this.nextBB.x - this.game.camera.x, this.nextBB.y - this.game.camera.y, this.nextBB.width, this.nextBB.height);
 			
         }
         this.healthBar.draw(ctx);

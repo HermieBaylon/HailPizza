@@ -16,7 +16,7 @@ class Mission {
 	keyFill(key) {
 		// keys
 		var keys = ["tut1", "tut2"];
-		var startText = ["Ya got an order, bud. ya got 30 minutes...29 minutes ago.", 
+		var startText = ["Ya got an order, bud. 30 minutes... 29 minutes ago.", 
 							"I got 2 for ya this time. Don't come back until they're both done."];
 		var finishText1 = ["Damn, I was banking on your drunk ass being late again.", "Who the fu... oh right."];
 		var finishText2 = ["Fine, I'll pay this time. Tip? fuck outta here.", "Whatever, took long enough."];
@@ -47,8 +47,8 @@ class Mission {
 	randomFill() {
 		// Random responses
 		var startText = ["Ya got orders, bud.", "Was wonderin' where the hell ya were. Get goin."];
-		var finishText1 = ["Hell yeah, Pizza!", "It better not be cold."];
-		var finishText2 = ["Tip? You think I'm made of money?", "Alright, whatever, here's a $5."];
+		var finishText1 = ["It better not be cold.", "Hell yeah, Pizza!"];
+		var finishText2 = ["Tip? You think I'm made of money?", "Alright, here's a $5."];
 		// Assign Stuff
 		this.key = "Random";
 		this.numOrders = Math.random() * 3;

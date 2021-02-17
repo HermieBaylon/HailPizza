@@ -59,7 +59,7 @@ class Building {
 	};
 	
 	update() {
-		// No need to update bounding box, it ain't going anywhere
+		this.updateBB();
 	};
 	
 	draw(ctx) {

@@ -7,9 +7,9 @@ class Point {
 	isLeft(oth) {
 		var returnFlag = false;
 		if (oth instanceof Point) {
-			if (this.x < oth.x) returnFlag = true;
+			if (this.x <= oth.x) returnFlag = true;
 		} else {
-			if (this.x < oth) returnFlag = true;
+			if (this.x <= oth) returnFlag = true;
 		}
 		return returnFlag;
 	}
@@ -17,9 +17,9 @@ class Point {
 	isRight(oth) {
 		var returnFlag = false;
 		if (oth instanceof Point) {
-			if (this.x > oth.x) returnFlag = true;
+			if (this.x >= oth.x) returnFlag = true;
 		} else {
-			if (this.x > oth) returnFlag = true;
+			if (this.x >= oth) returnFlag = true;
 		}
 		return returnFlag;
 	}
@@ -27,9 +27,9 @@ class Point {
 	isAbove(oth) {
 		var returnFlag = false;
 		if (oth instanceof Point) {
-			if (this.y < oth.y) returnFlag = true;
+			if (this.y <= oth.y) returnFlag = true;
 		} else {
-			if (this.y < oth) returnFlag = true;
+			if (this.y <= oth) returnFlag = true;
 		}
 		return returnFlag;
 	}
@@ -37,9 +37,9 @@ class Point {
 	isBelow(oth) {
 		var returnFlag = false;
 		if (oth instanceof Point) {
-			if (this.y > oth.y) returnFlag = true;
+			if (this.y >= oth.y) returnFlag = true;
 		} else {
-			if (this.y > oth) returnFlag = true;
+			if (this.y >= oth) returnFlag = true;
 		}
 		return returnFlag;
 	}
@@ -100,11 +100,92 @@ class AngleBoundingBox {
     };
 
     collide(oth) {
-		if (oth instanceof Point) {
+		if (oth instanceof AngleBoundingBox) {
+			//console.log(oth.left.y > this.getY(this.top, this.right, oth.left.x));
+			//if (this.cornerCollisionAngle(oth)) console.log("collides");
+			if (this.right.isRight(oth.left) && this.left.isLeft(oth.right) && this.top.isAbove(oth.bottom) && this.bottom.isBelow(oth.top)) return true;
+		} else if (oth instanceof Point) {
 			if (this.right > oth.x && this.left < oth.x && this.top < oth.y && this.bottom > oth.y) return true;
 		} else {
-			if (this.right.isRight(oth.left) && this.left.isLeft(oth.right) && this.top.isAbove(oth.bottom) && this.bottom.isBelow(oth.top)) return true;
+			//if (this.cornerCollision(oth)) console.log("Collide");
+			return this.cornerCollision(oth);
+			//if (this.right.isRight(oth.left) && this.left.isLeft(oth.right) && this.top.isAbove(oth.bottom) && this.bottom.isBelow(oth.top)) return true;
         }
 		return false;
-    };
+	};
+    
+	
+	cornerCollision(oth) {
+		// Broad collision
+		if (this.right.isRight(oth.left) && this.left.isLeft(oth.right) && this.top.isAbove(oth.bottom) && this.bottom.isBelow(oth.top)) {
+			// Edge case, this object is not angled oddly.
+			if (this.direction % 90 < 15) return true;
+			// Narrow detection
+			if (this.x < oth.x) {
+				// other object is colliding from the RIGHT...
+				if (this.y > oth.y) {
+					// other object is colliding from TOP RIGHT
+					if ( oth.left <= this.getX(this.top, this.right, oth.bottom) ) return true;
+				} else if (this.y < oth.y){
+					// other object is colliding from BOTTOM RIGHT
+					if ( oth.left <= this.getX(this.bottom, this.right, oth.top) ) return true;
+				}
+			}else if (this.x > oth.x) {
+				// other object is colliding from the LEFT...
+				if (this.y > oth.y) {
+					// other object is colliding from TOP LEFT
+					if ( oth.right >= this.getX(this.left, this.top, oth.bottom) ) return true;
+				} else if (this.y < oth.y){
+					// other object is colliding from BOTTOM LEFT
+					if ( oth.right >= this.getX(this.left, this.bottom, oth.top) ) return true;
+					//if ( oth.right.y <= this.getY(this.bottom, this.left, oth.right.x) ) return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	cornerCollisionAngle(oth) {
+		// Broad collision
+		if (this.right.isRight(oth.left) && this.left.isLeft(oth.right) && this.top.isAbove(oth.bottom) && this.bottom.isBelow(oth.top)) {
+			// Edge case, this object is not angled oddly.
+			if (this.direction % 90 < 15) return true;
+			// Narrow detection
+			if (this.x < oth.x) {
+				// other object is colliding from the RIGHT...
+				if (this.y > oth.y) {
+					// other object is colliding from TOP RIGHT
+					if ( oth.left.x <= this.getX(this.top, this.right, oth.bottom.y) ) return true;
+				} else if (this.y < oth.y){
+					// other object is colliding from BOTTOM RIGHT
+					if ( oth.left.x <= this.getX(this.bottom, this.right, oth.top.y) ) return true;
+				}
+			}else if (this.x > oth.x) {
+				// other object is colliding from the LEFT...
+				if (this.y > oth.y) {
+					// other object is colliding from TOP LEFT
+					if ( oth.right.x >= this.getX(this.left, this.top, oth.bottom.y) ) return true;
+				} else if (this.y < oth.y){
+					// other object is colliding from BOTTOM LEFT
+					if ( oth.right.x >= this.getX(this.left, this.bottom, oth.top.y) ) return true;
+					//if ( oth.right.y <= this.getY(this.bottom, this.left, oth.right.x) ) return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	getY(leftPoint, rightPoint, x) {
+		let m = (rightPoint.x - leftPoint.x) / (rightPoint.y - leftPoint.y);
+		let b = leftPoint.y - (m * leftPoint.x);
+		
+		return (m * x) + b;
+	}
+	
+	getX(leftPoint, rightPoint, y) {
+		let m = (rightPoint.x - leftPoint.x) / (rightPoint.y - leftPoint.y);
+		let b = leftPoint.y - (m * leftPoint.x);
+		
+		return (y - b) / m;
+	}
 };

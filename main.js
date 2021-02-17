@@ -34,7 +34,6 @@ ASSET_MANAGER.downloadAll(function () {
 		for (var j = 0; j <= 4; j++) {
 			if (i == 3 && j == 3) {
 				bgTiles.push(new Background(gameEngine, i * PARAMS.TILE_WIDTH, j * PARAMS.TILE_WIDTH, 2));
-				console.log("alt");
 			} else {
 				bgTiles.push(new Background(gameEngine, i * PARAMS.TILE_WIDTH, j * PARAMS.TILE_WIDTH, 1));
 			}

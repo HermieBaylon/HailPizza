@@ -88,15 +88,20 @@ class Pedestrian {
 		var that = this;
 		this.game.entities.forEach(function (entity) {
 			if (entity.BB && that.BB.collide(entity.BB)) {
-				// do stuff
+				if (entity instanceof Building) {	// hit building
+					if (entity.BB.top < that.BB.bottom && entity.BB.top > that.y) that.y = entity.BB.top - that.WIDTH / 2;
+					if (entity.BB.bottom > that.BB.top && entity.BB.bottom < that.y) that.y = entity.BB.bottom + that.WIDTH / 2;
+					if (entity.BB.left < that.BB.right && entity.BB.left > that.x) that.x = entity.BB.left - that.WIDTH / 2;
+					if (entity.BB.right > that.BB.left && entity.BB.right < that.x) that.x = entity.BB.right + that.WIDTH / 2;
+				}
 			};
 		});
 	};
 	
 	updateBB(){
-		this.BB = new BoundingBox(this.x, this.y, this.WIDTH, this.WIDTH);
-		this.nextBB = new BoundingBox(this.x + (this.WIDTH * Math.cos((Math.PI / 180) * this.direction)),
-											this.y + (this.WIDTH * Math.sin((Math.PI / 180) * this.direction)),
+		this.BB = new BoundingBox(this.x - this.WIDTH / 2, this.y - this.WIDTH / 2, this.WIDTH, this.WIDTH);
+		this.nextBB = new BoundingBox(this.x + (this.WIDTH * Math.cos((Math.PI / 180) * this.direction)) - this.WIDTH / 2,
+											this.y + (this.WIDTH * Math.sin((Math.PI / 180) * this.direction)) - this.WIDTH / 2,
 											this.WIDTH, this.WIDTH);
 	};
 	
@@ -111,9 +116,9 @@ class Pedestrian {
 		
 		if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x - this.game.camera.x - (this.WIDTH / 2), this.y - this.game.camera.y - (this.WIDTH / 2), this.BB.width, this.BB.height);
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
 			ctx.strokeStyle = 'Blue';
-			ctx.strokeRect(this.nextBB.x - this.game.camera.x - (this.WIDTH / 2), this.nextBB.y - this.game.camera.y - (this.WIDTH / 2), this.nextBB.width, this.nextBB.height);
+			ctx.strokeRect(this.nextBB.x - this.game.camera.x, this.nextBB.y - this.game.camera.y, this.nextBB.width, this.nextBB.height);
 			
 		}
 	};
@@ -488,7 +493,8 @@ class Car {
 					////console.log("boom (car)");
 					//that.forward = false;
 					//that.backward = true;
-				}if (entity instanceof Building) {	// hit building
+				}
+				if (entity instanceof Building) {	// hit building
 					// Calculate center to center angle
 					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
 					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
@@ -512,23 +518,27 @@ class Car {
 						}, 1500)
 						setTimeout(function () {
 							that.left = false;
-						}, 6000)
+						}, 2500)
 					}
 				}
 				if (entity instanceof Car && entity !== that) {	// hit car
 					// Calculate center to center angle
 					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+					let spin = 3;
+					if (Math.abs(angle) < 30) spin = 1;
 					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
-					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
-					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) {angle = 180 - (angle % 90); //Q2
+						spin = -spin;}
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) {angle = 360 - (angle % 90); //Q4
+						spin = -spin;}
 					// Stop drivercar
 					that.currentSpeed = 0;
 					that.driftSpeed = 0;
 					// push car
 					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
 					entity.pushDirection = angle;
-					//entity.spinSpeed = 5;	// TODO calculate spinning
+					entity.spinSpeed = spin;
 					////console.log("boom (car)");
 					if (that.forward && Math.abs(angle - that.direction) < 45) {
 						that.forward = false;

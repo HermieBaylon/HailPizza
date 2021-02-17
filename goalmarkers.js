@@ -123,8 +123,8 @@ class Arrow {
 		let angle = Math.atan( Math.abs(this.targetY - this.y) / Math.abs(this.targetX - this.x) ) * (180 / Math.PI);
 		if (this.targetX - this.x >= 0 && this.targetY - this.y >= 0) angle = (angle % 90); //Q1
 		if (this.targetX - this.x <  0 && this.targetY - this.y >= 0) angle = 180 - (angle % 90); //Q2
-		if (this.targetX - this.x <  0 && this.targetY - this.y <  0) angle = 180 + (angle % 90);// + 180; //Q3
-		if (this.targetX - this.x >= 0 && this.targetY - this.y <  0) angle = 360 - (angle % 90);// + 270; //Q4
+		if (this.targetX - this.x <  0 && this.targetY - this.y <  0) angle = 180 + (angle % 90); //Q3
+		if (this.targetX - this.x >= 0 && this.targetY - this.y <  0) angle = 360 - (angle % 90); //Q4
 		
 		this.direction = angle;
 	};
