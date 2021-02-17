@@ -24,11 +24,37 @@
     <script type="text/javascript" src="./mission.js"></script>
 </head>
 <body>
+    <div>
     <canvas id="gameWorld" width="1024" height="768" style="background: white; border: 1px solid black" tabindex ="0" autofocus muted="muted"></canvas>
-	 </br> <input type="checkbox" id="myMusic" checked> Toggle music. </br>
-	<input type="checkbox" id="myDebug" > Toggle Debug. </br>
-	
- WASD = movement, E = switch driver/ car, space to jump/brake.
+    </div>
+
+    <div>
+    <input type="checkbox" id="myMusic" checked> Toggle music. 
+    <input type="checkbox" id="myDebug" > Toggle Debug. 
+    </div>
+    
+    WASD = movement, E = switch driver/ car, space to jump/brake.
+    
+ </div>
+    <div class="components times">
+        <div class="stats">
+            <h4>Mission Time</h4>
+            <span id="minutes">00</span> :
+            <span id="seconds">00</span> :
+            <span id="millis">0</span>
+        </div>
+
+        <!-- <div class="stats">
+            <h4>Total Time</h4>
+            <span id="tot-minutes">00</span> :
+            <span id="tot-seconds">00</span> :
+            <span id="tot-millis">0</span>
+        </div> -->
+
+        <div class="stats">
+            <h4>Score</h4>
+            <span id="score">0</span>
+        </div>
 	
 </body>
 </html>

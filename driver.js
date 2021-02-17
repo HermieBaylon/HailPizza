@@ -16,6 +16,7 @@ class Driver {
 		this.mission = null;
 		this.pushSpeed = 0;
 		this.pushDirection = this.direction;
+		this.score = 0;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/driver.png");
 		
@@ -239,6 +240,7 @@ class Driver {
 	endMission() {
 		this.game.shopArrow.isVisible = true;
 		this.onMission = false;
+		this.score += 1;
 	}
 	
 	draw(ctx) {
@@ -266,5 +268,7 @@ class Driver {
 			
         }
         this.healthBar.draw(ctx);
+        this.game.score += this.score;
+        this.game.displayScore.innerHTML = this.game.score;
 	};
 };
