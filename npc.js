@@ -445,9 +445,9 @@ class Car {
 		this.y += (this.pushSpeed * Math.sin((Math.PI / 180) * this.pushDirection));
 		
 		// Update bounding box
-		this.updateBB();
+		 this.updateBB();
 		
-		// Collision
+		// // Collision
 		var that = this;
 		this.game.entities.forEach(function (entity) {
 			if (entity.BB && that.nextBB.collide(entity.BB)) {	// Action predictions
@@ -658,77 +658,86 @@ class Car {
 
 	generateRandomVersion() {
 		var random = Math.floor(Math.random() * 5);
-		//console.log(this.version);
 		this.version = random;
 	}
 
 	updateCar() {
 		var backgroundWidth = 1280 * 5;
 		var backgroundHeight = 1280 * 5;
-		if (this.movePattern == 1) {
-			if (this.direction == 0) {
-				if (this.x >= backgroundWidth) {
-					this.x = 0;
-				}
-			}
-			if (this.direction == 180) {
-				if (this.x < 0) {
-					this.x = backgroundWidth;
-				}
-			}
-		} else if (this.movePattern == 2) {
-			if (this.direction == 90) {	//previously 0
-				if (this.y > backgroundHeight) {
-					this.y = 0;
-				}
-			}
-			if (this.direction == 270) { //reviously 180
-				if (this.y < 0) {
-					this.y = backgroundHeight;
-				}
-			}
+		var out = 20;	
 
-		} else if (this.movePattern == 3) {
+		var isOutOfMap = this.x > backgroundWidth + out || this.x < 0 - out ||
+						 this.y > backgroundHeight + out || this.y < 0 - out;
 
-			if (this.isBackwards) {
-				if (this.y < 0) {
-					//console.log("HEY I AM LESS THAN ZERO");
-					this.direction = 180;
-					this.x = this.originX + this.WIDTH + 15;
-					this.y = this.originY;
-					this.generateRandomVersion();
-			 		this.horizontalToVertical();
-				}
-			} else {
-				if (this.y > backgroundHeight) {
-					this.direction = 0;
-					this.x = this.originX - this.WIDTH - 10;
-					this.y = this.originY;
-					this.generateRandomVersion();
-			 		this.horizontalToVertical();
-				}
-			}
-
-		} else if (this.movePattern == 4) {
-
-			if (this.isBackwards) {
-				if (this.x < 0) {
-					this.direction = 90;
-					this.x = this.originX;
-					this.y = this.originY - this.HEIGHT - 20;
-					this.generateRandomVersion();
-					this.verticalToHorizontal();
-				}
-			} else {
-				if (this.x > backgroundWidth) {
-					this.direction = 270;
-					this.x = this.originX;
-					this.y = this.originY + this.HEIGHT + 20;
-					this.generateRandomVersion();
-					this.verticalToHorizontal();
-				}
-			}
+		if (isOutOfMap) {
+			this.x = this.originX;
+			this.y = this.originY;
 		}
+
+		// if (this.movePattern == 1) {
+		// 	if (this.direction == 0) {
+		// 		if (this.x >= backgroundWidth) {
+		// 			this.x = 0;
+		// 		}
+		// 	}
+		// 	if (this.direction == 180) {
+		// 		if (this.x < 0) {
+		// 			this.x = backgroundWidth;
+		// 		}
+		// 	}
+		// } else if (this.movePattern == 2) {
+		// 	if (this.direction == 90) {
+		// 		if (this.y > backgroundHeight) {
+		// 			this.y = 0;
+		// 		}
+		// 	}
+		// 	if (this.direction == 270) {
+		// 		if (this.y < 0) {
+		// 			this.y = backgroundHeight;
+		// 		}
+		// 	}
+
+		// } else if (this.movePattern == 3) {
+
+		// 	if (this.isBackwards) {
+		// 		if (this.y < 0) {
+		// 			//console.log("HEY I AM LESS THAN ZERO");
+		// 			this.direction = 180;
+		// 			this.x = this.originX + this.WIDTH + 15;
+		// 			this.y = this.originY;
+		// 			this.generateRandomVersion();
+		// 	 		this.horizontalToVertical();
+		// 		}
+		// 	} else {
+		// 		if (this.y > backgroundHeight) {
+		// 			this.direction = 0;
+		// 			this.x = this.originX - this.WIDTH - 10;
+		// 			this.y = this.originY;
+		// 			this.generateRandomVersion();
+		// 	 		this.horizontalToVertical();
+		// 		}
+		// 	}
+
+		// } else if (this.movePattern == 4) {
+
+		// 	if (this.isBackwards) {
+		// 		if (this.x < 0) {
+		// 			this.direction = 90;
+		// 			this.x = this.originX;
+		// 			this.y = this.originY - this.HEIGHT - 20;
+		// 			this.generateRandomVersion();
+		// 			this.verticalToHorizontal();
+		// 		}
+		// 	} else {
+		// 		if (this.x > backgroundWidth) {
+		// 			this.direction = 270;
+		// 			this.x = this.originX;
+		// 			this.y = this.originY + this.HEIGHT + 20;
+		// 			this.generateRandomVersion();
+		// 			this.verticalToHorizontal();
+		// 		}
+		// 	}
+		// }
 	}
 
 	// horizontalToVertical() {
