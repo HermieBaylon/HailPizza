@@ -300,6 +300,7 @@ class Car {
 		this.movePattern = movePattern;
 		this.originX = x;
 		this.originY = y;
+		this.originDirection = direction;
 		
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
@@ -384,6 +385,7 @@ class Car {
 	}
 	
 	update() {
+
 		this.updateCar();
 
 		if (this.forward) {
@@ -448,109 +450,109 @@ class Car {
 		 this.updateBB();
 		
 		// // Collision
-		var that = this;
-		this.game.entities.forEach(function (entity) {
-			if (entity.BB && that.nextBB.collide(entity.BB)) {	// Action predictions
-				if (entity instanceof DriverCar) {	// predict car, stop
-					if (that.forward) {
-						that.forward = false;
-						that.backward = true;
-						setTimeout(function () {
-							that.backward = false;
-							that.forward = true;
-						}, 1500)
-					}
-				}
-				if (entity instanceof Pedestrian && !entity.dead) {	// predict pedestrian, stop
-					if (that.forward) {
-						that.forward = false;
-						that.backward = true;
-						setTimeout(function () {
-							that.backward = false;
-							that.forward = true;
-						}, 1500)
-					}
-				}
-			}
-            if (entity.BB && that.BB.collide(entity.BB)) {
-				if (entity instanceof Pedestrian) { // squish pedestrians
-						entity.dead = true;
-						setTimeout(function () {
-							entity.removeFromWorld = true;
-						}, 30000);
-				}
-				if (entity instanceof DriverCar) { // TODO car stops if drivercar is blocking
-					// Calculate center to center angle
-					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
-					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
-					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
-					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
-					// push drivercar
-					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
-					entity.pushDirection = angle;
-					//entity.spinSpeed = 5;	// TODO calculate spinning
-					////console.log("boom (car)");
-					//that.forward = false;
-					//that.backward = true;
-				}
-				if (entity instanceof Building) {	// hit building
-					// Calculate center to center angle
-					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
-					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
-					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
-					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+		// var that = this;
+		// this.game.entities.forEach(function (entity) {
+		// 	if (entity.BB && that.nextBB.collide(entity.BB)) {	// Action predictions
+		// 		if (entity instanceof DriverCar) {	// predict car, stop
+		// 			if (that.forward) {
+		// 				that.forward = false;
+		// 				that.backward = true;
+		// 				setTimeout(function () {
+		// 					that.backward = false;
+		// 					that.forward = true;
+		// 				}, 1500)
+		// 			}
+		// 		}
+		// 		if (entity instanceof Pedestrian && !entity.dead) {	// predict pedestrian, stop
+		// 			if (that.forward) {
+		// 				that.forward = false;
+		// 				that.backward = true;
+		// 				setTimeout(function () {
+		// 					that.backward = false;
+		// 					that.forward = true;
+		// 				}, 1500)
+		// 			}
+		// 		}
+		// 	}
+        //     if (entity.BB && that.BB.collide(entity.BB)) {
+		// 		if (entity instanceof Pedestrian) { // squish pedestrians
+		// 				entity.dead = true;
+		// 				setTimeout(function () {
+		// 					entity.removeFromWorld = true;
+		// 				}, 30000);
+		// 		}
+		// 		if (entity instanceof DriverCar) { // TODO car stops if drivercar is blocking
+		// 			// Calculate center to center angle
+		// 			let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+		// 			if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+		// 			if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+		// 			if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+		// 			if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+		// 			// push drivercar
+		// 			entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+		// 			entity.pushDirection = angle;
+		// 			//entity.spinSpeed = 5;	// TODO calculate spinning
+		// 			////console.log("boom (car)");
+		// 			//that.forward = false;
+		// 			//that.backward = true;
+		// 		}
+		// 		if (entity instanceof Building) {	// hit building
+		// 			// Calculate center to center angle
+		// 			let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+		// 			if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+		// 			if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+		// 			if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+		// 			if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
 					
-					// Halt movement
-					that.driftSpeed = 0;
-					that.currentSpeed = 0;
-					// Push
-					that.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
-					that.pushDirection = angle + 180;
-					if (that.forward) {
-						that.forward = false;
-						that.backward = true;
-						that.left = true;
-						setTimeout(function () {
-							that.backward = false;
-							that.forward = true;
-						}, 1500)
-						setTimeout(function () {
-							that.left = false;
-						}, 2500)
-					}
-				}
-				if (entity instanceof Car && entity !== that) {	// hit car
-					// Calculate center to center angle
-					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
-					let spin = 3;
-					if (Math.abs(angle) < 30) spin = 1;
-					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-					if (entity.x - that.x <  0 && entity.y - that.y >= 0) {angle = 180 - (angle % 90); //Q2
-						spin = -spin;}
-					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
-					if (entity.x - that.x >= 0 && entity.y - that.y <  0) {angle = 360 - (angle % 90); //Q4
-						spin = -spin;}
-					// Stop drivercar
-					that.currentSpeed = 0;
-					that.driftSpeed = 0;
-					// push car
-					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
-					entity.pushDirection = angle;
-					entity.spinSpeed = spin;
-					////console.log("boom (car)");
-					if (that.forward && Math.abs(angle - that.direction) < 45) {
-						that.forward = false;
-						that.backward = true;
-						setTimeout(function () {
-							that.backward = false;
-							that.forward = true;
-						}, 1500)
-					}
-				}
-			};
-		});
+		// 			// Halt movement
+		// 			that.driftSpeed = 0;
+		// 			that.currentSpeed = 0;
+		// 			// Push
+		// 			that.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+		// 			that.pushDirection = angle + 180;
+		// 			if (that.forward) {
+		// 				that.forward = false;
+		// 				that.backward = true;
+		// 				that.left = true;
+		// 				setTimeout(function () {
+		// 					that.backward = false;
+		// 					that.forward = true;
+		// 				}, 1500)
+		// 				setTimeout(function () {
+		// 					that.left = false;
+		// 				}, 2500)
+		// 			}
+		// 		}
+		// 		if (entity instanceof Car && entity !== that) {	// hit car
+		// 			// Calculate center to center angle
+		// 			let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+		// 			let spin = 3;
+		// 			if (Math.abs(angle) < 30) spin = 1;
+		// 			if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+		// 			if (entity.x - that.x <  0 && entity.y - that.y >= 0) {angle = 180 - (angle % 90); //Q2
+		// 				spin = -spin;}
+		// 			if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
+		// 			if (entity.x - that.x >= 0 && entity.y - that.y <  0) {angle = 360 - (angle % 90); //Q4
+		// 				spin = -spin;}
+		// 			// Stop drivercar
+		// 			that.currentSpeed = 0;
+		// 			that.driftSpeed = 0;
+		// 			// push car
+		// 			entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+		// 			entity.pushDirection = angle;
+		// 			entity.spinSpeed = spin;
+		// 			////console.log("boom (car)");
+		// 			if (that.forward && Math.abs(angle - that.direction) < 45) {
+		// 				that.forward = false;
+		// 				that.backward = true;
+		// 				setTimeout(function () {
+		// 					that.backward = false;
+		// 					that.forward = true;
+		// 				}, 1500)
+		// 			}
+		// 		}
+		// 	};
+		// });
 	};
 	
 	draw(ctx) {
@@ -583,9 +585,9 @@ class Car {
 	}
 
 	straightVertical() {
-		if (this.direction == 0) {
+		if (this.originDirection == 0) {
 			this.direction = 90;
-		} else if (this.direction == 180) {
+		} else if (this.originDirection == 180) {
 			this.direction = 270;
 		}
 		this.forward = true;
@@ -670,114 +672,83 @@ class Car {
 						 this.y > backgroundHeight + out || this.y < 0 - out;
 
 		if (isOutOfMap) {
+			if (this.movePattern == 1) {
+				this.straightHorizontal();
+			} else if (this.movePattern == 2) {
+				this.straightVertical();
+			} else if (this.movePattern == 3) {
+				this.horizontalToVertical();
+			} else if (this.movePattern == 4) {
+				this.verticalToHorizontal();
+			}
 			this.x = this.originX;
 			this.y = this.originY;
 		}
 
-		// if (this.movePattern == 1) {
-		// 	if (this.direction == 0) {
-		// 		if (this.x >= backgroundWidth) {
-		// 			this.x = 0;
-		// 		}
-		// 	}
-		// 	if (this.direction == 180) {
-		// 		if (this.x < 0) {
-		// 			this.x = backgroundWidth;
-		// 		}
-		// 	}
-		// } else if (this.movePattern == 2) {
-		// 	if (this.direction == 90) {
-		// 		if (this.y > backgroundHeight) {
-		// 			this.y = 0;
-		// 		}
-		// 	}
-		// 	if (this.direction == 270) {
-		// 		if (this.y < 0) {
-		// 			this.y = backgroundHeight;
-		// 		}
-		// 	}
+		if (this.movePattern == 1) {
+			if (this.direction == 0) {
+				if (this.x >= backgroundWidth) {
+					this.x = 0;
+				}
+			}
+			if (this.direction == 180) {
+				if (this.x < 0) {
+					this.x = backgroundWidth;
+				}
+			}
+		} else if (this.movePattern == 2) {
+			if (this.direction == 90) {
+				if (this.y > backgroundHeight) {
+					this.y = 0;
+				}
+			}
+			if (this.direction == 270) {
+				if (this.y < 0) {
+					this.y = backgroundHeight;
+				}
+			}
 
-		// } else if (this.movePattern == 3) {
+		} else if (this.movePattern == 3) {
 
-		// 	if (this.isBackwards) {
-		// 		if (this.y < 0) {
-		// 			//console.log("HEY I AM LESS THAN ZERO");
-		// 			this.direction = 180;
-		// 			this.x = this.originX + this.WIDTH + 15;
-		// 			this.y = this.originY;
-		// 			this.generateRandomVersion();
-		// 	 		this.horizontalToVertical();
-		// 		}
-		// 	} else {
-		// 		if (this.y > backgroundHeight) {
-		// 			this.direction = 0;
-		// 			this.x = this.originX - this.WIDTH - 10;
-		// 			this.y = this.originY;
-		// 			this.generateRandomVersion();
-		// 	 		this.horizontalToVertical();
-		// 		}
-		// 	}
+			if (this.isBackwards) {
+				if (this.y < 0) {
+					//console.log("HEY I AM LESS THAN ZERO");
+					this.direction = 180;
+					this.x = this.originX + this.WIDTH + 15;
+					this.y = this.originY;
+					this.generateRandomVersion();
+			 		this.horizontalToVertical();
+				}
+			} else {
+				if (this.y > backgroundHeight) {
+					this.direction = 0;
+					this.x = this.originX - this.WIDTH - 10;
+					this.y = this.originY;
+					this.generateRandomVersion();
+			 		this.horizontalToVertical();
+				}
+			}
 
-		// } else if (this.movePattern == 4) {
+		} else if (this.movePattern == 4) {
 
-		// 	if (this.isBackwards) {
-		// 		if (this.x < 0) {
-		// 			this.direction = 90;
-		// 			this.x = this.originX;
-		// 			this.y = this.originY - this.HEIGHT - 20;
-		// 			this.generateRandomVersion();
-		// 			this.verticalToHorizontal();
-		// 		}
-		// 	} else {
-		// 		if (this.x > backgroundWidth) {
-		// 			this.direction = 270;
-		// 			this.x = this.originX;
-		// 			this.y = this.originY + this.HEIGHT + 20;
-		// 			this.generateRandomVersion();
-		// 			this.verticalToHorizontal();
-		// 		}
-		// 	}
-		// }
+			if (this.isBackwards) {
+				if (this.x < 0) {
+					this.direction = 90;
+					this.x = this.originX;
+					this.y = this.originY - this.HEIGHT - 20;
+					this.generateRandomVersion();
+					this.verticalToHorizontal();
+				}
+			} else {
+				if (this.x > backgroundWidth) {
+					this.direction = 270;
+					this.x = this.originX;
+					this.y = this.originY + this.HEIGHT + 20;
+					this.generateRandomVersion();
+					this.verticalToHorizontal();
+				}
+			}
+		}
 	}
 
-	// horizontalToVertical() {
-	// 	this.forward = true;
-	// 	var that = this;
-	// 	if (that.x >= 210) {
-	// 		that.right = true;
-	// 	}
-	// 	if (that.direction >= 89) {
-	// 		that.direction = 90
-	// 		that.right = false;
-	// 	}
-	// }
-
-	// horizontalToVertical() {
-	// 	this.forward = true;
-	// 	var that = this;
-	// 	setTimeout(function () {
-	// 		that.right = true;
-	// 	}, 829.96)	//800 // 829.96
-	// 	setTimeout(function () {
-	// 		that.right = false;
-	// 	}, 1390) //1700
-	// 	// setTimeout(function () {
-	// 	// 	that.forward = false;
-	// 	// 	//console.log("stop driving");
-	// 	// }, 5500)
-	// }
-
-	// verticalToHorizontal() {
-	// 	this.direction = 270
-	// 	this.forward = true;
-	// 	var that = this;
-	// 	if (that.y <= 600) {
-	// 		//this.forward = false;
-	// 		this.right = true;
-	// 	}
-	// 	// if (that.direction >= 89) {
-	// 	// 	that.direction = 90
-	// 	// 	that.right = false;
-	// 	// }
-	// }
 };
