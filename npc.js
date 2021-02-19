@@ -582,6 +582,7 @@ class Car {
 
 	straightHorizontal() {
 		this.forward = true;
+		this.direction = this.originDirection;
 	}
 
 	straightVertical() {
@@ -683,6 +684,8 @@ class Car {
 			}
 			this.x = this.originX;
 			this.y = this.originY;
+			console.log("The X: "+this.x);
+			console.log("The Y: "+this.y);
 		}
 
 		if (this.movePattern == 1) {

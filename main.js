@@ -83,11 +83,11 @@ ASSET_MANAGER.downloadAll(function () {
 	// // (StraightVerticalDown2) X
 	var STD2 = [350, 860, 1630, 2104, 2910, 3420, 3930, 4700, 5210, 5980];
 
-	for (var i1 = 0; i1 < SHL1.length-1; i1++) {
-		npccars.push(new Car(gameEngine, starting, SHL1[i1], Math.floor(Math.random() * 5), 0, 1));
-		npccars.push(new Car(gameEngine, ending, SHR1[i1], Math.floor(Math.random() * 5), 180, 1));
-		npccars.push(new Car(gameEngine, SVU2[i1], ending, Math.floor(Math.random() * 5), 180, 2));
-		npccars.push(new Car(gameEngine, STD2[i1], starting, Math.floor(Math.random() * 5), 0, 2));
+	for (var i = 0; i < SHL1.length-1; i++) {
+		npccars.push(new Car(gameEngine, starting, SHL1[i], Math.floor(Math.random() * 5), 0, 1));
+		npccars.push(new Car(gameEngine, ending, SHR1[i], Math.floor(Math.random() * 5), 180, 1));
+		npccars.push(new Car(gameEngine, SVU2[i], ending, Math.floor(Math.random() * 5), 180, 2));
+		npccars.push(new Car(gameEngine, STD2[i], starting, Math.floor(Math.random() * 5), 0, 2));
 	}
 
 
