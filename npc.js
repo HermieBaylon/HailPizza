@@ -450,109 +450,109 @@ class Car {
 		 this.updateBB();
 		
 		// // Collision
-		// var that = this;
-		// this.game.entities.forEach(function (entity) {
-		// 	if (entity.BB && that.nextBB.collide(entity.BB)) {	// Action predictions
-		// 		if (entity instanceof DriverCar) {	// predict car, stop
-		// 			if (that.forward) {
-		// 				that.forward = false;
-		// 				that.backward = true;
-		// 				setTimeout(function () {
-		// 					that.backward = false;
-		// 					that.forward = true;
-		// 				}, 1500)
-		// 			}
-		// 		}
-		// 		if (entity instanceof Pedestrian && !entity.dead) {	// predict pedestrian, stop
-		// 			if (that.forward) {
-		// 				that.forward = false;
-		// 				that.backward = true;
-		// 				setTimeout(function () {
-		// 					that.backward = false;
-		// 					that.forward = true;
-		// 				}, 1500)
-		// 			}
-		// 		}
-		// 	}
-        //     if (entity.BB && that.BB.collide(entity.BB)) {
-		// 		if (entity instanceof Pedestrian) { // squish pedestrians
-		// 				entity.dead = true;
-		// 				setTimeout(function () {
-		// 					entity.removeFromWorld = true;
-		// 				}, 30000);
-		// 		}
-		// 		if (entity instanceof DriverCar) { // TODO car stops if drivercar is blocking
-		// 			// Calculate center to center angle
-		// 			let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
-		// 			if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-		// 			if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
-		// 			if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
-		// 			if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
-		// 			// push drivercar
-		// 			entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
-		// 			entity.pushDirection = angle;
-		// 			//entity.spinSpeed = 5;	// TODO calculate spinning
-		// 			////console.log("boom (car)");
-		// 			//that.forward = false;
-		// 			//that.backward = true;
-		// 		}
-		// 		if (entity instanceof Building) {	// hit building
-		// 			// Calculate center to center angle
-		// 			let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
-		// 			if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-		// 			if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
-		// 			if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
-		// 			if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+		var that = this;
+		this.game.entities.forEach(function (entity) {
+			if (entity.BB && that.nextBB.collide(entity.BB)) {	// Action predictions
+				if (entity instanceof DriverCar) {	// predict car, stop
+					if (that.forward) {
+						that.forward = false;
+						that.backward = true;
+						setTimeout(function () {
+							that.backward = false;
+							that.forward = true;
+						}, 1500)
+					}
+				}
+				if (entity instanceof Pedestrian && !entity.dead) {	// predict pedestrian, stop
+					if (that.forward) {
+						that.forward = false;
+						that.backward = true;
+						setTimeout(function () {
+							that.backward = false;
+							that.forward = true;
+						}, 1500)
+					}
+				}
+			}
+            if (entity.BB && that.BB.collide(entity.BB)) {
+				if (entity instanceof Pedestrian) { // squish pedestrians
+						entity.dead = true;
+						setTimeout(function () {
+							entity.removeFromWorld = true;
+						}, 30000);
+				}
+				if (entity instanceof DriverCar) { // TODO car stops if drivercar is blocking
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					// push drivercar
+					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					entity.pushDirection = angle;
+					//entity.spinSpeed = 5;	// TODO calculate spinning
+					////console.log("boom (car)");
+					//that.forward = false;
+					//that.backward = true;
+				}
+				if (entity instanceof Building) {	// hit building
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
 					
-		// 			// Halt movement
-		// 			that.driftSpeed = 0;
-		// 			that.currentSpeed = 0;
-		// 			// Push
-		// 			that.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
-		// 			that.pushDirection = angle + 180;
-		// 			if (that.forward) {
-		// 				that.forward = false;
-		// 				that.backward = true;
-		// 				that.left = true;
-		// 				setTimeout(function () {
-		// 					that.backward = false;
-		// 					that.forward = true;
-		// 				}, 1500)
-		// 				setTimeout(function () {
-		// 					that.left = false;
-		// 				}, 2500)
-		// 			}
-		// 		}
-		// 		if (entity instanceof Car && entity !== that) {	// hit car
-		// 			// Calculate center to center angle
-		// 			let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
-		// 			let spin = 3;
-		// 			if (Math.abs(angle) < 30) spin = 1;
-		// 			if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-		// 			if (entity.x - that.x <  0 && entity.y - that.y >= 0) {angle = 180 - (angle % 90); //Q2
-		// 				spin = -spin;}
-		// 			if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
-		// 			if (entity.x - that.x >= 0 && entity.y - that.y <  0) {angle = 360 - (angle % 90); //Q4
-		// 				spin = -spin;}
-		// 			// Stop drivercar
-		// 			that.currentSpeed = 0;
-		// 			that.driftSpeed = 0;
-		// 			// push car
-		// 			entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
-		// 			entity.pushDirection = angle;
-		// 			entity.spinSpeed = spin;
-		// 			////console.log("boom (car)");
-		// 			if (that.forward && Math.abs(angle - that.direction) < 45) {
-		// 				that.forward = false;
-		// 				that.backward = true;
-		// 				setTimeout(function () {
-		// 					that.backward = false;
-		// 					that.forward = true;
-		// 				}, 1500)
-		// 			}
-		// 		}
-		// 	};
-		// });
+					// Halt movement
+					that.driftSpeed = 0;
+					that.currentSpeed = 0;
+					// Push
+					that.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					that.pushDirection = angle + 180;
+					if (that.forward) {
+						that.forward = false;
+						that.backward = true;
+						that.left = true;
+						setTimeout(function () {
+							that.backward = false;
+							that.forward = true;
+						}, 1500)
+						setTimeout(function () {
+							that.left = false;
+						}, 2500)
+					}
+				}
+				if (entity instanceof Car && entity !== that) {	// hit car
+					// Calculate center to center angle
+					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+					let spin = 3;
+					if (Math.abs(angle) < 30) spin = 1;
+					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) {angle = 180 - (angle % 90); //Q2
+						spin = -spin;}
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) {angle = 360 - (angle % 90); //Q4
+						spin = -spin;}
+					// Stop drivercar
+					that.currentSpeed = 0;
+					that.driftSpeed = 0;
+					// push car
+					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+					entity.pushDirection = angle;
+					entity.spinSpeed = spin;
+					////console.log("boom (car)");
+					if (that.forward && Math.abs(angle - that.direction) < 45) {
+						that.forward = false;
+						that.backward = true;
+						setTimeout(function () {
+							that.backward = false;
+							that.forward = true;
+						}, 1500)
+					}
+				}
+			};
+		});
 	};
 	
 	draw(ctx) {
@@ -684,8 +684,6 @@ class Car {
 			}
 			this.x = this.originX;
 			this.y = this.originY;
-			console.log("The X: "+this.x);
-			console.log("The Y: "+this.y);
 		}
 
 		if (this.movePattern == 1) {
