@@ -71,21 +71,21 @@ ASSET_MANAGER.downloadAll(function () {
 	var starting = 0;
 	var ending = (1280 * 5);
 
-	// (StraightHorizontalLeft1) --> y = 415, 925, 1695, 2205, 2975, 3485
-	var SHL1 = [415, 925, 1695, 2205, 2975, 3485];
+	// (StraightHorizontalLeft1) Y
+	var SHL1 = [415, 925, 1695, 2205, 2975, 3485, 4255, 4765, 5535, 6045];
 
-	//(StraightHorizontalRight1) --> y = 350, 860, 1630, 2104, 2910, 3420
-	var SHR1 = [350, 860, 1630, 2104, 2910, 3420];
+	//(StraightHorizontalRight1) Y
+	var SHR1 = [350, 860, 1630, 2104, 2910, 3420, 3930, 4700, 5210, 5980];
 
-	// (StraightVerticalUp2) --> x = 415, 925, 1695, 2205, 2975, 3485
-	var SVU2 = [415, 925, 1695, 2205, 2975, 3485];
+	// (StraightVerticalUp2) X
+	var SVU2 = [415, 925, 1695, 2205, 2975, 3485, 4255, 4765, 5535, 6045];
 
-	// // (StraightVerticalDown2) --> x = 350, 860, 1630, 2104, 2910, 3420
-	var STD2 = [350, 860, 1630, 2104, 2910, 3420];
+	// // (StraightVerticalDown2) X
+	var STD2 = [350, 860, 1630, 2104, 2910, 3420, 3930, 4700, 5210, 5980];
 
 	for (var i1 = 0; i1 < SHL1.length-1; i1++) {
 		npccars.push(new Car(gameEngine, starting, SHL1[i1], Math.floor(Math.random() * 5), 0, 1));
-		npccars.push(new Car(gameEngine, ending, SHR1[i1], Math.floor(Math.random() * 5), 0, 1));
+		npccars.push(new Car(gameEngine, ending, SHR1[i1], Math.floor(Math.random() * 5), 180, 1));
 		npccars.push(new Car(gameEngine, SVU2[i1], ending, Math.floor(Math.random() * 5), 180, 2));
 		npccars.push(new Car(gameEngine, STD2[i1], starting, Math.floor(Math.random() * 5), 0, 2));
 	}
