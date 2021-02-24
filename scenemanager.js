@@ -12,6 +12,8 @@ class SceneManager {
 		this.tutorialFlag2 = true;
 		this.shopArrowFlag = false;
 		
+		this.title = true;
+		
 		// HUD variables
 		//this.life = 5;
 		//this.totalLife = 5;
@@ -30,8 +32,7 @@ class SceneManager {
 		//this.loadAnimations();
 		game.addEntity(this);
 		game.addEntity(new HealthBar(game, 10, 10));
-		
-		
+
 		// Effects
 	}
 	
@@ -67,6 +68,12 @@ class SceneManager {
 		
 		this.x = Math.min(Math.max(this.game.player.x - xMidpoint, 0), PARAMS.MAP_WIDTH - PARAMS.PAGE_WIDTH);
 		this.y = Math.min(Math.max(this.game.player.y - yMidpoint, 0), PARAMS.MAP_HEIGHT - PARAMS.PAGE_HEIGHT);
+		
+		// User clicks on "Start your shift" then title screen disappears..
+		if (this.title && this.game.click) {
+            if (this.game.click && this.game.click.y > 9 * PARAMS.BLOCKWIDTH && this.game.click.y < 9.5 * PARAMS.BLOCKWIDTH) {
+                this.title = false;
+            }
 	}
 	
 	draw(ctx) {
@@ -85,6 +92,14 @@ class SceneManager {
 		ctx.strokeStyle = 'White';
 		ctx.fillText(this.displayText, PARAMS.PAGE_WIDTH / 2, PARAMS.PAGE_HEIGHT - 50);
 		
+		// Title Screen
+		if (this.title) {
+			var width = 176;
+			var height = 88;
+			ctx.drawImage(ASSET_MANAGER.getAsset("./assets/hailpizza.png"), 2.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH, width * PARAMS.SCALE, height * PARAMS.SCALE);
+			ctx.fillStyle = this.game.mouse && this.game.mouse.y > 9 * PARAMS.BLOCKWIDTH && this.game.mouse.y < 9.5 * PARAMS.BLOCKWIDTH ? "Grey" : "White";
+            ctx.fillText("START YOUR SHIFT", 6.75 * PARAMS.BLOCKWIDTH, 9.5 * PARAMS.BLOCKWIDTH);
+		}
 		// controls only appears for prompt of game.
 		if (this.tutorialFlag1) {
 			ctx.font = "20px Arial";
