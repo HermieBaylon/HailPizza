@@ -10,6 +10,37 @@ ASSET_MANAGER.queueDownload("./assets/streetlight02.png");
 ASSET_MANAGER.queueDownload("./assets/fence.png");
 ASSET_MANAGER.queueDownload("./assets/building.png");
 
+ASSET_MANAGER.queueDownload("./assets/roof/00-00.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-00.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-01.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-02.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-03.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-04.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-05.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-00.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-01.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-02.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-03.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-04.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-05.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-06.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-07.png");
+ASSET_MANAGER.queueDownload("./assets/roof/03-00.png");
+ASSET_MANAGER.queueDownload("./assets/roof/03-01.png");
+ASSET_MANAGER.queueDownload("./assets/roof/03-02.png");
+ASSET_MANAGER.queueDownload("./assets/roof/03-03.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-00.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-01.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-02.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-03.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-04.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-05.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-06.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-07.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-08.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-09.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-10.png");
+
 ASSET_MANAGER.queueDownload("./assets/npcs.png");
 ASSET_MANAGER.queueDownload("./assets/npccars.png");
 
@@ -39,6 +70,10 @@ ASSET_MANAGER.downloadAll(function () {
 			}
 		}
 	}
+	// Intersection grid spaces that will determine when cars turn. direction variable is the new goalDirection cars are given.
+	var intersections = [];
+	intersections.push(new Intersection(gameEngine, PARAMS.TILE_WIDTH + 256, PARAMS.TILE_WIDTH + 256, 270));
+	intersections.push(new Intersection(gameEngine, PARAMS.TILE_WIDTH + 256, PARAMS.TILE_WIDTH + 448, 90));
 	
 	// Goal Markers
 	var goals = [];
@@ -52,7 +87,8 @@ ASSET_MANAGER.downloadAll(function () {
 				if ( (i % 8 == 0) || (i % 8 == 2) ) {
 					for (var j = 0; j < 20 ; j++) {
 						if ( (j % 8 == 1) || (j % 8 == 2) ) {
-							buildings.push(new Building (gameEngine, PARAMS.GRID_WIDTH * i + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * j + (PARAMS.TILE_WIDTH * l)));
+							buildings.push(new ModularBuilding (gameEngine, PARAMS.GRID_WIDTH + PARAMS.GRID_WIDTH * i + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * j + (PARAMS.TILE_WIDTH * l), 1, 0));
+							buildings.push(new ModularBuilding (gameEngine, PARAMS.GRID_WIDTH * i + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * j + (PARAMS.TILE_WIDTH * l), 1, 2));
 						}
 					}
 				}
@@ -63,10 +99,16 @@ ASSET_MANAGER.downloadAll(function () {
 			}
 		}
 	}
+	//let x = 1666;
+	//let y = 1866;
+	//buildings.push(new ModularBuilding (gameEngine, x + 64, y + 64, 2, 0));
+	//buildings.push(new ModularBuilding (gameEngine, x, y + 64, 2, 1));
+	//buildings.push(new ModularBuilding (gameEngine, x, y, 2, 2));
+	//buildings.push(new ModularBuilding (gameEngine, x + 64, y, 2, 3));
 	
-
 	// NPCs
 	var npccars = [];
+	/* OLD
 	// List of possible starting points
 	// (StraightHorizontalLeft1) --> y = 415, 925, 1695, 2205, 2975, 3485
 	npccars.push(new Car(gameEngine, 200, 415, Math.floor(Math.random() * 5), 0, 1));
@@ -123,10 +165,27 @@ ASSET_MANAGER.downloadAll(function () {
 	npccars.push(new Car(gameEngine, 1565, 3840, Math.floor(Math.random() * 5), 0, 4));
 	npccars.push(new Car(gameEngine, 2075, 3840, Math.floor(Math.random() * 5), 0, 4));
 	npccars.push(new Car(gameEngine, 2845, 3840, Math.floor(Math.random() * 5), 0, 4));
-	npccars.push(new Car(gameEngine, 3355, 3840, Math.floor(Math.random() * 5), 0, 4));
+	npccars.push(new Car(gameEngine, 3355, 3840, Math.floor(Math.random() * 5), 0, 4));*/
+	
+	// Define street entrances as points. TODO input final list of street entrances.
+	let streets = [];
+	streets.push(new Point (PARAMS.TILE_WIDTH, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
+	streets.push(new Point (PARAMS.TILE_WIDTH - PARAMS.GRID_WIDTH * 1, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 5.5));
+	streets.push(new Point (PARAMS.TILE_WIDTH - PARAMS.GRID_WIDTH * 2, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 6.5));
+	streets.push(new Point (PARAMS.TILE_WIDTH - PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 7.5));
+	
+	streets.push(new Point (PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
+	streets.push(new Point (PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 5.5));
+	streets.push(new Point (PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 6.5));
+	streets.push(new Point (PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 7.5));
+	gameEngine.streets = streets;
+	
+	for (var i = 0; i < streets.length; i++) {
+		npccars.push(new Car(gameEngine, streets[i].x, streets[i].y, Math.floor(Math.random() * 5), 0, 1));
+	}
 
 	var npcs = [];
-	var population = 10;//100 Anything larger than 20 stops the game somehow
+	var population = 10;//100 Anything larger than 20 stops the game somehow (MP: I don't see this issue)
 	var i = 0;
 	for (i = 0; i < population; i++) {
 		var randomX = Math.floor(Math.random() * 3000) + 0;
@@ -136,8 +195,8 @@ ASSET_MANAGER.downloadAll(function () {
 	}
 	
 	// Player
-	var driver = new Driver(gameEngine, 1856, 2020, 270);
-	var drivercar = new DriverCar(gameEngine, 1472, 2020, 0);
+	var driver = new Driver(gameEngine, 1472, 1828, 270);
+	var drivercar = new DriverCar(gameEngine, 1856, 2020, 0);
 	
 	var shopArrow = new Arrow(gameEngine, driver.x, driver.y, shop.x, shop.y, 0);
 	gameEngine.shopArrow = shopArrow;
@@ -147,6 +206,9 @@ ASSET_MANAGER.downloadAll(function () {
 	for (var i = 0; i < bgTiles.length; i++) {
 		gameEngine.addEntity(bgTiles[i]);
 	}
+	for (var i = 0; i < intersections.length; i++) {
+		gameEngine.addEntity(intersections[i]);
+	}
 	for (var i = 0; i < goals.length; i++) {
 		gameEngine.addEntity(goals[i]);
 	}
@@ -155,12 +217,10 @@ ASSET_MANAGER.downloadAll(function () {
 	
 	
 	// NPCs
-	for (var i = 0; i < npcs.length; i++)
-	{
+	for (var i = 0; i < npcs.length; i++) {
 		gameEngine.addEntity(npcs[i]);
 	}
-	for (var i = 0; i < npccars.length; i++)
-	{
+	for (var i = 0; i < npccars.length; i++) {
 		gameEngine.addEntity(npccars[i]);
 	}
 	

@@ -224,59 +224,25 @@ class DriverCar {
 		this.game.entities.forEach(function (entity) {
             if (entity.BB && that.BB.collide(entity.BB)) {
 				if (entity instanceof Pedestrian) { // squish pedestrians
-				if (that.currentSpeed > that.DRAG || that.driftSpeed > that.DRAG) {
-					entity.dead = true;
-					//console.log("dead");
-				} else {
-					// Calculate center to center angle
-					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
-					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = 180 - (angle % 90); //Q2
-					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
-					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = 360 - (angle % 90); //Q4
-					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
-					entity.pushDirection = angle;
+					if (that.currentSpeed > that.DRAG || that.driftSpeed > that.DRAG) {
+						entity.dead = true;
+						//console.log("dead");
+					} else {
+						// Calculate center to center angle
+						let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
+						if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+						if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = 180 - (angle % 90); //Q2
+						if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
+						if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = 360 - (angle % 90); //Q4
+						entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
+						entity.pushDirection = angle;
+					}
 				}
-				}
-				if (entity instanceof Building) {	// hit building
-					if (entity.BB.top < that.BB.bottom && entity.BB.top > that.y) that.y = entity.BB.top - that.WIDTH / 2;
-					if (entity.BB.bottom > that.BB.top && entity.BB.bottom < that.y) that.y = entity.BB.bottom + that.WIDTH / 2;
-					if (entity.BB.left < that.BB.right && entity.BB.left > that.x) that.x = entity.BB.left - that.WIDTH / 2;
-					if (entity.BB.right > that.BB.left && entity.BB.right < that.x) that.x = entity.BB.right + that.WIDTH / 2;
-					
-					// Calculate center to center angle
-					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
-					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = 180 - (angle % 90); //Q2
-					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
-					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = 360 - (angle % 90); //Q4
-					
-					// Halt movement
-					that.driftSpeed = 0;
-					that.currentSpeed = 0;
-					// Push
-					that.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
-					that.pushDirection = angle + 180;
+				if (entity instanceof Building || entity instanceof ModularBuilding) {	// hit building
+					vehicleToBuilding(that, entity);
 				}
 				if (entity instanceof Car) {	// hit car
-					// Calculate center to center angle
-					let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
-					let spin = 3;
-					if (Math.abs(angle) < 30) spin = 1;
-					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-					if (entity.x - that.x <  0 && entity.y - that.y >= 0) {angle = 180 - (angle % 90); //Q2
-						spin = -spin;}
-					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
-					if (entity.x - that.x >= 0 && entity.y - that.y <  0) {angle = 360 - (angle % 90); //Q4
-						spin = -spin;}
-					// Stop drivercar
-					that.currentSpeed = 0;
-					that.driftSpeed = 0;
-					// push car
-					entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
-					entity.pushDirection = angle;
-					entity.spinSpeed = spin;	// TODO calculate spinning
-					////console.log("boom (car)");
+					vehicleToVehicle(that, entity);
 				}
 			};
 		});

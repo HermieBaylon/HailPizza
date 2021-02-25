@@ -106,7 +106,7 @@ class Driver {
 
 		this.game.entities.forEach(function (entity) {
 			if (entity !== that && entity.BB && entity.BB.collide(that.BB)) {
-				if (entity instanceof Building) {	// hit building
+				if (entity instanceof Building || entity instanceof ModularBuilding) {	// hit building
 					if (entity.BB.top < that.BB.bottom && entity.BB.top > that.y) that.y = entity.BB.top - that.WIDTH / 2;
 					if (entity.BB.bottom > that.BB.top && entity.BB.bottom < that.y) that.y = entity.BB.bottom + that.WIDTH / 2;
 					if (entity.BB.left < that.BB.right && entity.BB.left > that.x) that.x = entity.BB.left - that.WIDTH / 2;
@@ -263,7 +263,6 @@ class Driver {
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y - this.game.camera.y, this.BB.width, this.BB.height);
 			ctx.strokeStyle = 'Blue';
 			ctx.strokeRect(this.nextBB.x - this.game.camera.x, this.nextBB.y - this.game.camera.y, this.nextBB.width, this.nextBB.height);
-			
         }
         this.healthBar.draw(ctx);
 	};
