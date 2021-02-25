@@ -84,11 +84,10 @@ ASSET_MANAGER.downloadAll(function () {
 	for (var k = 0; k < 5; k++) {
 		for (var l = 0; l < 5; l++) {
 			if (k != l)goals.push(new GoalPost(gameEngine, PARAMS.GRID_WIDTH * 9 + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * 8 + (PARAMS.TILE_WIDTH * l)));
-			if (k == 3 && l == 3) {
-				shop = new StartMission(gameEngine, PARAMS.GRID_WIDTH * 9 + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * 8 + (PARAMS.TILE_WIDTH * l));
-			}
 		}
 	}
+	shop = new StartMission(gameEngine, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 9.5, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 6);
+	
 	// curvy road across map
 	let tile1Buildings = [  [1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
 							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
@@ -223,10 +222,10 @@ ASSET_MANAGER.downloadAll(function () {
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -267,6 +266,8 @@ ASSET_MANAGER.downloadAll(function () {
 										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
 										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
 										0, 0));
+					} else if (tile1locA.includes(a) && tile1locB.includes(b) && tile1Buildings[i][j] == -1) {
+						// Goal Tile
 					}
 					if (tile2locA.includes(a) && tile2locB.includes(b) && tile2Buildings[i][j] == 1) {
 						buildings.push(new ModularBuilding (gameEngine,
