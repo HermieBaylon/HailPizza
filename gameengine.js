@@ -29,6 +29,8 @@ class GameEngine {
         this.surfaceHeight = this.ctx.canvas.height;
         this.startInput();
         this.timer = new Timer();
+        this.score = 0;
+        this.displayScore = document.getElementById('score');
     };
 
     start() {
@@ -38,6 +40,13 @@ class GameEngine {
             requestAnimFrame(gameLoop, that.ctx.canvas);
         })();
     };
+
+    // reset() {
+    //     this.entities = [];
+    //     this.score = 0;
+    //     this.displayScore.innerHTML = 0;
+    //     this.timer = new Timer();
+    // };
 
     startInput() {
         var that = this;

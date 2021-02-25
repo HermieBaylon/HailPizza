@@ -285,6 +285,7 @@ class Car {
 		this.movePattern = movePattern;
 		this.originX = x;
 		this.originY = y;
+		this.originDirection = direction;
 		
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
@@ -370,6 +371,7 @@ class Car {
 	}
 	
 	update() {
+
 		this.updateCar();
 
 		if (this.forward) {
@@ -431,9 +433,9 @@ class Car {
 		this.y += (this.pushSpeed * Math.sin((Math.PI / 180) * this.pushDirection));
 		
 		// Update bounding box
-		this.updateBB();
+		 this.updateBB();
 		
-		// Collision
+		// // Collision
 		var that = this;
 		this.resumeFlag = true;
 		this.game.entities.forEach(function (entity) {
@@ -530,12 +532,13 @@ class Car {
 	straightHorizontal() {
 		this.goalDirection = this.direction;
 		this.forward = true;
+		this.direction = this.originDirection;
 	}
 
 	straightVertical() {
-		if (this.direction == 0) {
+		if (this.originDirection == 0) {
 			this.direction = 90;
-		} else if (this.direction == 180) {
+		} else if (this.originDirection == 180) {
 			this.direction = 270;
 		}
 		this.forward = true;
@@ -608,7 +611,6 @@ class Car {
 
 	generateRandomVersion() {
 		var random = Math.floor(Math.random() * 5);
-		//console.log(this.version);
 		this.version = random;
 	}
 	
@@ -617,6 +619,25 @@ class Car {
 	updateCar() {
 		var backgroundWidth = 1280 * 5;
 		var backgroundHeight = 1280 * 5;
+		var out = 20;	
+
+		var isOutOfMap = this.x > backgroundWidth + out || this.x < 0 - out ||
+						 this.y > backgroundHeight + out || this.y < 0 - out;
+
+		if (isOutOfMap) {
+			if (this.movePattern == 1) {
+				this.straightHorizontal();
+			} else if (this.movePattern == 2) {
+				this.straightVertical();
+			} else if (this.movePattern == 3) {
+				this.horizontalToVertical();
+			} else if (this.movePattern == 4) {
+				this.verticalToHorizontal();
+			}
+			this.x = this.originX;
+			this.y = this.originY;
+		}
+
 		if (this.movePattern == 1) {
 			if (this.direction == 0) {
 				if (this.x >= backgroundWidth) {
@@ -629,12 +650,12 @@ class Car {
 				}
 			}
 		} else if (this.movePattern == 2) {
-			if (this.direction == 90) {	//previously 0
+			if (this.direction == 90) {
 				if (this.y > backgroundHeight) {
 					this.y = 0;
 				}
 			}
-			if (this.direction == 270) { //reviously 180
+			if (this.direction == 270) {
 				if (this.y < 0) {
 					this.y = backgroundHeight;
 				}
@@ -683,44 +704,4 @@ class Car {
 		}
 	}
 
-	// horizontalToVertical() {
-	// 	this.forward = true;
-	// 	var that = this;
-	// 	if (that.x >= 210) {
-	// 		that.right = true;
-	// 	}
-	// 	if (that.direction >= 89) {
-	// 		that.direction = 90
-	// 		that.right = false;
-	// 	}
-	// }
-
-	// horizontalToVertical() {
-	// 	this.forward = true;
-	// 	var that = this;
-	// 	setTimeout(function () {
-	// 		that.right = true;
-	// 	}, 829.96)	//800 // 829.96
-	// 	setTimeout(function () {
-	// 		that.right = false;
-	// 	}, 1390) //1700
-	// 	// setTimeout(function () {
-	// 	// 	that.forward = false;
-	// 	// 	//console.log("stop driving");
-	// 	// }, 5500)
-	// }
-
-	// verticalToHorizontal() {
-	// 	this.direction = 270
-	// 	this.forward = true;
-	// 	var that = this;
-	// 	if (that.y <= 600) {
-	// 		//this.forward = false;
-	// 		this.right = true;
-	// 	}
-	// 	// if (that.direction >= 89) {
-	// 	// 	that.direction = 90
-	// 	// 	that.right = false;
-	// 	// }
-	// }
 };
