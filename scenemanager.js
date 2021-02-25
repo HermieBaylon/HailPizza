@@ -74,6 +74,7 @@ class SceneManager {
             if (this.game.click && this.game.click.y > 9 * PARAMS.BLOCKWIDTH && this.game.click.y < 9.5 * PARAMS.BLOCKWIDTH) {
                 this.title = false;
             }
+		}
 	}
 	
 	draw(ctx) {

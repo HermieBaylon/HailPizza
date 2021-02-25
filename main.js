@@ -1,6 +1,7 @@
 var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
+ASSET_MANAGER.queueDownload("./assets/hailpizza.png");
 
 ASSET_MANAGER.queueDownload("./assets/bgtile00.png");
 ASSET_MANAGER.queueDownload("./assets/bgtile01.png");
