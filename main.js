@@ -72,8 +72,8 @@ ASSET_MANAGER.downloadAll(function () {
 	}
 	// Intersection grid spaces that will determine when cars turn. direction variable is the new goalDirection cars are given.
 	var intersections = [];
-	intersections.push(new Intersection(gameEngine, PARAMS.TILE_WIDTH + 256, PARAMS.TILE_WIDTH + 256, 270));
-	intersections.push(new Intersection(gameEngine, PARAMS.TILE_WIDTH + 256, PARAMS.TILE_WIDTH + 448, 90));
+	intersections.push(new Intersection(gameEngine,PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH, 270));
+	intersections.push(new Intersection(gameEngine,PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 1, PARAMS.TILE_WIDTH + 4 * PARAMS.GRID_WIDTH, 90));
 	
 	// Goal Markers
 	var goals = [];
@@ -83,28 +83,237 @@ ASSET_MANAGER.downloadAll(function () {
 	var buildings = [];
 	for (var k = 0; k < 5; k++) {
 		for (var l = 0; l < 5; l++) {
-			for (var i = 0; i < 20 ; i++) {
-				if ( (i % 8 == 0) || (i % 8 == 2) ) {
-					for (var j = 0; j < 20 ; j++) {
-						if ( (j % 8 == 1) || (j % 8 == 2) ) {
-							buildings.push(new ModularBuilding (gameEngine, PARAMS.GRID_WIDTH + PARAMS.GRID_WIDTH * i + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * j + (PARAMS.TILE_WIDTH * l), 1, 0));
-							buildings.push(new ModularBuilding (gameEngine, PARAMS.GRID_WIDTH * i + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * j + (PARAMS.TILE_WIDTH * l), 1, 2));
-						}
-					}
-				}
-			}
 			if (k != l)goals.push(new GoalPost(gameEngine, PARAMS.GRID_WIDTH * 9 + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * 8 + (PARAMS.TILE_WIDTH * l)));
 			if (k == 3 && l == 3) {
 				shop = new StartMission(gameEngine, PARAMS.GRID_WIDTH * 9 + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * 8 + (PARAMS.TILE_WIDTH * l));
 			}
 		}
 	}
-	//let x = 1666;
-	//let y = 1866;
-	//buildings.push(new ModularBuilding (gameEngine, x + 64, y + 64, 2, 0));
-	//buildings.push(new ModularBuilding (gameEngine, x, y + 64, 2, 1));
-	//buildings.push(new ModularBuilding (gameEngine, x, y, 2, 2));
-	//buildings.push(new ModularBuilding (gameEngine, x + 64, y, 2, 3));
+	// curvy road across map
+	let tile1Buildings = [  [1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1]  ];
+	// U shape road
+	let tile2Buildings = [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
+							[0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
+							[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0]  ];
+	// vertical roads
+	let tile3Buildings = [  [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1]  ];
+	// Horizontal roads across map
+	let tile4Buildings = [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
+							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
+							[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
+							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]  ];
+	// no roads
+	let tile5Buildings = [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ];
+	 // vertical roads in center of map
+	let tile6Buildings = [  [1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1],
+							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
+							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
+							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
+							[1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1]  ];
+	// shop tile, 1 horizontal road to shop
+	let tileSBuildings = [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ];
+	
+	let tile1locA = [0,4];
+	let tile1locB = [0,4];
+	
+	let tile2locA = [1,3];
+	let tile2locB = [0,4];
+	
+	let tile3locA = [2];
+	let tile3locB = [0,4];
+	
+	let tile4locA = [0,1,2,3,4];
+	let tile4locB = [1,3];
+	
+	let tile5locA = [0,4];
+	let tile5locB = [2];
+	
+	let tile6locA = [1,3];
+	let tile6locB = [2];
+	
+	let tileSlocA = [2];
+	let tileSlocB = [2];
+	
+	for (let a = 0; a < 5; a++) {
+		for (let b = 0; b < 5; b++) {
+			for (let i = 0; i < tile1Buildings.length; i++) {
+				for (let j = 0; j < tile1Buildings[i].length; j++) {	// There may be a way to refactor this into less lines but I'm tired and it's week 8
+					if (tile1locA.includes(a) && tile1locB.includes(b) && tile1Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tile2locA.includes(a) && tile2locB.includes(b) && tile2Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tile3locA.includes(a) && tile3locB.includes(b) && tile3Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tile3locA.includes(a) && tile3locB.includes(b) && tile3Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tile4locA.includes(a) && tile4locB.includes(b) && tile4Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tile5locA.includes(a) && tile5locB.includes(b) && tile5Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tile6locA.includes(a) && tile6locB.includes(b) && tile6Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tileSlocA.includes(a) && tileSlocB.includes(b) && tileSBuildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+				}
+			}
+		}
+	}
 	
 	// NPCs
 	var npccars = [];
@@ -164,15 +373,15 @@ ASSET_MANAGER.downloadAll(function () {
 	
 	// Define street entrances as points. TODO input final list of street entrances.
 	let streets = [];
-	streets.push(new Point (PARAMS.TILE_WIDTH, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
-	streets.push(new Point (PARAMS.TILE_WIDTH - PARAMS.GRID_WIDTH * 1, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 5.5));
-	streets.push(new Point (PARAMS.TILE_WIDTH - PARAMS.GRID_WIDTH * 2, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 6.5));
-	streets.push(new Point (PARAMS.TILE_WIDTH - PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 7.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
 	
-	streets.push(new Point (PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
-	streets.push(new Point (PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 5.5));
-	streets.push(new Point (PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 6.5));
-	streets.push(new Point (PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 7.5));
+	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
+	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
+	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
+	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
 	gameEngine.streets = streets;
 	
 	for (var i = 0; i < streets.length; i++) {
@@ -190,8 +399,8 @@ ASSET_MANAGER.downloadAll(function () {
 	}
 	
 	// Player
-	var driver = new Driver(gameEngine, 1472, 1828, 270);
-	var drivercar = new DriverCar(gameEngine, 1856, 2020, 0);
+	var driver = new Driver(gameEngine, 2581, 1636, 270);
+	var drivercar = new DriverCar(gameEngine, 2655, 1311, 0);
 	
 	var shopArrow = new Arrow(gameEngine, driver.x, driver.y, shop.x, shop.y, 0);
 	gameEngine.shopArrow = shopArrow;
