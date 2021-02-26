@@ -52,49 +52,6 @@ class AssetManager {
             console.log(path);
             var ext = path.substring(path.length - 3);
 
-            // switch (ext) {
-            //     case 'png':
-                    // console.log("THIS IS REACHEDDDDDDDDDDDDDd");
-                    // img.addEventListener("load", function () {
-                    //     console.log("Loaded " + this.src);
-                    //     that.successCount++;
-                    //     if (that.isDone()) callback();
-                    // });
-
-                    // img.addEventListener("error", function () {
-                    //     console.log("Error loading " + this.src);
-                    //     that.errorCount++;
-                    //     if (that.isDone()) callback();
-                    // });
-
-                    // img.src = path;
-                    // this.cache[path] = img;
-            //         break;
-            //     case 'mp3':
-                    // aud.addEventListener("loadeddata", function () {
-                    //     console.log("Loaded " + this.src);
-                    //     that.successCount++;
-                    //     if (that.isDone()) callback();
-                    // });
-
-                    // aud.addEventListener("error", function () {
-                    //     console.log("Error loading " + this.src);
-                    //     that.errorCount++;
-                    //     if (that.isDone()) callback();
-                    // });
-
-                    // aud.addEventListener("ended", function () {
-                    //     aud.pause();
-                    //     aud.currentTime = 0;
-                    // });
-
-                    // aud.src = path;
-                    // aud.load()
-
-                    // this.cache[path] = aud;
-            //         break;
-            // }
-
             if (ext === 'png' || ext === 'PNG') {
                 img.addEventListener("load", function () {
                     console.log("Loaded " + this.src);
