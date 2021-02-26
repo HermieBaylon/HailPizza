@@ -237,7 +237,6 @@ class Pedestrian {
 
 			if (this.isBackwards) {
 				if (this.y < 0) {
-					//console.log("HEY I AM LESS THAN ZERO");
 					this.direction = 180;
 					this.x = this.originX + this.WIDTH + 15;
 					this.y = this.originY;

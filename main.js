@@ -24,6 +24,9 @@ ASSET_MANAGER.queueDownload("./assets/goal.png");
 ASSET_MANAGER.queueDownload("./assets/arrow01.png");
 ASSET_MANAGER.queueDownload("./assets/arrow02.png");
 
+//sound effects
+ASSET_MANAGER.queueDownload("./music/DoorClose.mp3");
+
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
@@ -83,7 +86,7 @@ ASSET_MANAGER.downloadAll(function () {
 	// // (StraightVerticalDown2) X
 	var STD2 = [350, 860, 1630, 2104, 2910, 3420, 3930, 4700, 5210, 5980];
 
-	for (var i = 0; i < SHL1.length-1; i++) {
+	for (var i = 0; i < SHL1.length; i++) {
 		npccars.push(new Car(gameEngine, starting, SHL1[i], Math.floor(Math.random() * 5), 0, 1));
 		npccars.push(new Car(gameEngine, ending, SHR1[i], Math.floor(Math.random() * 5), 180, 1));
 		npccars.push(new Car(gameEngine, SVU2[i], ending, Math.floor(Math.random() * 5), 180, 2));
@@ -91,34 +94,34 @@ ASSET_MANAGER.downloadAll(function () {
 	}
 
 
-	// // (HorizontalToVerticalforward3) --> y = 480, 990, 1760, 2270, 3040, 3550
-	// npccars.push(new Car(gameEngine, 0, 480, Math.floor(Math.random() * 5), 0, 3));
-	// npccars.push(new Car(gameEngine, 0, 990, Math.floor(Math.random() * 5), 0, 3));
-	// npccars.push(new Car(gameEngine, 0, 1760, Math.floor(Math.random() * 5), 0, 3));
-	// npccars.push(new Car(gameEngine, 0, 2270, Math.floor(Math.random() * 5), 0, 3));
-	// npccars.push(new Car(gameEngine, 0, 3040, Math.floor(Math.random() * 5), 0, 3));
-	// npccars.push(new Car(gameEngine, 0, 3550, Math.floor(Math.random() * 5), 0, 3));
-	// // // (HorizontalToVerticalbackward3) --> y = 285, 795, 1565, 2075, 2845, 3355
-	// npccars.push(new Car(gameEngine, 3840, 285, Math.floor(Math.random() * 5), 180, 3));
-	// npccars.push(new Car(gameEngine, 3840, 795, Math.floor(Math.random() * 5), 180, 3));
-	// npccars.push(new Car(gameEngine, 3840, 1565, Math.floor(Math.random() * 5), 180, 3));
-	// npccars.push(new Car(gameEngine, 3840, 2075, Math.floor(Math.random() * 5), 180, 3));
-	// npccars.push(new Car(gameEngine, 3840, 2845, Math.floor(Math.random() * 5), 180, 3));
-	// npccars.push(new Car(gameEngine, 3840, 3355, Math.floor(Math.random() * 5), 180, 3));
-	// // // (VerticalToHorizontalDown4) --> X = 480, 990, 1760, 2270, 3040, 3550
-	// npccars.push(new Car(gameEngine, 480, 0, Math.floor(Math.random() * 5), 180, 4));
-	// npccars.push(new Car(gameEngine, 990, 0, Math.floor(Math.random() * 5), 180, 4));
-	// npccars.push(new Car(gameEngine, 1760, 0, Math.floor(Math.random() * 5), 180, 4));
-	// npccars.push(new Car(gameEngine, 2270, 0, Math.floor(Math.random() * 5), 180, 4));
-	// npccars.push(new Car(gameEngine, 3040, 0, Math.floor(Math.random() * 5), 180, 4));
-	// npccars.push(new Car(gameEngine, 3550, 0, Math.floor(Math.random() * 5), 180, 4));
-	// // // (VerticalToHorizontalbackward4) --> X = 285, 795, 1565, 2075, 2845, 3355
-	// npccars.push(new Car(gameEngine, 285, 3840, Math.floor(Math.random() * 5), 0, 4));
-	// npccars.push(new Car(gameEngine, 795, 3840, Math.floor(Math.random() * 5), 0, 4));
-	// npccars.push(new Car(gameEngine, 1565, 3840, Math.floor(Math.random() * 5), 0, 4));
-	// npccars.push(new Car(gameEngine, 2075, 3840, Math.floor(Math.random() * 5), 0, 4));
-	// npccars.push(new Car(gameEngine, 2845, 3840, Math.floor(Math.random() * 5), 0, 4));
-	// npccars.push(new Car(gameEngine, 3355, 3840, Math.floor(Math.random() * 5), 0, 4));
+	// (HorizontalToVerticalforward3) --> y = 480, 990, 1760, 2270, 3040, 3550
+	npccars.push(new Car(gameEngine, 0, 480, Math.floor(Math.random() * 5), 0, 3));
+	npccars.push(new Car(gameEngine, 0, 990, Math.floor(Math.random() * 5), 0, 3));
+	npccars.push(new Car(gameEngine, 0, 1760, Math.floor(Math.random() * 5), 0, 3));
+	npccars.push(new Car(gameEngine, 0, 2270, Math.floor(Math.random() * 5), 0, 3));
+	npccars.push(new Car(gameEngine, 0, 3040, Math.floor(Math.random() * 5), 0, 3));
+	npccars.push(new Car(gameEngine, 0, 3550, Math.floor(Math.random() * 5), 0, 3));
+	// // (HorizontalToVerticalbackward3) --> y = 285, 795, 1565, 2075, 2845, 3355
+	npccars.push(new Car(gameEngine, 3840, 285, Math.floor(Math.random() * 5), 180, 3));
+	npccars.push(new Car(gameEngine, 3840, 795, Math.floor(Math.random() * 5), 180, 3));
+	npccars.push(new Car(gameEngine, 3840, 1565, Math.floor(Math.random() * 5), 180, 3));
+	npccars.push(new Car(gameEngine, 3840, 2075, Math.floor(Math.random() * 5), 180, 3));
+	npccars.push(new Car(gameEngine, 3840, 2845, Math.floor(Math.random() * 5), 180, 3));
+	npccars.push(new Car(gameEngine, 3840, 3355, Math.floor(Math.random() * 5), 180, 3));
+	// // (VerticalToHorizontalDown4) --> X = 480, 990, 1760, 2270, 3040, 3550
+	npccars.push(new Car(gameEngine, 480, 0, Math.floor(Math.random() * 5), 180, 4));
+	npccars.push(new Car(gameEngine, 990, 0, Math.floor(Math.random() * 5), 180, 4));
+	npccars.push(new Car(gameEngine, 1760, 0, Math.floor(Math.random() * 5), 180, 4));
+	npccars.push(new Car(gameEngine, 2270, 0, Math.floor(Math.random() * 5), 180, 4));
+	npccars.push(new Car(gameEngine, 3040, 0, Math.floor(Math.random() * 5), 180, 4));
+	npccars.push(new Car(gameEngine, 3550, 0, Math.floor(Math.random() * 5), 180, 4));
+	// // (VerticalToHorizontalbackward4) --> X = 285, 795, 1565, 2075, 2845, 3355
+	npccars.push(new Car(gameEngine, 285, 3840, Math.floor(Math.random() * 5), 0, 4));
+	npccars.push(new Car(gameEngine, 795, 3840, Math.floor(Math.random() * 5), 0, 4));
+	npccars.push(new Car(gameEngine, 1565, 3840, Math.floor(Math.random() * 5), 0, 4));
+	npccars.push(new Car(gameEngine, 2075, 3840, Math.floor(Math.random() * 5), 0, 4));
+	npccars.push(new Car(gameEngine, 2845, 3840, Math.floor(Math.random() * 5), 0, 4));
+	npccars.push(new Car(gameEngine, 3355, 3840, Math.floor(Math.random() * 5), 0, 4));
 
 	var npcs = [];
 	var population = 10;//100 Anything larger than 20 stops the game somehow
@@ -168,9 +171,13 @@ ASSET_MANAGER.downloadAll(function () {
 	for (var i = 0; i < buildings.length; i++) {
 		gameEngine.addEntity(buildings[i]);
 	}
+
+	var door = new Audio('music/DoorClose.mp3');
+	door.play();
 	
 	new SceneManager(gameEngine);
 	new AudioManager(gameEngine);
 	
 	gameEngine.start();
+	door.play();
 });
