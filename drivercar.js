@@ -20,6 +20,8 @@ class DriverCar {
 		this.MAX_SPIN_SPEED = this.TURN_SPEED * 2;
 		this.SPIN_DRAG = this.DRAG * 5;
 
+		this.increment = 0;
+
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
 		this.direction = direction; // 0 - 359, with 0 = right facing
@@ -226,7 +228,8 @@ class DriverCar {
 				if (entity instanceof Pedestrian) { // squish pedestrians
 					if (that.currentSpeed > that.DRAG || that.driftSpeed > that.DRAG) {
 						entity.dead = true;
-						//console.log("dead");
+						ASSET_MANAGER.adjustVolume(.5);
+						ASSET_MANAGER.playAsset("./music/dead.mp3");
 					} else {
 						// Calculate center to center angle
 						let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
@@ -240,9 +243,13 @@ class DriverCar {
 				}
 				if (entity instanceof Building || entity instanceof ModularBuilding) {	// hit building
 					vehicleToBuilding(that, entity);
+					ASSET_MANAGER.adjustVolume(.5);
+					ASSET_MANAGER.playAsset("./music/CarImpact.mp3");
 				}
 				if (entity instanceof Car) {	// hit car
 					vehicleToVehicle(that, entity);
+					ASSET_MANAGER.adjustVolume(.5);
+					ASSET_MANAGER.playAsset("./music/CarImpact2.mp3");
 				}
 			};
 		});
