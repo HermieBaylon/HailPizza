@@ -25,8 +25,52 @@ window.requestAnimFrame = (function () {
         };
 })();
 
-// add global parameters here
+// Collision Sub-Fuctions
+function vehicleToBuilding(vehicle, building) {
+	let buffer = 4;
+	let vertOffset = Math.abs(vehicle.BB.y - vehicle.BB.top.y) + buffer;
+	let horiOffset = Math.abs(vehicle.BB.x - vehicle.BB.left.x) + buffer;
+	if (building.BB.top < vehicle.BB.bottom.y && building.BB.top > vehicle.y) vehicle.y = building.BB.top - vertOffset;
+	if (building.BB.bottom > vehicle.BB.top.y && building.BB.bottom < vehicle.y) vehicle.y = building.BB.bottom + vertOffset;
+	if (building.BB.left < vehicle.BB.right.x && building.BB.left > vehicle.x) vehicle.x = building.BB.left - horiOffset;
+	if (building.BB.right > vehicle.BB.left.x && building.BB.right < vehicle.x) vehicle.x = building.BB.right + horiOffset;
+	
+	// Halt movement
+	vehicle.driftSpeed = 0;
+	vehicle.currentSpeed = 0;
+	/*
+	// Calculate center to center angle
+	let angle = Math.atan( Math.abs(building.y - vehicle.y) / Math.abs(building.x - vehicle.x) ) * (180 / Math.PI);
+	if (building.x - vehicle.x >= 0 && building.y - vehicle.y >= 0) angle = (angle % 90); //Q1
+	if (building.x - vehicle.x <  0 && building.y - vehicle.y >= 0) angle = 180 - (angle % 90); //Q2
+	if (building.x - vehicle.x <  0 && building.y - vehicle.y <  0) angle = 180 + (angle % 90); //Q3
+	if (building.x - vehicle.x >= 0 && building.y - vehicle.y <  0) angle = 360 - (angle % 90); //Q4
+	// Push
+	vehicle.pushSpeed = Math.max(vehicle.currentSpeed, 10 * vehicle.DRAG) / 2;
+	vehicle.pushDirection = angle;*/
+}
 
+function vehicleToVehicle(vehicle, oth) {
+	// Calculate center to center angle
+		let angle = Math.atan( Math.abs(oth.y - vehicle.y) / Math.abs(oth.x - vehicle.x) ) * (180 / Math.PI);
+		let spin = 3;
+		if (Math.abs(angle) < 30) spin = 1;
+		if (oth.x - vehicle.x >= 0 && oth.y - vehicle.y >= 0) angle = (angle % 90); //Q1
+		if (oth.x - vehicle.x <  0 && oth.y - vehicle.y >= 0) {angle = 180 - (angle % 90); //Q2
+			spin = -spin;}
+		if (oth.x - vehicle.x <  0 && oth.y - vehicle.y <  0) angle = 180 + (angle % 90); //Q3
+		if (oth.x - vehicle.x >= 0 && oth.y - vehicle.y <  0) {angle = 360 - (angle % 90); //Q4
+			spin = -spin;}
+		// Stop drivercar
+		vehicle.currentSpeed = 0;
+		vehicle.driftSpeed = 0;
+		// push car
+		oth.pushSpeed = Math.max(vehicle.currentSpeed, 10 * vehicle.DRAG) / 2;
+		oth.pushDirection = angle;
+		oth.spinSpeed = spin;
+}
+
+// global parameters
 const PARAMS = {
 	DEBUG: true,
 	AUDIO: true,

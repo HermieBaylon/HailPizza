@@ -10,6 +10,37 @@ ASSET_MANAGER.queueDownload("./assets/streetlight02.png");
 ASSET_MANAGER.queueDownload("./assets/fence.png");
 ASSET_MANAGER.queueDownload("./assets/building.png");
 
+ASSET_MANAGER.queueDownload("./assets/roof/00-00.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-00.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-01.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-02.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-03.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-04.png");
+ASSET_MANAGER.queueDownload("./assets/roof/01-05.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-00.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-01.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-02.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-03.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-04.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-05.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-06.png");
+ASSET_MANAGER.queueDownload("./assets/roof/02-07.png");
+ASSET_MANAGER.queueDownload("./assets/roof/03-00.png");
+ASSET_MANAGER.queueDownload("./assets/roof/03-01.png");
+ASSET_MANAGER.queueDownload("./assets/roof/03-02.png");
+ASSET_MANAGER.queueDownload("./assets/roof/03-03.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-00.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-01.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-02.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-03.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-04.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-05.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-06.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-07.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-08.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-09.png");
+ASSET_MANAGER.queueDownload("./assets/roof/04-10.png");
+
 ASSET_MANAGER.queueDownload("./assets/npcs.png");
 ASSET_MANAGER.queueDownload("./assets/npccars.png");
 
@@ -42,6 +73,10 @@ ASSET_MANAGER.downloadAll(function () {
 			}
 		}
 	}
+	// Intersection grid spaces that will determine when cars turn. direction variable is the new goalDirection cars are given.
+	var intersections = [];
+	intersections.push(new Intersection(gameEngine,PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH, 270));
+	intersections.push(new Intersection(gameEngine,PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 1, PARAMS.TILE_WIDTH + 4 * PARAMS.GRID_WIDTH, 90));
 	
 	// Goal Markers
 	var goals = [];
@@ -51,25 +86,242 @@ ASSET_MANAGER.downloadAll(function () {
 	var buildings = [];
 	for (var k = 0; k < 5; k++) {
 		for (var l = 0; l < 5; l++) {
-			for (var i = 0; i < 20 ; i++) {
-				if ( (i % 8 == 0) || (i % 8 == 2) ) {
-					for (var j = 0; j < 20 ; j++) {
-						if ( (j % 8 == 1) || (j % 8 == 2) ) {
-							buildings.push(new Building (gameEngine, PARAMS.GRID_WIDTH * i + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * j + (PARAMS.TILE_WIDTH * l)));
-						}
+			if (k != l)goals.push(new GoalPost(gameEngine, PARAMS.GRID_WIDTH * 9 + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * 8 + (PARAMS.TILE_WIDTH * l)));
+		}
+	}
+	shop = new StartMission(gameEngine, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 9.5, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 6);
+	
+	// curvy road across map
+	let tile1Buildings = [  [1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1]  ];
+	// U shape road
+	let tile2Buildings = [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
+							[0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
+							[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0]  ];
+	// vertical roads
+	let tile3Buildings = [  [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1]  ];
+	// Horizontal roads across map
+	let tile4Buildings = [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
+							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
+							[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
+							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]  ];
+	// no roads
+	let tile5Buildings = [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ];
+	 // vertical roads in center of map
+	let tile6Buildings = [  [1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1],
+							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
+							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
+							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
+							[1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1]  ];
+	// shop tile, 1 horizontal road to shop
+	let tileSBuildings = [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ];
+	
+	let tile1locA = [0,4];
+	let tile1locB = [0,4];
+	
+	let tile2locA = [1,3];
+	let tile2locB = [0,4];
+	
+	let tile3locA = [2];
+	let tile3locB = [0,4];
+	
+	let tile4locA = [0,1,2,3,4];
+	let tile4locB = [1,3];
+	
+	let tile5locA = [0,4];
+	let tile5locB = [2];
+	
+	let tile6locA = [1,3];
+	let tile6locB = [2];
+	
+	let tileSlocA = [2];
+	let tileSlocB = [2];
+	
+	for (let a = 0; a < 5; a++) {
+		for (let b = 0; b < 5; b++) {
+			for (let i = 0; i < tile1Buildings.length; i++) {
+				for (let j = 0; j < tile1Buildings[i].length; j++) {	// There may be a way to refactor this into less lines but I'm tired and it's week 8
+					if (tile1locA.includes(a) && tile1locB.includes(b) && tile1Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					} else if (tile1locA.includes(a) && tile1locB.includes(b) && tile1Buildings[i][j] == -1) {
+						// Goal Tile
+					}
+					if (tile2locA.includes(a) && tile2locB.includes(b) && tile2Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tile3locA.includes(a) && tile3locB.includes(b) && tile3Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tile3locA.includes(a) && tile3locB.includes(b) && tile3Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tile4locA.includes(a) && tile4locB.includes(b) && tile4Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tile5locA.includes(a) && tile5locB.includes(b) && tile5Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tile6locA.includes(a) && tile6locB.includes(b) && tile6Buildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
+					}
+					if (tileSlocA.includes(a) && tileSlocB.includes(b) && tileSBuildings[i][j] == 1) {
+						buildings.push(new ModularBuilding (gameEngine,
+										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+										0, 0));
 					}
 				}
-			}
-			if (k != l)goals.push(new GoalPost(gameEngine, PARAMS.GRID_WIDTH * 9 + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * 8 + (PARAMS.TILE_WIDTH * l)));
-			if (k == 3 && l == 3) {
-				shop = new StartMission(gameEngine, PARAMS.GRID_WIDTH * 9 + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * 8 + (PARAMS.TILE_WIDTH * l));
 			}
 		}
 	}
 	
-
 	// NPCs
 	var npccars = [];
+	/* OLD
 	// List of possible starting points
 	var starting = 0;
 	var ending = (1280 * 5);
@@ -94,7 +346,8 @@ ASSET_MANAGER.downloadAll(function () {
 	}
 
 
-	// (HorizontalToVerticalforward3) --> y = 480, 990, 1760, 2270, 3040, 3550
+
+	// // (HorizontalToVerticalforward3) --> y = 480, 990, 1760, 2270, 3040, 3550
 	npccars.push(new Car(gameEngine, 0, 480, Math.floor(Math.random() * 5), 0, 3));
 	npccars.push(new Car(gameEngine, 0, 990, Math.floor(Math.random() * 5), 0, 3));
 	npccars.push(new Car(gameEngine, 0, 1760, Math.floor(Math.random() * 5), 0, 3));
@@ -121,10 +374,28 @@ ASSET_MANAGER.downloadAll(function () {
 	npccars.push(new Car(gameEngine, 1565, 3840, Math.floor(Math.random() * 5), 0, 4));
 	npccars.push(new Car(gameEngine, 2075, 3840, Math.floor(Math.random() * 5), 0, 4));
 	npccars.push(new Car(gameEngine, 2845, 3840, Math.floor(Math.random() * 5), 0, 4));
-	npccars.push(new Car(gameEngine, 3355, 3840, Math.floor(Math.random() * 5), 0, 4));
+
+	npccars.push(new Car(gameEngine, 3355, 3840, Math.floor(Math.random() * 5), 0, 4));*/
+	
+	// Define street entrances as points. TODO input final list of street entrances.
+	let streets = [];
+	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
+	
+	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
+	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
+	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
+	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
+	gameEngine.streets = streets;
+	
+	for (var i = 0; i < streets.length; i++) {
+		npccars.push(new Car(gameEngine, streets[i].x, streets[i].y, Math.floor(Math.random() * 5), 0, 1));
+	}
 
 	var npcs = [];
-	var population = 10;//100 Anything larger than 20 stops the game somehow
+	var population = 10;//100 Anything larger than 20 stops the game somehow (MP: I don't see this issue)
 	var i = 0;
 	for (i = 0; i < population; i++) {
 		var randomX = Math.floor(Math.random() * 3000) + 0;
@@ -134,8 +405,8 @@ ASSET_MANAGER.downloadAll(function () {
 	}
 	
 	// Player
-	var driver = new Driver(gameEngine, 1856, 2020, 270);
-	var drivercar = new DriverCar(gameEngine, 1472, 2020, 0);
+	var driver = new Driver(gameEngine, 2581, 1636, 270);
+	var drivercar = new DriverCar(gameEngine, 2655, 1311, 0);
 	
 	var shopArrow = new Arrow(gameEngine, driver.x, driver.y, shop.x, shop.y, 0);
 	gameEngine.shopArrow = shopArrow;
@@ -145,6 +416,9 @@ ASSET_MANAGER.downloadAll(function () {
 	for (var i = 0; i < bgTiles.length; i++) {
 		gameEngine.addEntity(bgTiles[i]);
 	}
+	for (var i = 0; i < intersections.length; i++) {
+		gameEngine.addEntity(intersections[i]);
+	}
 	for (var i = 0; i < goals.length; i++) {
 		gameEngine.addEntity(goals[i]);
 	}
@@ -153,12 +427,10 @@ ASSET_MANAGER.downloadAll(function () {
 	
 	
 	// NPCs
-	for (var i = 0; i < npcs.length; i++)
-	{
+	for (var i = 0; i < npcs.length; i++) {
 		gameEngine.addEntity(npcs[i]);
 	}
-	for (var i = 0; i < npccars.length; i++)
-	{
+	for (var i = 0; i < npccars.length; i++) {
 		gameEngine.addEntity(npccars[i]);
 	}
 	
