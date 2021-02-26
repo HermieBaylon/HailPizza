@@ -55,6 +55,9 @@ ASSET_MANAGER.queueDownload("./assets/goal.png");
 ASSET_MANAGER.queueDownload("./assets/arrow01.png");
 ASSET_MANAGER.queueDownload("./assets/arrow02.png");
 
+//sound effects
+ASSET_MANAGER.queueDownload("./music/DoorClose.mp3");
+
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
@@ -335,12 +338,13 @@ ASSET_MANAGER.downloadAll(function () {
 	// // (StraightVerticalDown2) X
 	var STD2 = [350, 860, 1630, 2104, 2910, 3420, 3930, 4700, 5210, 5980];
 
-	for (var i = 0; i < SHL1.length-1; i++) {
+	for (var i = 0; i < SHL1.length; i++) {
 		npccars.push(new Car(gameEngine, starting, SHL1[i], Math.floor(Math.random() * 5), 0, 1));
 		npccars.push(new Car(gameEngine, ending, SHR1[i], Math.floor(Math.random() * 5), 180, 1));
 		npccars.push(new Car(gameEngine, SVU2[i], ending, Math.floor(Math.random() * 5), 180, 2));
 		npccars.push(new Car(gameEngine, STD2[i], starting, Math.floor(Math.random() * 5), 0, 2));
 	}
+
 
 
 	// // (HorizontalToVerticalforward3) --> y = 480, 990, 1760, 2270, 3040, 3550
@@ -370,6 +374,7 @@ ASSET_MANAGER.downloadAll(function () {
 	npccars.push(new Car(gameEngine, 1565, 3840, Math.floor(Math.random() * 5), 0, 4));
 	npccars.push(new Car(gameEngine, 2075, 3840, Math.floor(Math.random() * 5), 0, 4));
 	npccars.push(new Car(gameEngine, 2845, 3840, Math.floor(Math.random() * 5), 0, 4));
+
 	npccars.push(new Car(gameEngine, 3355, 3840, Math.floor(Math.random() * 5), 0, 4));*/
 	
 	// Define street entrances as points. TODO input final list of street entrances.
@@ -438,9 +443,13 @@ ASSET_MANAGER.downloadAll(function () {
 	for (var i = 0; i < buildings.length; i++) {
 		gameEngine.addEntity(buildings[i]);
 	}
+
+	var door = new Audio('music/DoorClose.mp3');
+	door.play();
 	
 	new SceneManager(gameEngine);
 	new AudioManager(gameEngine);
 	
 	gameEngine.start();
+	door.play();
 });

@@ -108,12 +108,14 @@ class GameEngine {
 					break;
 				case "KeyE":
 					that.keyE = true;
-					if (that.keyE) {
-						that.audio.play();
-						that.audio.returnVolume();
-					} else {
-						that.audio.lowerVolume();
-					}
+                    ASSET_MANAGER.playAsset("./music/DoorClose.mp3");
+					// if (that.keyE) {
+                    //     that.audio.closeDoor();
+					// 	that.audio.play();
+					// 	that.audio.returnVolume();
+					// } else {
+					// 	that.audio.lowerVolume();
+					// }
 					//console.log("E");
 					break;
 			}
@@ -143,6 +145,7 @@ class GameEngine {
 					break;
 				case "KeyE":
 					that.keyE = false;
+                    ASSET_MANAGER.playAsset("./music/DoorClose.mp3");
 					break;
 			}
 		}, false);
