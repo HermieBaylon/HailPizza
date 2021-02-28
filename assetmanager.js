@@ -101,9 +101,26 @@ class AssetManager {
 
     playAsset(path) {
         let audio = this.cache[path];
-        audio.currentTime = 0;
-        audio.play();
+        //audio.currentTime = 0;
+        if (path === "./music/driving.mp3") {
+            if (audio.currentTime > 10) {
+                console.log("Audio is over 10 " +audio.currentTime);
+                audio.play();
+            }
+        } else {
+            audio.currentTime = 0;
+            audio.play();
+        }
+        //audio.play();
     };
+
+    // isDone(path) {
+    //     let audio = this.cache[path];
+    //     //return (audio.currentTime > 48);
+    //     if (audio.currentTime != 0) {
+    //         return true;
+    //     }
+    // }
 
     muteAudio(mute) {
         for (var key in this.cache) {
@@ -121,6 +138,13 @@ class AssetManager {
                 asset.volume = volume;
             }
         }
+    };
+
+    adjustVolumeOnPath(volume, path) {
+        let asset = this.cache[path];
+        if (asset instanceof Audio) {
+                asset.volume = volume;
+            }
     };
 
     pauseBackgroundMusic(mute) {
