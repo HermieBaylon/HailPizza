@@ -21,6 +21,10 @@ class GameEngine {
         this.surfaceWidth = null;
         this.surfaceHeight = null;
 		this.blockExit = false;
+
+        // if (this.keyE) {
+        //     ASSET_MANAGER.playAsset("./music/driving.mp3");
+        // }
     };
 
     init(ctx) {
@@ -108,13 +112,7 @@ class GameEngine {
 					break;
 				case "KeyE":
 					that.keyE = true;
-					if (that.keyE) {
-						that.audio.play();
-						that.audio.returnVolume();
-					} else {
-						that.audio.lowerVolume();
-					}
-					//console.log("E");
+                    ASSET_MANAGER.playAsset("./music/DoorClose.mp3");
 					break;
 			}
 		}, false);
@@ -143,6 +141,7 @@ class GameEngine {
 					break;
 				case "KeyE":
 					that.keyE = false;
+                    ASSET_MANAGER.playAsset("./music/DoorClose.mp3");
 					break;
 			}
 		}, false);
@@ -161,6 +160,7 @@ class GameEngine {
     };
 
     update() {
+
 		if (document.getElementById("myDebug").checked) {
 			PARAMS.DEBUG = true;
 		} else {

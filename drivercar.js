@@ -20,6 +20,8 @@ class DriverCar {
 		this.MAX_SPIN_SPEED = this.TURN_SPEED * 2;
 		this.SPIN_DRAG = this.DRAG * 5;
 
+		this.increment = 0;
+
 		// Assign Object Variables
 		Object.assign(this, { game, x, y });
 		this.direction = direction; // 0 - 359, with 0 = right facing
@@ -62,6 +64,18 @@ class DriverCar {
 	
 	update() {
 		var that = this;
+
+		// var carIsMoving = this.game.forward || this.game.backward || this.game.left || this.game.right;
+		// //var carIsMoving = !(this.game.forward || this.game.backward || this.game.left || this.game.right);
+
+		// if (carIsMoving) {
+		// 	// if finished
+		// 	ASSET_MANAGER.adjustVolumeOnPath(.5, "./music/driving.mp3");
+		// 	ASSET_MANAGER.playAsset("./music/driving.mp3");
+		// 	//ASSET_MANAGER.autoRepeat("./music/driving.mp3");
+		// } else {
+		// 	//ASSET_MANAGER.adjustVolumeOnPath(0, "./music/driving.mp3");
+		// }
 		
 		if (this.active) {
 			// Affirm focus
@@ -226,7 +240,8 @@ class DriverCar {
 				if (entity instanceof Pedestrian) { // squish pedestrians
 					if (that.currentSpeed > that.DRAG || that.driftSpeed > that.DRAG) {
 						entity.dead = true;
-						//console.log("dead");
+						ASSET_MANAGER.adjustVolume(.1);
+						ASSET_MANAGER.playAsset("./music/dead.mp3");
 					} else {
 						// Calculate center to center angle
 						let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
@@ -240,9 +255,13 @@ class DriverCar {
 				}
 				if (entity instanceof Building || entity instanceof ModularBuilding) {	// hit building
 					vehicleToBuilding(that, entity);
+					ASSET_MANAGER.adjustVolume(.1);
+					ASSET_MANAGER.playAsset("./music/CarImpact.mp3");
 				}
 				if (entity instanceof Car) {	// hit car
 					vehicleToVehicle(that, entity);
+					ASSET_MANAGER.adjustVolume(.1);
+					ASSET_MANAGER.playAsset("./music/CarImpact2.mp3");
 				}
 			};
 		});
