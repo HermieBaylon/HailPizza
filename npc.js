@@ -502,6 +502,7 @@ class Car {
 	};
 	
 	// Marc Begin
+	
 	// sub-method that makes sure the vehicle is heading towards the given goal direction set to the object. Called only in update().
 	updateDirection() {
 		let tolerance = this.TURN_SPEED;
