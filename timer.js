@@ -28,9 +28,9 @@ class Timer {
         time -= seconds;
         const millis = Math.floor(time * 10);
 
-        document.getElementById("minutes").textContent = (minutes < 10 ? "0" : "") + minutes;
-        document.getElementById("seconds").textContent = (seconds < 10 ? "0" : "") + seconds;
-        document.getElementById("millis").textContent = millis;
+        //document.getElementById("minutes").textContent = (minutes < 10 ? "0" : "") + minutes;
+        //document.getElementById("seconds").textContent = (seconds < 10 ? "0" : "") + seconds;
+        //document.getElementById("millis").textContent = millis;
     }
 
     getGameTime() {

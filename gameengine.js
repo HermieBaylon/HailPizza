@@ -108,6 +108,7 @@ class GameEngine {
 					that.right = true;
 					break;
 				case "Space":
+					event.preventDefault();
 					that.space = true;
 					break;
 				case "KeyE":

@@ -268,6 +268,6 @@ class Driver {
         }
         this.healthBar.draw(ctx);
         this.game.score += this.score;
-        this.game.displayScore.innerHTML = this.game.score;
+        //this.game.displayScore.innerHTML = this.game.score;
 	};
 };

@@ -109,12 +109,12 @@ class SceneManager {
 			ctx.textAlign  = "left";
 			ctx.strokeText(coordText, 50, 50);
 			ctx.textAlign  = "right";
-			ctx.strokeText(coordText2, PARAMS.PAGE_WIDTH - 50, 50);
+			ctx.strokeText(coordText2, PARAMS.PAGE_WIDTH - 50, 150);
 			ctx.strokeStyle = 'Black';
 			ctx.textAlign  = "left";
 			ctx.fillText(coordText, 50, 50);
 			ctx.textAlign  = "right";
-			ctx.fillText(coordText2, PARAMS.PAGE_WIDTH - 50, 50); // HUD text for checking bounding edges on driver car
+			ctx.fillText(coordText2, PARAMS.PAGE_WIDTH - 50, 150); // HUD text for checking bounding edges on driver car
 		}
 	}
 };

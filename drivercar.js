@@ -8,11 +8,11 @@ class DriverCar {
 		
 		this.ACCELERATION = 0.5;
 		this.REVERSE = this.ACCELERATION / 2;
-		this.MAX_SPEED = 15;
+		this.MAX_SPEED = 12;
 		this.MAX_REVERSE = this.MAX_SPEED / 2;
 		this.TURN_SPEED = 4;
 		this.DRIFT_TURN_SPEED = this.TURN_SPEED * (1);
-		this.DRAG = 0.5;
+		this.DRAG = 0.2;
 		this.TURN_DRAG = this.ACCELERATION + 0.1;
 		this.BRAKE_DRAG = this.DRAG / 2;
 		this.LOG_LENGTH = 10;
@@ -60,6 +60,9 @@ class DriverCar {
 	
 	updateBB(){
 		this.BB = new AngleBoundingBox(this.x, this.y, this.BB_WIDTH, this.BB_HEIGHT, this.direction);
+		this.nextBB = new AngleBoundingBox(this.x + (this.currentSpeed * Math.cos((Math.PI / 180) * this.direction)),
+											this.y +  (this.currentSpeed * Math.sin((Math.PI / 180) * this.direction)),
+											this.BB_WIDTH, this.BB_HEIGHT, this.direction);
 	}
 	
 	update() {
@@ -119,7 +122,13 @@ class DriverCar {
 				if ((this.direction % 90) <= this.TURN_SPEED)  this.direction -= (this.direction % 90);
 				if (90 - (this.direction % 90) <= this.TURN_SPEED)  this.direction += 90 - (this.direction % 90);
 				if (this.currentSpeed > 0 && (difference > 0) && (this.direction % 90) < 30) {
-					this.direction -= this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
+					if (this.direction % 90 < this.TURN_SPEED) {
+						this.direction -= (this.direction % 90 < this.TURN_SPEED);
+					} else if (this.direction % 90 > 90 - this.TURN_SPEED) {
+						this.direction += (this.direction % 90 < this.TURN_SPEED);
+					} else {
+						this.direction -= this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
+					}
 				}
 				if (this.currentSpeed > 0 && (difference < 0) && 90 - (this.direction % 90) < 30) {
 					this.direction += this.TURN_SPEED * (this.currentSpeed / this.MAX_SPEED);
@@ -237,31 +246,22 @@ class DriverCar {
 		// Collision
 		this.game.entities.forEach(function (entity) {
             if (entity.BB && that.BB.collide(entity.BB)) {
-				if (entity instanceof Pedestrian) { // squish pedestrians
+				if (entity instanceof Pedestrian && !entity.dead) { // squish pedestrians
 					if (that.currentSpeed > that.DRAG || that.driftSpeed > that.DRAG) {
 						entity.dead = true;
 						ASSET_MANAGER.adjustVolume(.1);
 						ASSET_MANAGER.playAsset("./music/dead.mp3");
-					} else {
-						// Calculate center to center angle
-						let angle = Math.atan( Math.abs(entity.y - that.y) / Math.abs(entity.x - that.x) ) * (180 / Math.PI);
-						if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-						if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = 180 - (angle % 90); //Q2
-						if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
-						if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = 360 - (angle % 90); //Q4
-						entity.pushSpeed = Math.max(that.currentSpeed, 10 * that.DRAG) / 2;
-						entity.pushDirection = angle;
-					}
+					} 
 				}
 				if (entity instanceof Building || entity instanceof ModularBuilding) {	// hit building
-					vehicleToBuilding(that, entity);
 					ASSET_MANAGER.adjustVolume(.1);
-					ASSET_MANAGER.playAsset("./music/CarImpact.mp3");
+					if (that.currentSpeed > that.MAX_SPEED / 2 ) ASSET_MANAGER.playAsset("./music/CarImpact.mp3");
+					vehicleToBuilding(that, entity);
 				}
 				if (entity instanceof Car) {	// hit car
-					vehicleToVehicle(that, entity);
 					ASSET_MANAGER.adjustVolume(.1);
-					ASSET_MANAGER.playAsset("./music/CarImpact2.mp3");
+					if (that.speed > that.MAX_SPEED / 2) ASSET_MANAGER.playAsset("./music/`Impact2.mp3");
+					vehicleToVehicle(that, entity);
 				}
 			};
 		});
@@ -318,6 +318,11 @@ class DriverCar {
 				ctx.lineTo(this.BB.points[(i-1 + 4) % 4].x - this.game.camera.x, this.BB.points[(i-1 + 4) % 4].y - this.game.camera.y);
 				ctx.stroke();
 			}
+			ctx.strokeStyle = 'Blue';
+			ctx.beginPath();
+			ctx.moveTo(this.nextBB.points[0].x - this.game.camera.x, this.nextBB.points[0].y - this.game.camera.y);
+			ctx.lineTo(this.nextBB.points[3].x - this.game.camera.x, this.nextBB.points[3].y - this.game.camera.y);
+			ctx.stroke();
 		} 
 	};
 };

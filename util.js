@@ -28,26 +28,39 @@ window.requestAnimFrame = (function () {
 // Collision Sub-Fuctions
 function vehicleToBuilding(vehicle, building) {
 	let buffer = 4;
-	let vertOffset = Math.abs(vehicle.BB.y - vehicle.BB.top.y) + buffer;
-	let horiOffset = Math.abs(vehicle.BB.x - vehicle.BB.left.x) + buffer;
-	if (building.BB.top < vehicle.BB.bottom.y && building.BB.top > vehicle.y) vehicle.y = building.BB.top - vertOffset;
-	if (building.BB.bottom > vehicle.BB.top.y && building.BB.bottom < vehicle.y) vehicle.y = building.BB.bottom + vertOffset;
-	if (building.BB.left < vehicle.BB.right.x && building.BB.left > vehicle.x) vehicle.x = building.BB.left - horiOffset;
-	if (building.BB.right > vehicle.BB.left.x && building.BB.right < vehicle.x) vehicle.x = building.BB.right + horiOffset;
+	let angle = 0;
+	let vertOffset = Math.abs(vehicle.BB.bottom.y - vehicle.BB.top.y) / 2 + buffer;
+	let horiOffset = Math.abs(vehicle.BB.right.x - vehicle.BB.left.x) / 2 + buffer;
+	if (building.BB.top < vehicle.BB.bottom.y && building.BB.top > vehicle.y) {
+		angle = 270;
+		vehicle.y = building.BB.top - vertOffset;
+	};
+	if (building.BB.bottom > vehicle.BB.top.y && building.BB.bottom < vehicle.y) {
+		angle = 90;
+		vehicle.y = building.BB.bottom + vertOffset;
+	};
+	if (building.BB.left < vehicle.BB.right.x && building.BB.left > vehicle.x) {
+		angle = 180;
+		vehicle.x = building.BB.left - horiOffset;
+	};
+	if (building.BB.right > vehicle.BB.left.x && building.BB.right < vehicle.x) {
+		angle = 0;
+		vehicle.x = building.BB.right + horiOffset;
+	};
 	
-	// Halt movement
-	vehicle.driftSpeed = 0;
-	vehicle.currentSpeed = 0;
-	/*
 	// Calculate center to center angle
-	let angle = Math.atan( Math.abs(building.y - vehicle.y) / Math.abs(building.x - vehicle.x) ) * (180 / Math.PI);
+	/*let angle = Math.atan( Math.abs(building.y - vehicle.y) / Math.abs(building.x - vehicle.x) ) * (180 / Math.PI);
 	if (building.x - vehicle.x >= 0 && building.y - vehicle.y >= 0) angle = (angle % 90); //Q1
 	if (building.x - vehicle.x <  0 && building.y - vehicle.y >= 0) angle = 180 - (angle % 90); //Q2
 	if (building.x - vehicle.x <  0 && building.y - vehicle.y <  0) angle = 180 + (angle % 90); //Q3
 	if (building.x - vehicle.x >= 0 && building.y - vehicle.y <  0) angle = 360 - (angle % 90); //Q4
+	*/
 	// Push
-	vehicle.pushSpeed = Math.max(vehicle.currentSpeed, 10 * vehicle.DRAG) / 2;
-	vehicle.pushDirection = angle;*/
+	vehicle.pushSpeed = Math.max(vehicle.currentSpeed / 2, vehicle.MAX_SPEED / 4);
+	vehicle.pushDirection = angle;
+	// Halt movement
+	vehicle.driftSpeed = 0;
+	vehicle.currentSpeed = 0;
 }
 
 function vehicleToVehicle(vehicle, oth) {

@@ -389,10 +389,25 @@ ASSET_MANAGER.downloadAll(function () {
 	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
 	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
 	
-	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
-	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
-	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
-	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 1.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 2.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 3.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 4.5));
+	
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 1.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 2.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 3.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 4.5));
+	
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 1.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 2.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 3.5));
+	streets.push(new Point (0, PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 4.5));
+	
+	//streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
+	//streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
+	//streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
+	//streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
 	gameEngine.streets = streets;
 	
 	for (var i = 0; i < streets.length; i++) {
@@ -450,11 +465,11 @@ ASSET_MANAGER.downloadAll(function () {
 	}
 
 	var door = new Audio('music/DoorClose.mp3');
-	door.play();
+	//door.play();
 	
 	new SceneManager(gameEngine);
 	new AudioManager(gameEngine);
 	
 	gameEngine.start();
-	door.play();
+	//door.play();
 });

@@ -20,6 +20,7 @@ class AudioManager {
 		if (document.getElementById("myMusic").checked) {
 			PARAMS.AUDIO = true;
 			//if (this.songs[this.selection].paused) this.songs[this.selection].play();
+			if (this.songs[this.selection].currentTime == this.songs[this.selection].duration) this.selection = (this.selection + 1) % this.songs.length;
 		} else {
 			PARAMS.AUDIO = false;
 			this.songs[this.selection].pause();
@@ -28,13 +29,14 @@ class AudioManager {
 	
 	play() {
 		if (PARAMS.AUDIO) {
+			/*
 			if (this.isPlaying) {
 				this.songs[this.selection].pause();
 			} else {
 				this.isPlaying = true;
-				this.selection = Math.floor(Math.random() * this.songs.length);
-			}
-			this.songs[this.selection].play();
+				//this.selection = Math.floor(Math.random() * this.songs.length);
+			}*/
+			if (this.songs[this.selection].paused) this.songs[this.selection].play();
 		}
 	}
 	
