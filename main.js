@@ -89,22 +89,23 @@ ASSET_MANAGER.downloadAll(function () {
 	
 	// Buildings
 	var buildings = [];
-	for (var k = 0; k < 5; k++) {
+	/*for (var k = 0; k < 5; k++) {
 		for (var l = 0; l < 5; l++) {
 			if (k != l)goals.push(new GoalPost(gameEngine, PARAMS.GRID_WIDTH * 9 + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * 8 + (PARAMS.TILE_WIDTH * l)));
 		}
-	}
-	shop = new StartMission(gameEngine, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 9.5, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 6);
+	}*/
 	
 	// curvy road across map
-	let tile1Buildings = [  [1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
+	let tileLayout = []
+	
+	tileLayout.push(     [  [1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
 							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
 							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
 							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1],
 							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
 							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1],
 							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1],
+							[1,1,0,0,0,0,0,0,0,0,1,1,0,2,0,0,0,0,0,1],
 							[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1],
 							[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1],
 							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -113,15 +114,15 @@ ASSET_MANAGER.downloadAll(function () {
 							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1]  ];
+							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1]  ]);
 	// U shape road
-	let tile2Buildings = [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	tileLayout.push(     [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
 							[0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
 							[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
@@ -133,13 +134,13 @@ ASSET_MANAGER.downloadAll(function () {
 							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
 							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
 							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
+							[0,0,0,0,1,1,2,0,0,0,0,0,0,2,1,1,0,0,0,0],
 							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
 							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
 							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
-							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
-							[0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0]  ];
+							[0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0]  ]);
 	// vertical roads
-	let tile3Buildings = [  [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+	tileLayout.push(     [  [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
 							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
 							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
 							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
@@ -158,55 +159,55 @@ ASSET_MANAGER.downloadAll(function () {
 							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
 							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
 							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1]  ];
+							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1]  ]);
 	// Horizontal roads across map
-	let tile4Buildings = [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	tileLayout.push(     [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
-							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
-							[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+							[1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,1],
+							[1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1],
+							[0,0,0,0,1,1,0,2,0,0,0,0,0,0,1,1,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
-							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
-							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
+							[0,0,0,0,1,1,0,0,0,0,0,0,2,0,1,1,0,0,0,0],
+							[1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1],
+							[1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]  ];
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]  ]);
 	// no roads
-	let tile5Buildings = [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
+	tileLayout.push(     [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
+							[1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ];
+							[1,0,0,0,1,0,1,0,1,1,0,0,0,0,0,0,1,0,0,1],
+							[1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,1],
+							[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1],
+							[1,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,2,0,0,1],
+							[1,0,0,0,0,2,0,0,0,0,0,1,0,0,1,1,0,0,0,1],
+							[1,0,0,0,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,1,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1],
+							[1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,2,0,0,0,1],
+							[1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1],
+							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ]);
 	 // vertical roads in center of map
-	let tile6Buildings = [  [1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1],
+	tileLayout.push(     [  [1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1],
 							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
 							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -214,19 +215,19 @@ ASSET_MANAGER.downloadAll(function () {
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0],
 							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
 							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
-							[1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1]  ];
+							[1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1]  ]);
 	// shop tile, 1 horizontal road to shop
-	let tileSBuildings = [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
+	tileLayout.push(     [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -237,92 +238,62 @@ ASSET_MANAGER.downloadAll(function () {
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0],
+							[1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+							[1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+							[1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ];
+							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ]);
 	
-	let tile1locA = [0,4];
-	let tile1locB = [0,4];
-	
-	let tile2locA = [1,3];
-	let tile2locB = [0,4];
-	
-	let tile3locA = [2];
-	let tile3locB = [0,4];
-	
-	let tile4locA = [0,1,2,3,4];
-	let tile4locB = [1,3];
-	
-	let tile5locA = [0,4];
-	let tile5locB = [2];
-	
-	let tile6locA = [1,3];
-	let tile6locB = [2];
-	
-	let tileSlocA = [2];
-	let tileSlocB = [2];
+	let mapTileCoordsA = [];
+	let mapTileCoordsB = [];
+	// Tile 1
+	mapTileCoordsA.push([0,4]);
+	mapTileCoordsB.push([0,4]);
+	// Tile 2
+	mapTileCoordsA.push([1,3]);
+	mapTileCoordsB.push([0,4]);
+	// Tile 3
+	mapTileCoordsA.push([2]);
+	mapTileCoordsB.push([0,4]);
+	// Tile 4
+	mapTileCoordsA.push([0,1,2,3,4]);
+	mapTileCoordsB.push([1,3]);
+	// Tile 5
+	mapTileCoordsA.push([0,4]);
+	mapTileCoordsB.push([2]);
+	// Tile 6
+	mapTileCoordsA.push([1,3]);
+	mapTileCoordsB.push([2]);
+	// Tile 7 (Shop)
+	mapTileCoordsA.push([2]);
+	mapTileCoordsB.push([2]);
 	
 	for (let a = 0; a < 5; a++) {
 		for (let b = 0; b < 5; b++) {
-			for (let i = 0; i < tile1Buildings.length; i++) {
-				for (let j = 0; j < tile1Buildings[i].length; j++) {	// There may be a way to refactor this into less lines but I'm tired and it's week 8
-					if (tile1locA.includes(a) && tile1locB.includes(b) && tile1Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					} else if (tile1locA.includes(a) && tile1locB.includes(b) && tile1Buildings[i][j] == -1) {
-						// Goal Tile
-					}
-					if (tile2locA.includes(a) && tile2locB.includes(b) && tile2Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tile3locA.includes(a) && tile3locB.includes(b) && tile3Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tile3locA.includes(a) && tile3locB.includes(b) && tile3Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tile4locA.includes(a) && tile4locB.includes(b) && tile4Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tile5locA.includes(a) && tile5locB.includes(b) && tile5Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tile6locA.includes(a) && tile6locB.includes(b) && tile6Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tileSlocA.includes(a) && tileSlocB.includes(b) && tileSBuildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
+			for (let i = 0; i < tileLayout[0].length; i++) {
+				for (let j = 0; j < tileLayout[0][i].length; j++) {
+					for (let k = 0; k < mapTileCoordsA.length; k++) {
+						if (mapTileCoordsA[k].includes(a) && mapTileCoordsB[k].includes(b)) {
+							if (tileLayout[k][i][j] == 1) {
+								let ver = getModVersion(tileLayout[k], i, j);
+								// Building
+							buildings.push(new ModularBuilding (gameEngine,
+											PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+											PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+											ver[0], ver[1]));
+							} else if (tileLayout[k][i][j] == 2) {
+								// Goal Tile
+								goals.push(new GoalPost(gameEngine, PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+																	PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,));
+							};
+						}
 					}
 				}
 			}
 		}
 	}
+	shop = new StartMission(gameEngine, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 9.5, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 6);
 	
 	// NPCs
 	var npccars = [];
@@ -473,3 +444,133 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.start();
 	//door.play();
 });
+
+function getModVersion (tile, x, y) {
+	let ver = [0,0];	// default
+	
+	// Count adjacent building tiles
+	let adjCount = 0;
+	let adjHits = [];
+	if (x != 0) 					{ if (tile[x - 1][y] == 1) {adjCount ++; adjHits.push('T');} };
+	if (x != tile.length - 1) 		{ if (tile[x + 1][y] == 1) {adjCount ++; adjHits.push('B');} };
+	if (y != 0) 					{ if (tile[x][y - 1] == 1) {adjCount ++; adjHits.push('L');} };
+	if (y != tile[0].length - 1) 	{ if (tile[x][y + 1] == 1) {adjCount ++; adjHits.push('R');} };
+	// Count corner building tiles
+	let crnCount = 0;
+	let crnHits = [];
+	if (x != 0) {
+		if (y != 0) 					{ if (tile[x - 1][y - 1] == 1) {crnCount ++; crnHits.push("TL");} };
+		if (y != tile[0].length - 1) 	{ if (tile[x - 1][y + 1] == 1) {crnCount ++; crnHits.push("TR");} };
+	}
+	if (x != tile.length - 1) {
+		if (y != 0) 					{ if (tile[x + 1][y - 1] == 1) {crnCount ++; crnHits.push("BL");} };
+		if (y != tile[0].length - 1) 	{ if (tile[x + 1][y + 1] == 1) {crnCount ++; crnHits.push("BR");} };
+	}
+	
+	if (adjCount == 1) {
+		if (adjHits.includes('L')) {
+			ver = [1,0];
+		} else if (adjHits.includes('T')) {
+			ver = [1,1];
+		} else if (adjHits.includes('R')) {
+			ver = [1,2];
+		} else if (adjHits.includes('B')) {
+			ver = [1,3];
+		};
+	} else if (adjCount == 2) {
+		if (adjHits.includes('L') && adjHits.includes('R')) {
+			ver = [1,4];
+		} else if (adjHits.includes('T') && adjHits.includes('B')) {
+			ver = [1,5];
+		} else {
+			if (adjHits.includes('T') && adjHits.includes('L')) {
+				if (crnHits.includes("TL")) {
+					ver = [2,0];
+				} else {
+					ver = [2,4];
+				}
+			} else if (adjHits.includes('T') && adjHits.includes('R')) {
+				if (crnHits.includes("TR")) {
+					ver = [2,1];
+				} else {
+					ver = [2,5];
+				}
+			} else if (adjHits.includes('B') && adjHits.includes('R')) {
+				if (crnHits.includes("BR")) {
+					ver = [2,2];
+				} else {
+					ver = [2,6];
+				}
+			} else {
+				if (crnHits.includes("BL")) {
+					ver = [2,3];
+				} else {
+					ver = [2,7];
+				};
+			}
+		}
+		
+	} else if (adjCount == 3) {
+		if (!adjHits.includes('R')) {
+			ver = [3,0];
+		} else if (!adjHits.includes('B')) {
+			ver = [3,1];
+		} else if (!adjHits.includes('L')) {
+			ver = [3,2];
+		} else if (!adjHits.includes('T')) {
+			ver = [3,3];
+		}
+	} else if (adjCount == 4) {
+		// inner corner walls or enclosed wall
+		if (crnHits.includes("TL") && crnHits.includes("BL") && crnHits.includes("TR") && crnHits.includes("BR")) {
+			// ALL CORNERS
+			ver = [4,0];
+		} else if (crnHits.includes("BL") && crnHits.includes("TR") && crnHits.includes("BR")) {
+			// !TL
+			ver = [4,0]; // [4,11]
+		} else if (crnHits.includes("TL") && crnHits.includes("TR") && crnHits.includes("BR")) {
+			// !BL
+			ver = [4,0]; // [4,12]
+		} else if (crnHits.includes("TL") && crnHits.includes("BL") && crnHits.includes("BR")) {
+			// !TR
+			ver = [4,0]; // [4,13]
+		} else if (crnHits.includes("TL") && crnHits.includes("BL") && crnHits.includes("TR")) {
+			// !BR
+			ver = [4,0]; // [4,14]
+		} else if (crnHits.includes("BL") && crnHits.includes("BR")) {
+			// BL BR
+			ver = [4,10];
+		} else if (crnHits.includes("TR") && crnHits.includes("BR")) {
+			// BR TR
+			ver = [4,8];
+		} else if (crnHits.includes("TL") && crnHits.includes("TR")) {
+			// TR TL
+			ver = [4,9];
+		} else if (crnHits.includes("TL") && crnHits.includes("BL")) {
+			// TL BL
+			ver = [4,7];
+		} else if (crnHits.includes("TL") && crnHits.includes("BR")) {
+			// TL BR
+			ver = [4,6];
+		} else if (crnHits.includes("BL") && crnHits.includes("TR")) {
+			// TR BL
+			ver = [4,5];
+		} else if (crnHits.includes("TL")) {
+			// TL
+			ver = [4,1];
+		} else if (crnHits.includes("BL")) {
+			// BL
+			ver = [4,4];
+		} else if (crnHits.includes("TR")) {
+			// TR
+			ver = [4,2];
+		} else if (crnHits.includes("BR")) {
+			// BR
+			ver = [4,3];
+		} else {
+			ver = [4,0]; // [4,15]
+		}
+	}
+	
+	return ver;
+}
