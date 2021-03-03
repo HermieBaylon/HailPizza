@@ -118,10 +118,13 @@ class AngleBoundingBox {
 	cornerCollision(oth) {
 		// Broad collision
 		if (this.right.isRight(oth.left) && this.left.isLeft(oth.right) && this.top.isAbove(oth.bottom) && this.bottom.isBelow(oth.top)) {
+			/*
 			// Edge case, this object is not angled oddly.
-			if (this.direction % 90 < 15) return true;
+			//if (this.direction % 90 < 15) return true;
+			*/
+			
 			// Narrow detection
-			if (this.x < oth.x) {
+			if (this.x > oth.x) {
 				// other object is colliding from the RIGHT...
 				if (this.y > oth.y) {
 					// other object is colliding from TOP RIGHT
@@ -130,7 +133,7 @@ class AngleBoundingBox {
 					// other object is colliding from BOTTOM RIGHT
 					if ( oth.left <= this.getX(this.bottom, this.right, oth.top) ) return true;
 				}
-			}else if (this.x > oth.x) {
+			}else if (this.x < oth.x) {
 				// other object is colliding from the LEFT...
 				if (this.y > oth.y) {
 					// other object is colliding from TOP LEFT
@@ -141,6 +144,8 @@ class AngleBoundingBox {
 					//if ( oth.right.y <= this.getY(this.bottom, this.left, oth.right.x) ) return true;
 				}
 			}
+			
+			
 		}
 		return false;
 	}

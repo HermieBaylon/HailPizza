@@ -297,107 +297,72 @@ ASSET_MANAGER.downloadAll(function () {
 	
 	// NPCs
 	var npccars = [];
-	/* OLD
-	// List of possible starting points
-	var starting = 0;
-	var ending = (1280 * 5);
-
-	// (StraightHorizontalLeft1) Y
-	var SHL1 = [415, 925, 1695, 2205, 2975, 3485, 4255, 4765, 5535, 6045];
-
-	//(StraightHorizontalRight1) Y
-	var SHR1 = [350, 860, 1630, 2104, 2910, 3420, 3930, 4700, 5210, 5980];
-
-	// (StraightVerticalUp2) X
-	var SVU2 = [415, 925, 1695, 2205, 2975, 3485, 4255, 4765, 5535, 6045];
-
-	// // (StraightVerticalDown2) X
-	var STD2 = [350, 860, 1630, 2104, 2910, 3420, 3930, 4700, 5210, 5980];
-
-	for (var i = 0; i < SHL1.length; i++) {
-		npccars.push(new Car(gameEngine, starting, SHL1[i], Math.floor(Math.random() * 5), 0, 1));
-		npccars.push(new Car(gameEngine, ending, SHR1[i], Math.floor(Math.random() * 5), 180, 1));
-		npccars.push(new Car(gameEngine, SVU2[i], ending, Math.floor(Math.random() * 5), 180, 2));
-		npccars.push(new Car(gameEngine, STD2[i], starting, Math.floor(Math.random() * 5), 0, 2));
-	}
-
-
-
-	// // (HorizontalToVerticalforward3) --> y = 480, 990, 1760, 2270, 3040, 3550
-	npccars.push(new Car(gameEngine, 0, 480, Math.floor(Math.random() * 5), 0, 3));
-	npccars.push(new Car(gameEngine, 0, 990, Math.floor(Math.random() * 5), 0, 3));
-	npccars.push(new Car(gameEngine, 0, 1760, Math.floor(Math.random() * 5), 0, 3));
-	npccars.push(new Car(gameEngine, 0, 2270, Math.floor(Math.random() * 5), 0, 3));
-	npccars.push(new Car(gameEngine, 0, 3040, Math.floor(Math.random() * 5), 0, 3));
-	npccars.push(new Car(gameEngine, 0, 3550, Math.floor(Math.random() * 5), 0, 3));
-	// // (HorizontalToVerticalbackward3) --> y = 285, 795, 1565, 2075, 2845, 3355
-	npccars.push(new Car(gameEngine, 3840, 285, Math.floor(Math.random() * 5), 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 795, Math.floor(Math.random() * 5), 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 1565, Math.floor(Math.random() * 5), 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 2075, Math.floor(Math.random() * 5), 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 2845, Math.floor(Math.random() * 5), 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 3355, Math.floor(Math.random() * 5), 180, 3));
-	// // (VerticalToHorizontalDown4) --> X = 480, 990, 1760, 2270, 3040, 3550
-	npccars.push(new Car(gameEngine, 480, 0, Math.floor(Math.random() * 5), 180, 4));
-	npccars.push(new Car(gameEngine, 990, 0, Math.floor(Math.random() * 5), 180, 4));
-	npccars.push(new Car(gameEngine, 1760, 0, Math.floor(Math.random() * 5), 180, 4));
-	npccars.push(new Car(gameEngine, 2270, 0, Math.floor(Math.random() * 5), 180, 4));
-	npccars.push(new Car(gameEngine, 3040, 0, Math.floor(Math.random() * 5), 180, 4));
-	npccars.push(new Car(gameEngine, 3550, 0, Math.floor(Math.random() * 5), 180, 4));
-	// // (VerticalToHorizontalbackward4) --> X = 285, 795, 1565, 2075, 2845, 3355
-	npccars.push(new Car(gameEngine, 285, 3840, Math.floor(Math.random() * 5), 0, 4));
-	npccars.push(new Car(gameEngine, 795, 3840, Math.floor(Math.random() * 5), 0, 4));
-	npccars.push(new Car(gameEngine, 1565, 3840, Math.floor(Math.random() * 5), 0, 4));
-	npccars.push(new Car(gameEngine, 2075, 3840, Math.floor(Math.random() * 5), 0, 4));
-	npccars.push(new Car(gameEngine, 2845, 3840, Math.floor(Math.random() * 5), 0, 4));
-
-	npccars.push(new Car(gameEngine, 3355, 3840, Math.floor(Math.random() * 5), 0, 4));*/
 	
 	// Define street entrances as points. TODO input final list of street entrances.
-	let streets = [];
-	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
+	let streetsLeft = [];
+	let streetsRight = [];
+	let sidewalk = [];
 	
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 1.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 2.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 3.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 4.5));
+	for (var i = 0; i < 5; i+=2) {
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * i), PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * (i + 1)), PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * i, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * (i + 1), PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
+		
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * i), PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 1.5));
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * (i + 1)), PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 2.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * i, PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 3.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * (i + 1), PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 4.5));
 	
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 1.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 2.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 3.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 4.5));
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * i), PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 1.5));
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * (i + 1)), PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 2.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * i, PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 3.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * (i + 1), PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 4.5));
+		
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * i), PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 1.5));
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * (i + 1)), PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 2.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * i, PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 3.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * (i + 1), PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 4.5));
+	}
+	var population = 10;
+	for (var i = 0; i < population; i++) {
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 0.5));
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 5.5));
+		
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 0.5));
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 5.5));
+		
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 0.5));
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 5.5));
+		
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 0.5));
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 5.5));
+	}
+	gameEngine.streetsLeft = streetsLeft;
+	gameEngine.streetsRight = streetsRight;
 	
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 1.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 2.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 3.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 4.5));
-	
-	//streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
-	//streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
-	//streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
-	//streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
-	gameEngine.streets = streets;
-	
-	for (var i = 0; i < streets.length; i++) {
-		npccars.push(new Car(gameEngine, streets[i].x, streets[i].y, Math.floor(Math.random() * 5), 0, 1));
+	for (var i = 0; i < streetsLeft.length; i++) {
+		npccars.push(new Car(gameEngine, streetsLeft[i].x, streetsLeft[i].y, Math.floor(Math.random() * 5), 0, 1));
+	}
+	for (var i = 0; i < streetsRight.length; i++) {
+		npccars.push(new Car(gameEngine, streetsRight[i].x, streetsRight[i].y, Math.floor(Math.random() * 5), 180, 1));
 	}
 
 	var npcs = [];
-	var population = 10;//100 Anything larger than 20 stops the game somehow (MP: I don't see this issue)
-	var i = 0;
-	for (i = 0; i < population; i++) {
-		var randomX = Math.floor(Math.random() * 3000) + 0;
-		var randomY = Math.floor(Math.random() * 3000) + 0;
-		var randomMovementPattern = Math.floor(Math.random() * 4) + 1;
-		npcs.push(new Pedestrian(gameEngine, randomX, randomY, 1, 0, randomMovementPattern));
+	for (var i = 0; i < sidewalk.length; i++) {
+		npcs.push(new Pedestrian(gameEngine, sidewalk[i].x, sidewalk[i].y, Math.random() * 2, 0 + (180 * ( Math.round( Math.random() ) ) ), 1));
 	}
+	//var population = 10;//100 Anything larger than 20 stops the game somehow (MP: I don't see this issue)
+	//for (var i = 0; i < population; i++) {
+		//var randomX = Math.floor(Math.random() * 3000) + 0;
+		//var randomY = Math.floor(Math.random() * 3000) + 0;
+		//var randomMovementPattern = Math.floor(Math.random() * 4) + 1;
+		//npcs.push(new Pedestrian(gameEngine, 0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 0.5, Math.random() * 2, 0, 1));
+	//}
 	
 	// Player
-	var driver = new Driver(gameEngine, 2581, 1636, 270);
-	var drivercar = new DriverCar(gameEngine, 2655, 1311, 0);
+	var driver = new Driver(gameEngine, 628, 353, 180);
+	var drivercar = new DriverCar(gameEngine, 243, 98, 90);
 	
 	var shopArrow = new Arrow(gameEngine, driver.x, driver.y, shop.x, shop.y, 0);
 	gameEngine.shopArrow = shopArrow;

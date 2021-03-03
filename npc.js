@@ -304,10 +304,6 @@ class Car {
 		this.version = version;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/npccars.png");
-		
-		//this.driving = new AngleAnimator(this.spritesheet,
-		//	(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
-		//	this.WIDTH, this.HEIGHT, 1, 1, 1, this.direction, false, true);
 			
 		// Create array of version animations
 		this.driving = [];
@@ -371,7 +367,13 @@ class Car {
 	
 	update() {
 
-		this.updateCar();
+		//this.updateCar();
+		if (this.x < 0) {
+			this.x = PARAMS.MAP_WIDTH;
+		}
+		if (this.x > PARAMS.MAP_WIDTH) {
+			this.x = 0;
+		}
 
 		if (this.forward) {
 			// Acceleration/Deceleration

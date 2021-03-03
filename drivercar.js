@@ -36,6 +36,9 @@ class DriverCar {
 		this.spinSpeed = 0;
 		this.pushSpeed = 0;
 		this.pushDirection = this.direction;
+		this.canEnter = false;
+		
+		this.game.car = this;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/drivercar.png");
 		
@@ -210,6 +213,13 @@ class DriverCar {
 				this.game.audio.setVolume(0.34 - ((distance / (this.WIDTH * 3)) / 3));
 			} else {
 				this.game.audio.pause();
+			}
+			
+			// canEnter proximity
+			if (distance < this.WIDTH) {
+				this.canEnter = true;
+			} else {
+				this.canEnter = false;
 			}
 		}
 		

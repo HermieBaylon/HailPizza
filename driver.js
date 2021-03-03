@@ -151,26 +151,28 @@ class Driver {
 			};
 			// nextBB collisions
 			if (entity !== that && entity.BB && entity.BB.collide(that.nextBB)) {
-				if (entity instanceof DriverCar && that.game.keyE && that.active && !that.game.blockExit) {	// enter car
-					that.game.camera.shopArrowFlag = true;
-					if (that.game.camera.tutorialFlag1) {
-						that.game.camera.displayText = "FOLLOW THE ARROW. GO TO THE SHOP.";
-						that.game.shopArrow.isVisible = true;
-
-					}
-					that.game.camera.controlText = "W/Up: Accelerate. S/Down: Reverse. A,D/Left,Right: Turn. E: Exit Vehicle. Space: Brakes. Power Slide for a boost.";
-					that.x = -1000;	// arbitrary offmap location
-					that.y = -1000;
-					that.updateBB();
-					that.game.blockExit = true;
-					that.active = false;
-					entity.active = true;
-					setTimeout(function () {
-						that.game.blockExit = false;
-					}, 500)
-				}
+				//
 			}
 		});
+		
+		// Enter Vehicle, switch states
+		if (this.game.keyE && this.active && !this.game.blockExit && this.game.car.canEnter) {	// enter car
+			this.game.camera.shopArrowFlag = true;
+			if (this.game.camera.tutorialFlag1) {
+				this.game.camera.displayText = "FOLLOW THE ARROW. GO TO THE SHOP.";
+				this.game.shopArrow.isVisible = true;
+			}
+			this.game.camera.controlText = "W/Up: Accelerate. S/Down: Reverse. A,D/Left,Right: Turn. E: Exit Vehicle. Space: Brakes. Power Slide for a boost.";
+			this.x = -1000;	// arbitrary offmap location
+			this.y = -1000;
+			this.updateBB();
+			this.game.blockExit = true;
+			this.active = false;
+			this.game.car.active = true;
+			setTimeout(function () {
+				that.game.blockExit = false;
+			}, 500)
+		}
 		
 		// Keep in bounds
 		if (this.BB.left < 0) {	// Left
