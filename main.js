@@ -303,7 +303,7 @@ ASSET_MANAGER.downloadAll(function () {
 	let streetsRight = [];
 	let sidewalk = [];
 	
-	for (var i = 0; i < 5; i+=2) {
+	for (var i = 0; i < 3; i+=2) {
 		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * i), PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
 		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * (i + 1)), PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
 		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * i, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
@@ -324,7 +324,7 @@ ASSET_MANAGER.downloadAll(function () {
 		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * i, PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 3.5));
 		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * (i + 1), PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 4.5));
 	}
-	var population = 10;
+	var population = 6;
 	for (var i = 0; i < population; i++) {
 		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 0.5));
 		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 5.5));
