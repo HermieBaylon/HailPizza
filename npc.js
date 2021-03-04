@@ -21,13 +21,13 @@ class Pedestrian {
 		// Animations
 		 this.standing = new AngleAnimator(this.spritesheet,
 		 0, this.version * this.WIDTH,
-		 	this.WIDTH, this.WIDTH, 12, 0.3, 0, this.direction, false, true);	// Standing
+		 	this.WIDTH, this.WIDTH, 12, 0.3, 1, this.direction, false, true);	// Standing
 		 this.walking = new AngleAnimator(this.spritesheet,
 		 228, this.version * this.WIDTH,
-		 	this.WIDTH, this.WIDTH, 8, 0.3, 0, this.direction, false, true);	// Walking
+		 	this.WIDTH, this.WIDTH, 8, 0.3, 1, this.direction, false, true);	// Walking
 		 this.corpse = new AngleAnimator(this.spritesheet,
 		 380, this.version * this.WIDTH,
-		 	this.WIDTH, this.WIDTH, 1, 1, 0, this.direction, false, true);	// Corpse
+		 	this.WIDTH, this.WIDTH, 1, 1, 1, this.direction, false, true);	// Corpse
 		
 		if (this.movePattern == 1) {
 			this.straightHorizontal();
@@ -304,10 +304,6 @@ class Car {
 		this.version = version;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/npccars.png");
-		
-		//this.driving = new AngleAnimator(this.spritesheet,
-		//	(this.version * this.WIDTH) % this.PAGE_WIDTH, Math.floor((this.version * this.WIDTH) / this.PAGE_WIDTH) * this.HEIGHT,
-		//	this.WIDTH, this.HEIGHT, 1, 1, 1, this.direction, false, true);
 			
 		// Create array of version animations
 		this.driving = [];
@@ -371,7 +367,13 @@ class Car {
 	
 	update() {
 
-		this.updateCar();
+		//this.updateCar();
+		if (this.x < 0) {
+			this.x = PARAMS.MAP_WIDTH;
+		}
+		if (this.x > PARAMS.MAP_WIDTH) {
+			this.x = 0;
+		}
 
 		if (this.forward) {
 			// Acceleration/Deceleration
@@ -481,6 +483,8 @@ class Car {
 	};
 	
 	draw(ctx) {
+		if (Math.abs(this.game.player.x - this.x) > PARAMS.PAGE_WIDTH) return;
+		if (Math.abs(this.game.player.y - this.y) > PARAMS.PAGE_HEIGHT) return;
 		this.driving[this.version].drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 		
 		if (PARAMS.DEBUG) {
@@ -501,6 +505,7 @@ class Car {
 	};
 	
 	// Marc Begin
+	
 	// sub-method that makes sure the vehicle is heading towards the given goal direction set to the object. Called only in update().
 	updateDirection() {
 		let tolerance = this.TURN_SPEED;

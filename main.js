@@ -10,6 +10,24 @@ ASSET_MANAGER.queueDownload("./assets/streetlight02.png");
 ASSET_MANAGER.queueDownload("./assets/fence.png");
 ASSET_MANAGER.queueDownload("./assets/building.png");
 
+ASSET_MANAGER.queueDownload("./assets/ground.png");
+
+ASSET_MANAGER.queueDownload("./assets/road/00-00.png");
+ASSET_MANAGER.queueDownload("./assets/road/01-00.png");
+ASSET_MANAGER.queueDownload("./assets/road/01-01.png");
+ASSET_MANAGER.queueDownload("./assets/road/01-02.png");
+ASSET_MANAGER.queueDownload("./assets/road/01-03.png");
+ASSET_MANAGER.queueDownload("./assets/road/01-04.png");
+ASSET_MANAGER.queueDownload("./assets/road/01-05.png");
+ASSET_MANAGER.queueDownload("./assets/road/02-00.png");
+ASSET_MANAGER.queueDownload("./assets/road/02-01.png");
+ASSET_MANAGER.queueDownload("./assets/road/02-02.png");
+ASSET_MANAGER.queueDownload("./assets/road/02-03.png");
+ASSET_MANAGER.queueDownload("./assets/road/03-00.png");
+ASSET_MANAGER.queueDownload("./assets/road/03-01.png");
+ASSET_MANAGER.queueDownload("./assets/road/03-02.png");
+ASSET_MANAGER.queueDownload("./assets/road/03-03.png");
+
 ASSET_MANAGER.queueDownload("./assets/roof/00-00.png");
 ASSET_MANAGER.queueDownload("./assets/roof/01-00.png");
 ASSET_MANAGER.queueDownload("./assets/roof/01-01.png");
@@ -69,7 +87,9 @@ ASSET_MANAGER.downloadAll(function () {
 	var ctx = canvas.getContext('2d');
 
 	// Background
-	var bgTiles = [];
+	var roads = [];
+	var ground = [];
+	/*var bgTiles = [];
 	for (var i = 0; i <= 4; i++) {
 		for (var j = 0; j <= 4; j++) {
 			if (i == 3 && j == 3) {
@@ -78,7 +98,7 @@ ASSET_MANAGER.downloadAll(function () {
 				bgTiles.push(new Background(gameEngine, i * PARAMS.TILE_WIDTH, j * PARAMS.TILE_WIDTH, 1));
 			}
 		}
-	}
+	}*/
 	// Intersection grid spaces that will determine when cars turn. direction variable is the new goalDirection cars are given.
 	var intersections = [];
 	intersections.push(new Intersection(gameEngine,PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH, 270));
@@ -90,337 +110,309 @@ ASSET_MANAGER.downloadAll(function () {
 	
 	// Buildings
 	var buildings = [];
-	for (var k = 0; k < 5; k++) {
+	/*for (var k = 0; k < 5; k++) {
 		for (var l = 0; l < 5; l++) {
 			if (k != l)goals.push(new GoalPost(gameEngine, PARAMS.GRID_WIDTH * 9 + (PARAMS.TILE_WIDTH * k), PARAMS.GRID_WIDTH * 8 + (PARAMS.TILE_WIDTH * l)));
 		}
-	}
-	shop = new StartMission(gameEngine, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 9.5, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 6);
+	}*/
 	
 	// curvy road across map
-	let tile1Buildings = [  [1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
-							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1],
-							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1]  ];
+	let tileLayout = []
+	
+	tileLayout.push(     [  [1,1,0,0,3,3,3,3,0,0,1,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,3,3,3,3,0,0,1,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,3,3,3,3,0,0,1,1,0,0,0,0,0,0,1,1],
+							[1,1,0,0,3,3,3,3,0,0,1,1,0,0,0,0,1,1,1,1],
+							[1,1,0,0,3,3,3,3,0,0,0,0,0,0,0,0,1,1,1,1],
+							[1,1,0,0,3,3,3,3,0,0,1,1,0,0,0,0,1,1,1,1],
+							[1,1,0,0,3,3,3,3,0,0,1,1,0,0,1,0,0,0,0,1],
+							[1,1,0,0,3,3,3,3,0,0,1,1,0,2,0,0,0,0,0,1],
+							[1,1,0,0,3,3,3,3,0,0,1,1,1,1,1,1,1,0,0,1],
+							[1,1,0,0,3,3,3,3,0,0,1,1,1,1,1,1,1,0,0,1],
+							[1,1,0,0,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,1],
+							[1,1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,1],
+							[1,1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,1],
+							[1,1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,1],
+							[1,1,0,2,0,0,0,0,0,0,0,0,3,3,3,3,0,0,0,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,3,3,3,3,0,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,3,3,3,3,0,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,3,3,3,3,0,1,1,1]  ]);
 	// U shape road
-	let tile2Buildings = [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	tileLayout.push(     [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
 							[0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
 							[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
-							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
-							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
-							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
-							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
-							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
-							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
-							[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0],
-							[0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0]  ];
+							[0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0],
+							[0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0],
+							[0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0],
+							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
+							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
+							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
+							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
+							[0,3,3,0,1,1,2,0,0,0,0,0,0,2,1,1,0,3,3,0],
+							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
+							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
+							[1,3,3,1,1,1,0,0,0,0,0,0,0,0,1,1,1,3,3,1],
+							[1,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,1]  ]);
 	// vertical roads
-	let tile3Buildings = [  [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
-							[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1]  ];
+	tileLayout.push(     [  [1,1,0,3,3,3,3,0,0,0,0,0,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,0,0,0,0,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,1,0,0,1,0,3,3,3,3,0,1,1],
+							[1,1,0,3,3,3,3,0,0,0,0,0,0,3,3,3,3,1,1,1],
+							[1,1,1,3,3,3,3,0,0,0,0,0,1,3,3,3,3,1,1,1]  ]);
 	// Horizontal roads across map
-	let tile4Buildings = [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
-							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
-							[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
-							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
-							[1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]  ];
+	tileLayout.push(     [  [0,3,3,3,3,3,3,0,0,0,0,0,3,3,3,3,3,3,3,0],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0],
+							[0,3,3,0,1,1,1,1,1,1,1,1,1,1,1,1,2,3,3,0],
+							[0,3,3,0,1,1,1,1,1,1,1,1,1,1,1,1,0,3,3,0],
+							[0,3,3,0,1,1,0,2,0,0,0,0,0,0,1,1,0,3,3,0],
+							[0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0],
+							[0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0],
+							[0,3,3,0,1,1,0,0,0,0,0,0,2,0,1,1,0,3,3,0],
+							[0,3,3,0,1,1,1,1,1,1,1,1,1,1,1,1,0,3,3,0],
+							[0,3,3,0,1,1,1,1,1,1,1,1,1,1,1,1,0,3,3,0],
+							[0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[0,0,0,3,3,3,3,0,0,0,0,0,0,3,3,3,3,0,0,0]  ]);
 	// no roads
-	let tile5Buildings = [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
+	tileLayout.push(     [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
+							[1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ];
+							[1,0,0,0,1,0,1,0,1,1,0,0,0,0,0,0,1,0,0,1],
+							[1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,1],
+							[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1],
+							[1,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,2,0,0,1],
+							[1,0,0,0,0,2,0,0,0,0,0,1,0,0,1,1,0,0,0,1],
+							[1,0,0,0,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,1,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1],
+							[1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,2,0,0,0,1],
+							[1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1],
+							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ]);
 	 // vertical roads in center of map
-	let tile6Buildings = [  [1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1],
-							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
-							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
-							[1,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1],
-							[1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1]  ];
+	tileLayout.push(     [  [1,1,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,1,1],
+							[1,0,0,0,0,0,0,1,0,3,3,0,1,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,0,3,3,0,1,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,1],
+							[1,0,2,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,1],
+							[1,0,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,0,1],
+							[1,0,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,0,1],
+							[0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,0],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,2,0,0,0,0],
+							[1,0,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,0,1],
+							[1,0,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,0,1],
+							[1,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,0,3,3,0,1,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,0,3,3,0,1,0,0,0,0,0,0,1],
+							[1,1,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,1,1]  ]);
 	// shop tile, 1 horizontal road to shop
-	let tileSBuildings = [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
+	tileLayout.push(     [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,0,0,1],
+							[1,0,0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0],
+							[3,3,3,3,3,3,0,0,1,1,1,1,0,0,3,3,3,3,3,3],
+							[3,3,3,3,3,3,0,0,1,1,1,1,0,0,3,3,3,3,3,3],
+							[3,3,3,3,3,3,0,0,1,1,1,1,0,0,3,3,3,3,3,3],
+							[3,3,3,3,3,3,0,0,0,0,0,0,0,0,3,3,3,3,3,3],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0],
+							[1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+							[1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,1],
+							[1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ];
+							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ]);
 	
-	let tile1locA = [0,4];
-	let tile1locB = [0,4];
-	
-	let tile2locA = [1,3];
-	let tile2locB = [0,4];
-	
-	let tile3locA = [2];
-	let tile3locB = [0,4];
-	
-	let tile4locA = [0,1,2,3,4];
-	let tile4locB = [1,3];
-	
-	let tile5locA = [0,4];
-	let tile5locB = [2];
-	
-	let tile6locA = [1,3];
-	let tile6locB = [2];
-	
-	let tileSlocA = [2];
-	let tileSlocB = [2];
+	let mapTileCoordsA = [];
+	let mapTileCoordsB = [];
+	// Tile 1
+	mapTileCoordsA.push([0,4]);
+	mapTileCoordsB.push([0,4]);
+	// Tile 2
+	mapTileCoordsA.push([1,3]);
+	mapTileCoordsB.push([0,4]);
+	// Tile 3
+	mapTileCoordsA.push([2]);
+	mapTileCoordsB.push([0,4]);
+	// Tile 4
+	mapTileCoordsA.push([0,1,2,3,4]);
+	mapTileCoordsB.push([1,3]);
+	// Tile 5
+	mapTileCoordsA.push([0,4]);
+	mapTileCoordsB.push([2]);
+	// Tile 6
+	mapTileCoordsA.push([1,3]);
+	mapTileCoordsB.push([2]);
+	// Tile 7 (Shop)
+	mapTileCoordsA.push([2]);
+	mapTileCoordsB.push([2]);
 	
 	for (let a = 0; a < 5; a++) {
 		for (let b = 0; b < 5; b++) {
-			for (let i = 0; i < tile1Buildings.length; i++) {
-				for (let j = 0; j < tile1Buildings[i].length; j++) {	// There may be a way to refactor this into less lines but I'm tired and it's week 8
-					if (tile1locA.includes(a) && tile1locB.includes(b) && tile1Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					} else if (tile1locA.includes(a) && tile1locB.includes(b) && tile1Buildings[i][j] == -1) {
-						// Goal Tile
-					}
-					if (tile2locA.includes(a) && tile2locB.includes(b) && tile2Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tile3locA.includes(a) && tile3locB.includes(b) && tile3Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tile3locA.includes(a) && tile3locB.includes(b) && tile3Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tile4locA.includes(a) && tile4locB.includes(b) && tile4Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tile5locA.includes(a) && tile5locB.includes(b) && tile5Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tile6locA.includes(a) && tile6locB.includes(b) && tile6Buildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
-					}
-					if (tileSlocA.includes(a) && tileSlocB.includes(b) && tileSBuildings[i][j] == 1) {
-						buildings.push(new ModularBuilding (gameEngine,
-										PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
-										PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
-										0, 0));
+			for (let i = 0; i < tileLayout[0].length; i++) {
+				for (let j = 0; j < tileLayout[0][i].length; j++) {
+					for (let k = 0; k < mapTileCoordsA.length; k++) {
+						if (mapTileCoordsA[k].includes(a) && mapTileCoordsB[k].includes(b)) {
+							if (tileLayout[k][i][j] == 1) {
+								// Building
+								let ver = getModVersion(tileLayout[k], i, j);
+								buildings.push(new ModularBuilding (gameEngine,
+											PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+											PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+											ver[0], ver[1]));
+							} else if (tileLayout[k][i][j] == 2) {
+								ground.push (new Ground (gameEngine,
+											PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+											PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b));
+								// Goal Tile
+								goals.push(new GoalPost(gameEngine, PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+																	PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,));
+							} else if (tileLayout[k][i][j] == 3) {
+								// Road
+								let ver = getRoadVersion(tileLayout[k], i, j);
+								roads.push(new Road (gameEngine,
+											PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+											PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+											ver[0], ver[1]));
+							} else {
+								ground.push (new Ground (gameEngine,
+											PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+											PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b));
+							};
+						}
 					}
 				}
 			}
 		}
 	}
+	shop = new StartMission(gameEngine, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 9.5, PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 6);
 	
 	// NPCs
 	var npccars = [];
-	/* OLD
-	// List of possible starting points
-	var starting = 0;
-	var ending = (1280 * 5);
-
-	// (StraightHorizontalLeft1) Y
-	var SHL1 = [415, 925, 1695, 2205, 2975, 3485, 4255, 4765, 5535, 6045];
-
-	//(StraightHorizontalRight1) Y
-	var SHR1 = [350, 860, 1630, 2104, 2910, 3420, 3930, 4700, 5210, 5980];
-
-	// (StraightVerticalUp2) X
-	var SVU2 = [415, 925, 1695, 2205, 2975, 3485, 4255, 4765, 5535, 6045];
-
-	// // (StraightVerticalDown2) X
-	var STD2 = [350, 860, 1630, 2104, 2910, 3420, 3930, 4700, 5210, 5980];
-
-	for (var i = 0; i < SHL1.length; i++) {
-		npccars.push(new Car(gameEngine, starting, SHL1[i], Math.floor(Math.random() * 5), 0, 1));
-		npccars.push(new Car(gameEngine, ending, SHR1[i], Math.floor(Math.random() * 5), 180, 1));
-		npccars.push(new Car(gameEngine, SVU2[i], ending, Math.floor(Math.random() * 5), 180, 2));
-		npccars.push(new Car(gameEngine, STD2[i], starting, Math.floor(Math.random() * 5), 0, 2));
-	}
-
-
-
-	// // (HorizontalToVerticalforward3) --> y = 480, 990, 1760, 2270, 3040, 3550
-	npccars.push(new Car(gameEngine, 0, 480, Math.floor(Math.random() * 5), 0, 3));
-	npccars.push(new Car(gameEngine, 0, 990, Math.floor(Math.random() * 5), 0, 3));
-	npccars.push(new Car(gameEngine, 0, 1760, Math.floor(Math.random() * 5), 0, 3));
-	npccars.push(new Car(gameEngine, 0, 2270, Math.floor(Math.random() * 5), 0, 3));
-	npccars.push(new Car(gameEngine, 0, 3040, Math.floor(Math.random() * 5), 0, 3));
-	npccars.push(new Car(gameEngine, 0, 3550, Math.floor(Math.random() * 5), 0, 3));
-	// // (HorizontalToVerticalbackward3) --> y = 285, 795, 1565, 2075, 2845, 3355
-	npccars.push(new Car(gameEngine, 3840, 285, Math.floor(Math.random() * 5), 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 795, Math.floor(Math.random() * 5), 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 1565, Math.floor(Math.random() * 5), 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 2075, Math.floor(Math.random() * 5), 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 2845, Math.floor(Math.random() * 5), 180, 3));
-	npccars.push(new Car(gameEngine, 3840, 3355, Math.floor(Math.random() * 5), 180, 3));
-	// // (VerticalToHorizontalDown4) --> X = 480, 990, 1760, 2270, 3040, 3550
-	npccars.push(new Car(gameEngine, 480, 0, Math.floor(Math.random() * 5), 180, 4));
-	npccars.push(new Car(gameEngine, 990, 0, Math.floor(Math.random() * 5), 180, 4));
-	npccars.push(new Car(gameEngine, 1760, 0, Math.floor(Math.random() * 5), 180, 4));
-	npccars.push(new Car(gameEngine, 2270, 0, Math.floor(Math.random() * 5), 180, 4));
-	npccars.push(new Car(gameEngine, 3040, 0, Math.floor(Math.random() * 5), 180, 4));
-	npccars.push(new Car(gameEngine, 3550, 0, Math.floor(Math.random() * 5), 180, 4));
-	// // (VerticalToHorizontalbackward4) --> X = 285, 795, 1565, 2075, 2845, 3355
-	npccars.push(new Car(gameEngine, 285, 3840, Math.floor(Math.random() * 5), 0, 4));
-	npccars.push(new Car(gameEngine, 795, 3840, Math.floor(Math.random() * 5), 0, 4));
-	npccars.push(new Car(gameEngine, 1565, 3840, Math.floor(Math.random() * 5), 0, 4));
-	npccars.push(new Car(gameEngine, 2075, 3840, Math.floor(Math.random() * 5), 0, 4));
-	npccars.push(new Car(gameEngine, 2845, 3840, Math.floor(Math.random() * 5), 0, 4));
-
-	npccars.push(new Car(gameEngine, 3355, 3840, Math.floor(Math.random() * 5), 0, 4));*/
 	
 	// Define street entrances as points. TODO input final list of street entrances.
-	let streets = [];
-	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
-	streets.push(new Point (0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
+	let streetsLeft = [];
+	let streetsRight = [];
+	let sidewalk = [];
 	
-	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
-	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
-	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
-	streets.push(new Point (PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
-	gameEngine.streets = streets;
+	var i = 0;
+	//for (var i = 0; i < 5; i+=2) {
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * i), PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 1.5));
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * (i + 1)), PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 2.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * i, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 3.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * (i + 1), PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 4.5));
+		
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * i), PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 1.5));
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * (i + 1)), PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 2.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * i, PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 3.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * (i + 1), PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 4.5));
 	
-	for (var i = 0; i < streets.length; i++) {
-		npccars.push(new Car(gameEngine, streets[i].x, streets[i].y, Math.floor(Math.random() * 5), 0, 1));
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * i), PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 1.5));
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * (i + 1)), PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 2.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * i, PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 3.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * (i + 1), PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 4.5));
+		
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * i), PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 1.5));
+		streetsRight.push(new Point (PARAMS.MAP_WIDTH - (PARAMS.GRID_WIDTH * (i + 1)), PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 2.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * i, PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 3.5));
+		streetsLeft.push(new Point (PARAMS.GRID_WIDTH * (i + 1), PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 4.5));
+	//}
+	var population = 6;
+	for (var i = 0; i < population; i++) {
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 0.5));
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 5.5));
+		
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 0.5));
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 2 - PARAMS.GRID_WIDTH * 5.5));
+		
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 0.5));
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 3 + PARAMS.GRID_WIDTH * 5.5));
+		
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 0.5));
+		sidewalk.push(new Point (Math.random() * PARAMS.MAP_WIDTH,PARAMS.TILE_WIDTH * 4 - PARAMS.GRID_WIDTH * 5.5));
+	}
+	gameEngine.streetsLeft = streetsLeft;
+	gameEngine.streetsRight = streetsRight;
+	
+	for (var i = 0; i < streetsLeft.length; i++) {
+		npccars.push(new Car(gameEngine, streetsLeft[i].x, streetsLeft[i].y, Math.floor(Math.random() * 5), 0, 1));
+	}
+	for (var i = 0; i < streetsRight.length; i++) {
+		npccars.push(new Car(gameEngine, streetsRight[i].x, streetsRight[i].y, Math.floor(Math.random() * 5), 180, 1));
 	}
 
 	var npcs = [];
-	var population = 10;//100 Anything larger than 20 stops the game somehow (MP: I don't see this issue)
-	var i = 0;
-	for (i = 0; i < population; i++) {
-		var randomX = Math.floor(Math.random() * 3000) + 0;
-		var randomY = Math.floor(Math.random() * 3000) + 0;
-		var randomMovementPattern = Math.floor(Math.random() * 4) + 1;
-		npcs.push(new Pedestrian(gameEngine, randomX, randomY, 1, 0, randomMovementPattern));
+	for (var i = 0; i < sidewalk.length; i++) {
+		npcs.push(new Pedestrian(gameEngine, sidewalk[i].x, sidewalk[i].y, Math.random() * 2, 0 + (180 * ( Math.round( Math.random() ) ) ), 1));
 	}
+	//var population = 10;//100 Anything larger than 20 stops the game somehow (MP: I don't see this issue)
+	//for (var i = 0; i < population; i++) {
+		//var randomX = Math.floor(Math.random() * 3000) + 0;
+		//var randomY = Math.floor(Math.random() * 3000) + 0;
+		//var randomMovementPattern = Math.floor(Math.random() * 4) + 1;
+		//npcs.push(new Pedestrian(gameEngine, 0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 0.5, Math.random() * 2, 0, 1));
+	//}
 	
 	// Player
-	var driver = new Driver(gameEngine, 2581, 1636, 270);
-	var drivercar = new DriverCar(gameEngine, 2655, 1311, 0);
+	var driver = new Driver(gameEngine, 628, 353, 180);
+	var drivercar = new DriverCar(gameEngine, 243, 98, 90);
 	
 	var shopArrow = new Arrow(gameEngine, driver.x, driver.y, shop.x, shop.y, 0);
 	gameEngine.shopArrow = shopArrow;
 
 	///// Draw all entities 
 	gameEngine.init(ctx);
-	for (var i = 0; i < bgTiles.length; i++) {
-		gameEngine.addEntity(bgTiles[i]);
+	//for (var i = 0; i < bgTiles.length; i++) {
+	//	gameEngine.addEntity(bgTiles[i]);
+	//}
+	for (var i = 0; i < roads.length; i++) {
+		gameEngine.addEntity(roads[i]);
+	}
+	for (var i = 0; i < ground.length; i++) {
+		gameEngine.addEntity(ground[i]);
 	}
 	for (var i = 0; i < intersections.length; i++) {
 		gameEngine.addEntity(intersections[i]);
@@ -451,11 +443,215 @@ ASSET_MANAGER.downloadAll(function () {
 	}
 
 	var door = new Audio('music/DoorClose.mp3');
-	door.play();
+	//door.play();
 	
 	new SceneManager(gameEngine);
 	new AudioManager(gameEngine);
 	
 	gameEngine.start();
-	door.play();
+	//door.play();
 });
+
+function getRoadVersion (tile, x, y) {
+	let ver = [0,0];	// default
+	
+	// Count adjacent building tiles
+	let adjCount = 0;
+	let adjHits = [];
+	if (x != 0) 					{ if (tile[x - 1][y] == 3) {adjCount ++; adjHits.push('T');} };
+	if (x != tile.length - 1) 		{ if (tile[x + 1][y] == 3) {adjCount ++; adjHits.push('B');} };
+	if (y != 0) 					{ if (tile[x][y - 1] == 3) {adjCount ++; adjHits.push('L');} };
+	if (y != tile[0].length - 1) 	{ if (tile[x][y + 1] == 3) {adjCount ++; adjHits.push('R');} };
+	// Edge of tile counts towards a hit
+	if (x == 0) 					{ adjCount ++; adjHits.push('T'); };
+	if (x == tile.length - 1) 		{ adjCount ++; adjHits.push('B'); };
+	if (y == 0) 					{ adjCount ++; adjHits.push('L'); };
+	if (y == tile[0].length - 1) 	{ adjCount ++; adjHits.push('R'); };
+	// Count corner building tiles
+	let crnCount = 0;
+	let crnHits = [];
+	if (x != 0) {
+		if (y != 0) 					{ if (tile[x - 1][y - 1] == 3) {crnCount ++; crnHits.push("TL");} };
+		if (y != tile[0].length - 1) 	{ if (tile[x - 1][y + 1] == 3) {crnCount ++; crnHits.push("TR");} };
+	}
+	if (x != tile.length - 1) {
+		if (y != 0) 					{ if (tile[x + 1][y - 1] == 3) {crnCount ++; crnHits.push("BL");} };
+		if (y != tile[0].length - 1) 	{ if (tile[x + 1][y + 1] == 3) {crnCount ++; crnHits.push("BR");} };
+	}
+	
+	if (adjCount == 2) {
+		if (adjHits.includes('L') && adjHits.includes('R')) {
+			ver = [1,0];
+		} else if (adjHits.includes('T') && adjHits.includes('B')) {
+			ver = [1,1];
+		} else {
+			if (adjHits.includes('T') && adjHits.includes('L')) {
+				if (crnHits.includes("TL")) {
+					ver = [2,0];
+				} else {
+					ver = [1,1];
+				}
+			} else if (adjHits.includes('T') && adjHits.includes('R')) {
+				if (crnHits.includes("TR")) {
+					ver = [2,1];
+				} else {
+					ver = [1,3];
+				}
+			} else if (adjHits.includes('B') && adjHits.includes('R')) {
+				if (crnHits.includes("BR")) {
+					ver = [2,2];
+				} else {
+					ver = [1,5];
+				}
+			} else {
+				if (crnHits.includes("BL")) {
+					ver = [2,3];
+				} else {
+					ver = [1,4];
+				};
+			}
+		}
+	} else if (adjCount == 3) {
+		if (!adjHits.includes('R')) {
+			ver = [3,1];
+		} else if (!adjHits.includes('B')) {
+			ver = [3,2];
+		} else if (!adjHits.includes('L')) {
+			ver = [3,3];
+		} else if (!adjHits.includes('T')) {
+			ver = [3,0];
+		}
+	} else if (adjCount == 4) {
+		// TODO
+	}
+	return ver;
+}
+
+function getModVersion (tile, x, y) {
+	let ver = [0,0];	// default
+	
+	// Count adjacent building tiles
+	let adjCount = 0;
+	let adjHits = [];
+	if (x != 0) 					{ if (tile[x - 1][y] == 1) {adjCount ++; adjHits.push('T');} };
+	if (x != tile.length - 1) 		{ if (tile[x + 1][y] == 1) {adjCount ++; adjHits.push('B');} };
+	if (y != 0) 					{ if (tile[x][y - 1] == 1) {adjCount ++; adjHits.push('L');} };
+	if (y != tile[0].length - 1) 	{ if (tile[x][y + 1] == 1) {adjCount ++; adjHits.push('R');} };
+	// Count corner building tiles
+	let crnCount = 0;
+	let crnHits = [];
+	if (x != 0) {
+		if (y != 0) 					{ if (tile[x - 1][y - 1] == 1) {crnCount ++; crnHits.push("TL");} };
+		if (y != tile[0].length - 1) 	{ if (tile[x - 1][y + 1] == 1) {crnCount ++; crnHits.push("TR");} };
+	}
+	if (x != tile.length - 1) {
+		if (y != 0) 					{ if (tile[x + 1][y - 1] == 1) {crnCount ++; crnHits.push("BL");} };
+		if (y != tile[0].length - 1) 	{ if (tile[x + 1][y + 1] == 1) {crnCount ++; crnHits.push("BR");} };
+	}
+	
+	if (adjCount == 1) {
+		if (adjHits.includes('L')) {
+			ver = [1,0];
+		} else if (adjHits.includes('T')) {
+			ver = [1,1];
+		} else if (adjHits.includes('R')) {
+			ver = [1,2];
+		} else if (adjHits.includes('B')) {
+			ver = [1,3];
+		};
+	} else if (adjCount == 2) {
+		if (adjHits.includes('L') && adjHits.includes('R')) {
+			ver = [1,4];
+		} else if (adjHits.includes('T') && adjHits.includes('B')) {
+			ver = [1,5];
+		} else {
+			if (adjHits.includes('T') && adjHits.includes('L')) {
+				if (crnHits.includes("TL")) {
+					ver = [2,0];
+				} else {
+					ver = [2,4];
+				}
+			} else if (adjHits.includes('T') && adjHits.includes('R')) {
+				if (crnHits.includes("TR")) {
+					ver = [2,1];
+				} else {
+					ver = [2,5];
+				}
+			} else if (adjHits.includes('B') && adjHits.includes('R')) {
+				if (crnHits.includes("BR")) {
+					ver = [2,2];
+				} else {
+					ver = [2,6];
+				}
+			} else {
+				if (crnHits.includes("BL")) {
+					ver = [2,3];
+				} else {
+					ver = [2,7];
+				};
+			}
+		}
+	} else if (adjCount == 3) {
+		if (!adjHits.includes('R')) {
+			ver = [3,0];
+		} else if (!adjHits.includes('B')) {
+			ver = [3,1];
+		} else if (!adjHits.includes('L')) {
+			ver = [3,2];
+		} else if (!adjHits.includes('T')) {
+			ver = [3,3];
+		}
+	} else if (adjCount == 4) {
+		// inner corner walls or enclosed wall
+		if (crnHits.includes("TL") && crnHits.includes("BL") && crnHits.includes("TR") && crnHits.includes("BR")) {
+			// ALL CORNERS
+			ver = [4,0];
+		} else if (crnHits.includes("BL") && crnHits.includes("TR") && crnHits.includes("BR")) {
+			// !TL
+			ver = [4,0]; // [4,11]
+		} else if (crnHits.includes("TL") && crnHits.includes("TR") && crnHits.includes("BR")) {
+			// !BL
+			ver = [4,0]; // [4,12]
+		} else if (crnHits.includes("TL") && crnHits.includes("BL") && crnHits.includes("BR")) {
+			// !TR
+			ver = [4,0]; // [4,13]
+		} else if (crnHits.includes("TL") && crnHits.includes("BL") && crnHits.includes("TR")) {
+			// !BR
+			ver = [4,0]; // [4,14]
+		} else if (crnHits.includes("BL") && crnHits.includes("BR")) {
+			// BL BR
+			ver = [4,10];
+		} else if (crnHits.includes("TR") && crnHits.includes("BR")) {
+			// BR TR
+			ver = [4,8];
+		} else if (crnHits.includes("TL") && crnHits.includes("TR")) {
+			// TR TL
+			ver = [4,9];
+		} else if (crnHits.includes("TL") && crnHits.includes("BL")) {
+			// TL BL
+			ver = [4,7];
+		} else if (crnHits.includes("TL") && crnHits.includes("BR")) {
+			// TL BR
+			ver = [4,6];
+		} else if (crnHits.includes("BL") && crnHits.includes("TR")) {
+			// TR BL
+			ver = [4,5];
+		} else if (crnHits.includes("TL")) {
+			// TL
+			ver = [4,1];
+		} else if (crnHits.includes("BL")) {
+			// BL
+			ver = [4,4];
+		} else if (crnHits.includes("TR")) {
+			// TR
+			ver = [4,2];
+		} else if (crnHits.includes("BR")) {
+			// BR
+			ver = [4,3];
+		} else {
+			ver = [4,0]; // [4,15]
+		}
+	}
+	
+	return ver;
+}

@@ -3,8 +3,8 @@ class ModularBuilding {
 		// constants
 		this.WIDTH = PARAMS.GRID_WIDTH;
 		this.HEIGHT = PARAMS.GRID_WIDTH;
-		this.BB_WIDTH = PARAMS.GRID_WIDTH - 10;
-		this.BB_HEIGHT = PARAMS.GRID_WIDTH - 10;
+		this.BB_WIDTH = PARAMS.GRID_WIDTH;
+		this.BB_HEIGHT = PARAMS.GRID_WIDTH;
 		this.BB_XBUFFER = (this.WIDTH - this.BB_WIDTH) / 2;
 		this.BB_YBUFFER = (this.HEIGHT - this.BB_HEIGHT) / 2;
 		

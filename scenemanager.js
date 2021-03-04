@@ -62,8 +62,8 @@ class SceneManager {
  //    }
 
 	update() { // TODO replace with constants
-		let xMidpoint = PARAMS.PAGE_WIDTH / 2;// - 19 / 2;
-		let yMidpoint = PARAMS.PAGE_HEIGHT / 2;// - 19 / 2;
+		let xMidpoint = PARAMS.PAGE_WIDTH / 2;
+		let yMidpoint = PARAMS.PAGE_HEIGHT / 2;
 		
 		this.x = Math.min(Math.max(this.game.player.x - xMidpoint, 0), PARAMS.MAP_WIDTH - PARAMS.PAGE_WIDTH);
 		this.y = Math.min(Math.max(this.game.player.y - yMidpoint, 0), PARAMS.MAP_HEIGHT - PARAMS.PAGE_HEIGHT);
@@ -78,7 +78,7 @@ class SceneManager {
 		//this.one.drawFrame(this.game.clockTick,ctx, 7, 8, 0.3)
 		
 		// Displays whatever text is given.
-		ctx.font = "30px Arial";
+		ctx.font = "30px Fantasy";
 		ctx.textAlign = "center";
 		ctx.strokeStyle = 'White';
 		ctx.strokeText(this.displayText, PARAMS.PAGE_WIDTH / 2, PARAMS.PAGE_HEIGHT - 50);
@@ -87,7 +87,7 @@ class SceneManager {
 		
 		// controls only appears for prompt of game.
 		if (this.tutorialFlag1) {
-			ctx.font = "20px Arial";
+			ctx.font = "20px Fantasy";
 			ctx.textAlign = "center";
 			ctx.strokeStyle = 'White';
 			ctx.strokeText(this.controlText, PARAMS.PAGE_WIDTH / 2, 100);
@@ -109,12 +109,12 @@ class SceneManager {
 			ctx.textAlign  = "left";
 			ctx.strokeText(coordText, 50, 50);
 			ctx.textAlign  = "right";
-			ctx.strokeText(coordText2, PARAMS.PAGE_WIDTH - 50, 50);
+			ctx.strokeText(coordText2, PARAMS.PAGE_WIDTH - 50, 150);
 			ctx.strokeStyle = 'Black';
 			ctx.textAlign  = "left";
 			ctx.fillText(coordText, 50, 50);
 			ctx.textAlign  = "right";
-			ctx.fillText(coordText2, PARAMS.PAGE_WIDTH - 50, 50); // HUD text for checking bounding edges on driver car
+			ctx.fillText(coordText2, PARAMS.PAGE_WIDTH - 50, 150); // HUD text for checking bounding edges on driver car
 		}
 	}
 };
