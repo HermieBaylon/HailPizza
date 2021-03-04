@@ -32,7 +32,7 @@ class SceneManager {
 		//this.loadAnimations();
 		game.addEntity(this);
 		game.addEntity(new HealthBar(game, 10, 10));
-
+		//game.addEntity(new Minimap(game, 860, 10, 150));
 		// Effects
 	}
 	
@@ -98,7 +98,6 @@ class SceneManager {
 			ctx.drawImage(ASSET_MANAGER.getAsset("./assets/hailpizza.png"), 0,0);
 			ctx.fillStyle = this.game.mouse && this.game.mouse.y > 0 && this.game.mouse.y < 768 ? "Grey" : "White";
             ctx.fillText("PRESS SPACE TO START YOUR SHIFT", 300, 600);
-            //console.log("Not working");
 		}
 		// controls only appears for prompt of game.
 		if (this.tutorialFlag1) {
