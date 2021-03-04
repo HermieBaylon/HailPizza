@@ -70,11 +70,9 @@ class SceneManager {
 		this.y = Math.min(Math.max(this.game.player.y - yMidpoint, 0), PARAMS.MAP_HEIGHT - PARAMS.PAGE_HEIGHT);
 		
 		// User clicks on "Start your shift" then title screen disappears..
-		if (this.title && this.game.click) {
-            if (this.game.click && this.game.click.y > 9 * PARAMS.BLOCKWIDTH && this.game.click.y < 9.5 * PARAMS.BLOCKWIDTH) {
+		if (this.title && this.game.space) {
                 this.title = false;
             }
-		}
 	}
 	
 	draw(ctx) {
@@ -97,9 +95,10 @@ class SceneManager {
 		if (this.title) {
 			var width = 176;
 			var height = 88;
-			ctx.drawImage(ASSET_MANAGER.getAsset("./assets/hailpizza.png"), 2.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH, width * PARAMS.SCALE, height * PARAMS.SCALE);
-			ctx.fillStyle = this.game.mouse && this.game.mouse.y > 9 * PARAMS.BLOCKWIDTH && this.game.mouse.y < 9.5 * PARAMS.BLOCKWIDTH ? "Grey" : "White";
-            ctx.fillText("START YOUR SHIFT", 6.75 * PARAMS.BLOCKWIDTH, 9.5 * PARAMS.BLOCKWIDTH);
+			ctx.drawImage(ASSET_MANAGER.getAsset("./assets/hailpizza.png"), 0,0);
+			ctx.fillStyle = this.game.mouse && this.game.mouse.y > 0 && this.game.mouse.y < 768 ? "Grey" : "White";
+            ctx.fillText("PRESS SPACE TO START YOUR SHIFT", 300, 600);
+            //console.log("Not working");
 		}
 		// controls only appears for prompt of game.
 		if (this.tutorialFlag1) {
