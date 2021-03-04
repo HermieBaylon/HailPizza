@@ -101,17 +101,13 @@ class AssetManager {
 
     playAsset(path) {
         let audio = this.cache[path];
-        //audio.currentTime = 0;
-        if (path === "./music/driving.mp3") {
-            if (audio.currentTime > 10) {
-                console.log("Audio is over 10 " +audio.currentTime);
-                audio.play();
-            }
-        } else {
-            audio.currentTime = 0;
-            audio.play();
-        }
-        //audio.play();
+        audio.currentTime = 0;
+        audio.play();
+    };
+
+    pauseAsset(path) {
+        let audio = this.cache[path];
+        audio.pause();
     };
 
     // isDone(path) {

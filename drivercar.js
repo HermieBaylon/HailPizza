@@ -71,17 +71,16 @@ class DriverCar {
 	update() {
 		var that = this;
 
-		// var carIsMoving = this.game.forward || this.game.backward || this.game.left || this.game.right;
-		// //var carIsMoving = !(this.game.forward || this.game.backward || this.game.left || this.game.right);
+		var isDriving = this.game.forward || this.game.backward || this.game.left || this.game.right;
 
-		// if (carIsMoving) {
-		// 	// if finished
-		// 	ASSET_MANAGER.adjustVolumeOnPath(.5, "./music/driving.mp3");
-		// 	ASSET_MANAGER.playAsset("./music/driving.mp3");
-		// 	//ASSET_MANAGER.autoRepeat("./music/driving.mp3");
-		// } else {
-		// 	//ASSET_MANAGER.adjustVolumeOnPath(0, "./music/driving.mp3");
-		// }
+		if (isDriving && this.active) {
+			ASSET_MANAGER.adjustVolumeOnPath(.5, "./music/driving.mp3");
+			if (ASSET_MANAGER.getAsset("./music/driving.mp3").paused) {
+				ASSET_MANAGER.playAsset("./music/driving.mp3");
+			}
+		} else {
+			ASSET_MANAGER.pauseAsset("./music/driving.mp3");
+		}
 		
 		if (this.active) {
 			// Affirm focus
