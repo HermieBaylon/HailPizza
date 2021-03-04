@@ -74,7 +74,7 @@ class DriverCar {
 		var isDriving = this.game.forward || this.game.backward || this.game.left || this.game.right;
 
 		if (isDriving && this.active) {
-			ASSET_MANAGER.adjustVolumeOnPath(.5, "./music/driving.mp3");
+			ASSET_MANAGER.adjustVolumeOnPath(.1, "./music/driving.mp3");
 			if (ASSET_MANAGER.getAsset("./music/driving.mp3").paused) {
 				ASSET_MANAGER.playAsset("./music/driving.mp3");
 			}
