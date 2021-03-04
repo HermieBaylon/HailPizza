@@ -64,6 +64,8 @@ class Driver {
 			ASSET_MANAGER.pauseAsset("./music/walking.mp3");
 		}
 
+		if (this.dead) return;
+
 		if (this.active) {
 			// Affirm focus
 			this.game.player = this;
