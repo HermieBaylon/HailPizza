@@ -112,7 +112,10 @@ class GameEngine {
 					break;
 				case "KeyE":
 					that.keyE = true;
-                    ASSET_MANAGER.playAsset("./music/DoorClose.mp3");
+                    // if (that.keyE) {
+                    //     ASSET_MANAGER.pauseAsset("./music/driving.mp3");
+                    // }
+                    //ASSET_MANAGER.playAsset("./music/DoorClose.mp3");
 					break;
 			}
 		}, false);
@@ -141,7 +144,9 @@ class GameEngine {
 					break;
 				case "KeyE":
 					that.keyE = false;
-                    ASSET_MANAGER.playAsset("./music/DoorClose.mp3");
+                    ASSET_MANAGER.pauseAsset("./music/driving.mp3");
+                    //ASSET_MANAGER.adjustVolumeOnPath(0, "./music/driving.mp3");
+                    //ASSET_MANAGER.playAsset("./music/DoorClose.mp3");
 					break;
 			}
 		}, false);

@@ -61,6 +61,7 @@ ASSET_MANAGER.queueDownload("./music/driving.mp3");
 ASSET_MANAGER.queueDownload("./music/CarImpact.mp3");
 ASSET_MANAGER.queueDownload("./music/CarImpact2.mp3");
 ASSET_MANAGER.queueDownload("./music/dead.mp3");
+ASSET_MANAGER.queueDownload("./music/walking.mp3");
 
 ASSET_MANAGER.downloadAll(function () {
 

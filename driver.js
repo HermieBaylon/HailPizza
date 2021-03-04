@@ -52,6 +52,18 @@ class Driver {
 	}
 	
 	update() {
+
+		var isWalking = this.game.forward || this.game.backward || this.game.left || this.game.right;
+
+		if (isWalking && this.active) {
+			ASSET_MANAGER.adjustVolumeOnPath(.5, "./music/walking.mp3");
+			if (ASSET_MANAGER.getAsset("./music/walking.mp3").paused) {
+				ASSET_MANAGER.playAsset("./music/walking.mp3");
+			}
+		} else {
+			ASSET_MANAGER.pauseAsset("./music/walking.mp3");
+		}
+
 		if (this.active) {
 			// Affirm focus
 			this.game.player = this;
