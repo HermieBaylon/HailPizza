@@ -17,6 +17,8 @@ class Driver {
 		this.pushSpeed = 0;
 		this.pushDirection = this.direction;
 		this.score = 0;
+		this.dead = false;
+		this.invulnerable = false;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/driver.png");
 		
@@ -24,7 +26,7 @@ class Driver {
 		this.updateBB();
 		
 		// Animations
-		this.standing = new AngleAnimator(this.spritesheet, 0, 21,
+		this.standing = new AngleAnimator(this.spritesheet, 0, 20,
 			this.WIDTH, this.WIDTH, 5, 0.3, 1, this.direction, false, true);	// Standing
 		this.pizzaStand = new AngleAnimator(this.spritesheet, 0, 60,
 			this.WIDTH, this.WIDTH, 5, 0.3, 1, this.direction, false, true);	// Standing w/ Pizza
@@ -34,6 +36,8 @@ class Driver {
 			this.WIDTH, this.WIDTH, 12, 0.05, 1, this.direction, false, true);	// Running w/ Pizza
 		this.jumping = new AngleAnimator(this.spritesheet, 0, 0,
 			this.WIDTH, this.WIDTH, 12, 0.7, 1, this.direction, false, true);	// Jumping
+		this.deadAnim = new AngleAnimator(this.spritesheet, 100, 60,
+			this.WIDTH, this.WIDTH, 1, 1, 1, this.direction, false, true);	// Dead
 			
 		// Assign initial focus
 		this.game.player = this;
@@ -52,6 +56,8 @@ class Driver {
 	}
 	
 	update() {
+		if (this.dead) return;
+		
 		if (this.active) {
 			// Affirm focus
 			this.game.player = this;
@@ -117,24 +123,28 @@ class Driver {
 					// Calculate center to center angle
 					let angle = Math.atan( Math.abs(that.y - entity.y) / Math.abs(that.x - entity.x) ) * (180 / Math.PI);
 					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
-					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
-					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
+					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = 180 - (angle % 90); //Q2
+					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
+					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = 360 - (angle % 90); //Q4
 					// face npc away
 					// move him forward
-					console.log("move, foo");
+					//console.log("move, foo");
 				}
-				if (entity instanceof Car) {	// damaged by car
+				if (entity instanceof Car && !that.invulnerable) {	// damaged by car
 					// Calculate center to center angle
-					let angle = Math.atan( Math.abs(that.y - entity.y) / Math.abs(that.x - entity.x) ) * (180 / Math.PI);
-					if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
-					if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = (angle % 90) + 90; //Q2
-					if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = (angle % 90) + 180; //Q3
-					if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = (angle % 90) + 270; //Q4
-					that.x -= (10 * Math.cos((Math.PI / 180) * angle));
-					that.y -= (10 * Math.sin((Math.PI / 180) * angle));
+					//let angle = Math.atan( Math.abs(that.y - entity.y) / Math.abs(that.x - entity.x) ) * (180 / Math.PI);
+					//if (entity.x - that.x >= 0 && entity.y - that.y >= 0) angle = (angle % 90); //Q1
+					//if (entity.x - that.x <  0 && entity.y - that.y >= 0) angle = 180 - (angle % 90); //Q2
+					//if (entity.x - that.x <  0 && entity.y - that.y <  0) angle = 180 + (angle % 90); //Q3
+					//if (entity.x - that.x >= 0 && entity.y - that.y <  0) angle = 360 + (angle % 90); //Q4
+					that.pushSpeed = 10;
+					that.pushDirection = entity.direction + 90;
 					that.healthPoint -= 1;
-					//console.log("damaged (car)" + angle);
+					that.invulnerable = true;
+					setTimeout(function () {
+						that.invulnerable = false;
+					}, 2000)
+					
 				}
 				if (entity instanceof StartMission) {	// start mission
 					if (!that.onMission) {
@@ -154,6 +164,10 @@ class Driver {
 				//
 			}
 		});
+			
+		if (this.healthPoint == 0){
+			this.dead = true;
+		}
 		
 		// Enter Vehicle, switch states
 		if (this.game.keyE && this.active && !this.game.blockExit && this.game.car.canEnter) {	// enter car
@@ -246,6 +260,11 @@ class Driver {
 	}
 	
 	draw(ctx) {
+		if (this.dead) {
+			this.deadAnim.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
+			return;
+		}
+		
 		if ((this.game.forward || this.game.backward) && this.active){
 			if (this.onMission) {
 				this.pizzaRun.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);

@@ -153,8 +153,11 @@ class AngleBoundingBox {
 	cornerCollisionAngle(oth) {
 		// Broad collision
 		if (this.right.isRight(oth.left) && this.left.isLeft(oth.right) && this.top.isAbove(oth.bottom) && this.bottom.isBelow(oth.top)) {
+			if (this instanceof driver) return true;
 			// Edge case, this object is not angled oddly.
-			if (this.direction % 90 < 15) return true;
+			let buffer = 15;
+			if (this.direction % 90 < buffer) return true;
+			if (this.direction % 90 > 90 - buffer) return true;
 			// Narrow detection
 			if (this.x < oth.x) {
 				// other object is colliding from the RIGHT...

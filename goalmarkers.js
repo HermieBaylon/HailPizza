@@ -61,11 +61,9 @@ class GoalPost {
 		
 		Object.assign(this, { game, x, y });
 		this.isVisible = false;
-		this.arrow = new Arrow(game, 0, 0, x + (this.WIDTH * this.SCALE) / 2, y + (this.HEIGHT * this.SCALE) / 2, 1);
-		// TODO
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/goal.png");
-		
+		this.arrow = new Arrow(this.game, 0, 0, this.x + (this.WIDTH * this.SCALE) / 2, this.y + (this.HEIGHT * this.SCALE) / 2, 1);
 		// Update bounding box
 		this.updateBB();
 	};
@@ -76,7 +74,6 @@ class GoalPost {
 	
 	update() {
 		this.arrow.update();
-		// TODO
 	};
 	
 	draw(ctx) {
@@ -87,6 +84,7 @@ class GoalPost {
 			this.arrow.isVisible = false;
 		}
 		this.arrow.draw(ctx);
+		
 		if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x,

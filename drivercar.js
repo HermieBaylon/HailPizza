@@ -138,9 +138,6 @@ class DriverCar {
 				}
 			}
 			
-			// Normalize to range integers 0-359
-			this.direction = (Math.floor(this.direction) % 360 + 360) % 360;
-			
 			// Acceleration/Deceleration
 			if (this.game.space) {									// Brakes
 				if (this.currentSpeed > 0) {
@@ -229,6 +226,9 @@ class DriverCar {
 			this.spinSpeed = Math.sign(this.spinSpeed) * (Math.abs(this.spinSpeed) - this.SPIN_DRAG);
 			if (Math.abs(this.spinSpeed) < 2) this.spinSpeed = 0;
 		}
+			
+		// Normalize to range integers 0-359
+		this.direction = (Math.floor(this.direction) % 360 + 360) % 360;
 		
 		// Movement
 		if (this.driftFlag && this.active) {

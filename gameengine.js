@@ -155,7 +155,12 @@ class GameEngine {
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         for (var i = 0; i < this.entities.length; i++) {
-            this.entities[i].draw(this.ctx);
+			// Draw flag used to only load sprites within the viewport for performance.
+			let drawFlag = true;
+			if (Math.abs(this.player.x - this.entities[i].x) > PARAMS.PAGE_WIDTH) drawFlag = false;
+			if (Math.abs(this.player.y - this.entities[i].y) > PARAMS.PAGE_HEIGHT) drawFlag = false;
+			if (this.entities[i] instanceof GoalPost) drawFlag = true;	// Edge case, goalpost controls it's own arrows
+			if (drawFlag) { this.entities[i].draw(this.ctx); };
         }
 		this.camera.draw(this.ctx);
     };
