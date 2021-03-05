@@ -160,12 +160,20 @@ class Driver {
 				}
 				if (entity instanceof StartMission) {	// start mission
 					if (!that.onMission) {
+						if (ASSET_MANAGER.getAsset("./music/newMission.mp3").paused) {
+							ASSET_MANAGER.adjustVolumeOnPath(0.9, "./music/newMission.mp3");
+							ASSET_MANAGER.playAsset("./music/newMission.mp3");
+						}
 						that.startMission();
 					}
 				}
 				if (entity instanceof GoalPost) {	// end mission
 					if (that.onMission && entity.isVisible) {
 						console.log("complete goal");
+						if (ASSET_MANAGER.getAsset("./music/achievement.mp3").paused) {
+							ASSET_MANAGER.adjustVolumeOnPath(.5, "./music/achievement.mp3");
+							ASSET_MANAGER.playAsset("./music/achievement.mp3");
+						}
 						entity.isVisible = false;
 						that.goal();
 					}

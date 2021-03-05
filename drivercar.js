@@ -81,6 +81,15 @@ class DriverCar {
 		} else {
 			ASSET_MANAGER.pauseAsset("./music/driving.mp3");
 		}
+		if (!isDriving && this.active) {
+			console.log("Car is active but not moving");
+			ASSET_MANAGER.adjustVolumeOnPath(.1, "./music/engine.mp3");
+			if (ASSET_MANAGER.getAsset("./music/engine.mp3").paused) {
+				ASSET_MANAGER.playAsset("./music/engine.mp3");
+			}
+		} else {
+			ASSET_MANAGER.pauseAsset("./music/engine.mp3");
+		}
 		
 		if (this.active) {
 			// Affirm focus
