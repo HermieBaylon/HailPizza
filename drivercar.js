@@ -269,7 +269,10 @@ class DriverCar {
 				}
 				if (entity instanceof Car) {	// hit car
 					ASSET_MANAGER.adjustVolume(.1);
-					if (that.speed > that.MAX_SPEED / 2) ASSET_MANAGER.playAsset("./music/`Impact2.mp3");
+					if (ASSET_MANAGER.getAsset("./music/CarImpact2.mp3").paused) {
+						ASSET_MANAGER.playAsset("./music/CarImpact2.mp3");
+					}
+					if (that.speed > that.MAX_SPEED / 2) ASSET_MANAGER.playAsset("./music/CarImpact2.mp3");
 					vehicleToVehicle(that, entity);
 				}
 			};

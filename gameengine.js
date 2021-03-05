@@ -145,9 +145,9 @@ class GameEngine {
 					break;
 				case "KeyE":
 					that.keyE = false;
-                    ASSET_MANAGER.pauseAsset("./music/driving.mp3");
+                    //ASSET_MANAGER.pauseAsset("./music/driving.mp3");
                     //ASSET_MANAGER.adjustVolumeOnPath(0, "./music/driving.mp3");
-                    //ASSET_MANAGER.playAsset("./music/DoorClose.mp3");
+                    ASSET_MANAGER.playAsset("./music/DoorClose.mp3");
 					break;
 			}
 		}, false);
