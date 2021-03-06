@@ -71,10 +71,10 @@ class Ground {
 }
 
 class Intersection {
-	constructor(game, x, y, direction) {
+	constructor(game, x, y, direction, turnChance) {
 		this.WIDTH = PARAMS.GRID_WIDTH;
 		
-		Object.assign(this, { game, x, y, direction });
+		Object.assign(this, { game, x, y, direction, turnChance });
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/streetlight02.png");
 		this.updateBB();

@@ -2,6 +2,7 @@
 
 class GameEngine {
     constructor() {
+		this.background = [];
         this.entities = [];
         this.showOutlines = false;
         this.ctx = null;
@@ -152,8 +153,19 @@ class GameEngine {
         this.entities.push(entity);
     };
 
+    addBackground(entity) {
+        this.background.push(entity);
+    };
+
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        for (var i = 0; i < this.background.length; i++) {
+			// Draw flag used to only load sprites within the viewport for performance.
+			let drawFlag = true;
+			if (Math.abs(this.player.x - this.background[i].x) > PARAMS.PAGE_WIDTH) drawFlag = false;
+			if (Math.abs(this.player.y - this.background[i].y) > PARAMS.PAGE_HEIGHT) drawFlag = false;
+			if (drawFlag) { this.background[i].draw(this.ctx); };
+        }
         for (var i = 0; i < this.entities.length; i++) {
 			// Draw flag used to only load sprites within the viewport for performance.
 			let drawFlag = true;

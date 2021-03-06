@@ -21,13 +21,13 @@ class Pedestrian {
 		// Animations
 		 this.standing = new AngleAnimator(this.spritesheet,
 		 0, this.version * this.WIDTH,
-		 	this.WIDTH, this.WIDTH, 12, 0.3, 1, this.direction, false, true);	// Standing
+		 	this.WIDTH, this.WIDTH, 12, 0.3, 0, this.direction, false, true);	// Standing
 		 this.walking = new AngleAnimator(this.spritesheet,
-		 228, this.version * this.WIDTH,
-		 	this.WIDTH, this.WIDTH, 8, 0.3, 1, this.direction, false, true);	// Walking
+		 12 * this.WIDTH, this.version * this.WIDTH,
+		 	this.WIDTH, this.WIDTH, 8, 0.3, 0, this.direction, false, true);	// Walking
 		 this.corpse = new AngleAnimator(this.spritesheet,
-		 380, this.version * this.WIDTH,
-		 	this.WIDTH, this.WIDTH, 1, 1, 1, this.direction, false, true);	// Corpse
+		 20 * this.WIDTH, this.version * this.WIDTH,
+		 	this.WIDTH, this.WIDTH, 1, 1, 0, this.direction, false, true);		// Corpse
 		
 		if (this.movePattern == 1) {
 			this.straightHorizontal();
@@ -451,7 +451,7 @@ class Car {
             if (entity.BB && that.BB.collide(entity.BB)) {	// Collisions
 				if (entity instanceof Intersection && that.seen != entity) { // turn at intersections
 					that.seen = entity;
-					if (Math.random() > 0.5) that.goalDirection = entity.direction;	// Random chance to turn. Otherwise, ignores this intersection and logs it briefly.
+					if (Math.random() <= entity.turnChance) that.goalDirection = entity.direction;	// Random chance to turn. Otherwise, ignores this intersection and logs it briefly.
 					setTimeout(function () {
 						that.seen = null;
 					}, 5000);
@@ -467,6 +467,15 @@ class Car {
 				}
 				if (entity instanceof Building || entity instanceof ModularBuilding) {	// hit building
 					vehicleToBuilding(that, entity);
+					that.goalDirection += 90;	
+					// Normalize to range integers 0-359
+					that.goalDirection = (Math.floor(that.goalDirection) % 360 + 360) % 360;
+					that.forward = false;
+					that.backward = true;
+					setTimeout(function () {
+						that.forward = true;
+						that.backward = false;
+					}, 5000);
 					if (that.forward) {
 						that.forward = false;
 						that.resumeFlag = false;

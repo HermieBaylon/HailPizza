@@ -100,8 +100,6 @@ ASSET_MANAGER.downloadAll(function () {
 	}*/
 	// Intersection grid spaces that will determine when cars turn. direction variable is the new goalDirection cars are given.
 	var intersections = [];
-	intersections.push(new Intersection(gameEngine,PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 3, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH, 270));
-	intersections.push(new Intersection(gameEngine,PARAMS.TILE_WIDTH * 2 + PARAMS.GRID_WIDTH * 1, PARAMS.TILE_WIDTH + 4 * PARAMS.GRID_WIDTH, 90));
 	
 	// Goal Markers
 	var goals = [];
@@ -130,14 +128,14 @@ ASSET_MANAGER.downloadAll(function () {
 							[1,1,0,0,3,3,3,3,0,0,1,1,1,1,1,1,1,0,0,1],
 							[1,1,0,0,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,1],
 							[1,1,0,0,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,1],
-							[1,1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,1],
-							[1,1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,1],
-							[1,1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,1],
-							[1,1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,1],
-							[1,1,0,2,0,0,0,0,0,0,0,0,3,3,3,3,0,0,0,1],
-							[1,1,1,1,1,1,1,1,1,1,1,0,3,3,3,3,0,1,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,0,3,3,3,3,0,1,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,0,3,3,3,3,0,1,1,1]  ]);
+							[1,1,0,0,3,3,3,7,3,3,3,3,3,3,3,3,6,0,0,1],
+							[1,1,0,0,3,3,7,3,3,3,3,3,3,3,3,6,3,0,0,1],
+							[1,1,0,0,3,4,3,3,3,3,3,3,3,3,5,3,3,0,0,1],
+							[1,1,0,0,4,3,3,3,3,3,3,3,3,5,3,3,3,0,0,1],
+							[1,1,0,2,0,0,0,0,0,0,0,0,0,3,3,3,3,0,0,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,0,3,3,3,3,0,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,0,3,3,3,3,0,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,0,0,3,3,3,3,0,1,1]  ]);
 	// U shape road
 	tileLayout.push(     [  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
@@ -147,18 +145,18 @@ ASSET_MANAGER.downloadAll(function () {
 							[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
 							[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
 							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0],
-							[0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0],
-							[0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0],
-							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
-							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
-							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
-							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
-							[0,3,3,0,1,1,2,0,0,0,0,0,0,2,1,1,0,3,3,0],
-							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
-							[0,3,3,0,1,1,0,0,0,0,0,0,0,0,1,1,0,3,3,0],
-							[1,3,3,1,1,1,0,0,0,0,0,0,0,0,1,1,1,3,3,1],
-							[1,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,1]  ]);
+							[0,0,0,5,3,3,3,3,3,3,3,3,3,3,3,3,6,0,0,0],
+							[0,0,0,3,5,3,3,3,3,3,3,3,3,3,3,6,3,0,0,0],
+							[0,0,0,3,3,0,0,0,0,0,0,0,0,0,0,3,3,0,0,0],
+							[0,0,0,3,3,1,0,0,0,0,0,0,0,0,1,3,3,0,0,0],
+							[0,0,0,3,3,1,0,0,0,0,0,0,0,0,1,3,3,0,0,0],
+							[0,0,0,3,3,1,0,0,0,0,0,0,0,0,1,3,3,0,0,0],
+							[0,0,0,3,3,1,0,0,0,0,0,0,0,0,1,3,3,0,0,0],
+							[0,0,0,3,3,1,2,0,0,0,0,0,0,2,1,3,3,0,0,0],
+							[0,0,0,3,3,1,0,0,0,0,0,0,0,0,1,3,3,0,0,0],
+							[0,0,0,3,3,1,0,0,0,0,0,0,0,0,1,3,3,0,0,0],
+							[1,0,0,3,3,1,0,0,0,0,0,0,0,0,1,3,3,0,0,1],
+							[1,0,0,3,3,1,1,1,1,1,1,1,1,1,1,3,3,0,0,1]  ]);
 	// vertical roads
 	tileLayout.push(     [  [1,1,0,3,3,3,3,0,0,0,0,0,0,3,3,3,3,0,1,1],
 							[1,1,0,3,3,3,3,0,0,0,0,0,0,3,3,3,3,0,1,1],
@@ -181,11 +179,11 @@ ASSET_MANAGER.downloadAll(function () {
 							[1,1,0,3,3,3,3,0,0,0,0,0,0,3,3,3,3,1,1,1],
 							[1,1,1,3,3,3,3,0,0,0,0,0,1,3,3,3,3,1,1,1]  ]);
 	// Horizontal roads across map
-	tileLayout.push(     [  [0,3,3,3,3,3,3,0,0,0,0,0,3,3,3,3,3,3,3,0],
+	tileLayout.push(     [  [0,0,0,3,3,3,3,0,0,0,0,0,0,3,3,3,3,0,0,0],
+							[3,3,3,6,6,6,6,3,3,3,3,3,3,6,3,3,11,3,3,3],
 							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
 							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[3,9,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,3],
 							[0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0],
 							[0,3,3,0,1,1,1,1,1,1,1,1,1,1,1,1,2,3,3,0],
 							[0,3,3,0,1,1,1,1,1,1,1,1,1,1,1,1,0,3,3,0],
@@ -196,7 +194,7 @@ ASSET_MANAGER.downloadAll(function () {
 							[0,3,3,0,1,1,1,1,1,1,1,1,1,1,1,1,0,3,3,0],
 							[0,3,3,0,1,1,1,1,1,1,1,1,1,1,1,1,0,3,3,0],
 							[0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0],
-							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+							[3,6,6,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,11,3],
 							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
 							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
 							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
@@ -223,26 +221,26 @@ ASSET_MANAGER.downloadAll(function () {
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1],
 							[1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1]  ]);
 	 // vertical roads in center of map
-	tileLayout.push(     [  [1,1,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,1,1],
-							[1,0,0,0,0,0,0,1,0,3,3,0,1,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,1,0,3,3,0,1,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,1],
-							[1,0,2,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,1],
-							[1,0,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,0,1],
-							[1,0,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,0,1],
-							[0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,0],
+	tileLayout.push(     [  [1,1,1,3,3,1,1,1,1,1,1,1,1,1,1,3,3,1,1,1],
+							[1,0,0,3,3,0,0,1,0,0,0,0,1,0,0,3,3,0,0,1],
+							[1,0,0,3,3,0,0,1,0,3,3,0,1,0,0,3,3,0,0,1],
+							[1,0,0,3,3,0,0,0,0,3,3,0,0,0,0,3,3,0,0,1],
+							[1,0,2,3,3,0,0,0,0,3,3,0,0,0,0,3,3,0,0,1],
+							[1,0,1,3,3,1,1,1,0,3,3,0,1,1,1,3,3,1,0,1],
+							[1,0,1,3,3,1,1,1,0,3,3,0,1,1,1,3,3,1,0,1],
+							[0,0,0,3,3,0,0,0,0,3,3,0,0,0,0,3,3,0,0,0],
 							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
 							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
 							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
 							[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-							[0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,2,0,0,0,0],
-							[1,0,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,0,1],
-							[1,0,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,0,1],
-							[1,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,1,0,3,3,0,1,0,0,0,0,0,0,1],
-							[1,0,0,0,0,0,0,1,0,3,3,0,1,0,0,0,0,0,0,1],
-							[1,1,1,1,1,1,1,1,0,3,3,0,1,1,1,1,1,1,1,1]  ]);
+							[0,0,0,3,3,0,0,0,0,3,3,0,0,0,0,3,3,0,0,0],
+							[1,0,1,3,3,1,1,1,0,3,3,0,1,1,1,3,3,1,0,1],
+							[1,0,1,3,3,1,1,1,0,3,3,0,1,1,1,3,3,1,0,1],
+							[1,0,0,3,3,0,0,0,0,3,3,0,0,0,0,3,3,0,0,1],
+							[1,0,0,3,3,0,0,0,0,3,3,0,0,0,0,3,3,0,0,1],
+							[1,0,0,3,3,0,0,1,0,3,3,0,1,0,0,3,3,0,0,1],
+							[1,0,0,3,3,0,0,1,0,0,0,0,1,0,0,3,3,0,0,1],
+							[1,1,1,3,3,1,1,1,1,1,1,1,1,1,1,3,3,1,1,1]  ]);
 	// shop tile, 1 horizontal road to shop
 	tileLayout.push(     [  [1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1],
 							[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -311,6 +309,25 @@ ASSET_MANAGER.downloadAll(function () {
 																	PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,));
 							} else if (tileLayout[k][i][j] == 3) {
 								// Road
+								let ver = getRoadVersion(tileLayout[k], i, j);
+								roads.push(new Road (gameEngine,
+											PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+											PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+											ver[0], ver[1]));
+							} else if (tileLayout[k][i][j] >= 4) {
+								// Intersections -- 4 -> right, 5 -> down, 6 -> left, 7 -> up
+								let ang = 90 * (tileLayout[k][i][j] - 4);
+								intersections.push(new Intersection(gameEngine,
+											PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+											PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+											ang, 1));
+								// Side Roads -- 8 -> right, 9 -> down, 10 -> left, 11 -> up
+								ang = 90 * (tileLayout[k][i][j] - 8);
+								intersections.push(new Intersection(gameEngine,
+											PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
+											PARAMS.GRID_WIDTH * i + PARAMS.TILE_WIDTH * b,
+											ang, 0.3));
+								// Road to cover the square
 								let ver = getRoadVersion(tileLayout[k], i, j);
 								roads.push(new Road (gameEngine,
 											PARAMS.GRID_WIDTH * j + PARAMS.TILE_WIDTH * a,
@@ -385,15 +402,8 @@ ASSET_MANAGER.downloadAll(function () {
 
 	var npcs = [];
 	for (var i = 0; i < sidewalk.length; i++) {
-		npcs.push(new Pedestrian(gameEngine, sidewalk[i].x, sidewalk[i].y, Math.random() * 2, 0 + (180 * ( Math.round( Math.random() ) ) ), 1));
+		npcs.push(new Pedestrian(gameEngine, sidewalk[i].x, sidewalk[i].y, Math.round( Math.random() ), 0 + (180 * ( Math.round( Math.random() ) ) ), 1));
 	}
-	//var population = 10;//100 Anything larger than 20 stops the game somehow (MP: I don't see this issue)
-	//for (var i = 0; i < population; i++) {
-		//var randomX = Math.floor(Math.random() * 3000) + 0;
-		//var randomY = Math.floor(Math.random() * 3000) + 0;
-		//var randomMovementPattern = Math.floor(Math.random() * 4) + 1;
-		//npcs.push(new Pedestrian(gameEngine, 0, PARAMS.TILE_WIDTH + PARAMS.GRID_WIDTH * 0.5, Math.random() * 2, 0, 1));
-	//}
 	
 	// Player
 	var driver = new Driver(gameEngine, 628, 353, 180);
@@ -404,14 +414,11 @@ ASSET_MANAGER.downloadAll(function () {
 
 	///// Draw all entities 
 	gameEngine.init(ctx);
-	//for (var i = 0; i < bgTiles.length; i++) {
-	//	gameEngine.addEntity(bgTiles[i]);
-	//}
 	for (var i = 0; i < roads.length; i++) {
-		gameEngine.addEntity(roads[i]);
+		gameEngine.addBackground(roads[i]);
 	}
 	for (var i = 0; i < ground.length; i++) {
-		gameEngine.addEntity(ground[i]);
+		gameEngine.addBackground(ground[i]);
 	}
 	for (var i = 0; i < intersections.length; i++) {
 		gameEngine.addEntity(intersections[i]);
@@ -457,10 +464,10 @@ function getRoadVersion (tile, x, y) {
 	// Count adjacent building tiles
 	let adjCount = 0;
 	let adjHits = [];
-	if (x != 0) 					{ if (tile[x - 1][y] == 3) {adjCount ++; adjHits.push('T');} };
-	if (x != tile.length - 1) 		{ if (tile[x + 1][y] == 3) {adjCount ++; adjHits.push('B');} };
-	if (y != 0) 					{ if (tile[x][y - 1] == 3) {adjCount ++; adjHits.push('L');} };
-	if (y != tile[0].length - 1) 	{ if (tile[x][y + 1] == 3) {adjCount ++; adjHits.push('R');} };
+	if (x != 0) 					{ if (tile[x - 1][y] >= 3) {adjCount ++; adjHits.push('T');} };
+	if (x != tile.length - 1) 		{ if (tile[x + 1][y] >= 3) {adjCount ++; adjHits.push('B');} };
+	if (y != 0) 					{ if (tile[x][y - 1] >= 3) {adjCount ++; adjHits.push('L');} };
+	if (y != tile[0].length - 1) 	{ if (tile[x][y + 1] >= 3) {adjCount ++; adjHits.push('R');} };
 	// Edge of tile counts towards a hit
 	if (x == 0) 					{ adjCount ++; adjHits.push('T'); };
 	if (x == tile.length - 1) 		{ adjCount ++; adjHits.push('B'); };
@@ -470,12 +477,12 @@ function getRoadVersion (tile, x, y) {
 	let crnCount = 0;
 	let crnHits = [];
 	if (x != 0) {
-		if (y != 0) 					{ if (tile[x - 1][y - 1] == 3) {crnCount ++; crnHits.push("TL");} };
-		if (y != tile[0].length - 1) 	{ if (tile[x - 1][y + 1] == 3) {crnCount ++; crnHits.push("TR");} };
+		if (y != 0) 					{ if (tile[x - 1][y - 1] >= 3) {crnCount ++; crnHits.push("TL");} };
+		if (y != tile[0].length - 1) 	{ if (tile[x - 1][y + 1] >= 3) {crnCount ++; crnHits.push("TR");} };
 	}
 	if (x != tile.length - 1) {
-		if (y != 0) 					{ if (tile[x + 1][y - 1] == 3) {crnCount ++; crnHits.push("BL");} };
-		if (y != tile[0].length - 1) 	{ if (tile[x + 1][y + 1] == 3) {crnCount ++; crnHits.push("BR");} };
+		if (y != 0) 					{ if (tile[x + 1][y - 1] >= 3) {crnCount ++; crnHits.push("BL");} };
+		if (y != tile[0].length - 1) 	{ if (tile[x + 1][y + 1] >= 3) {crnCount ++; crnHits.push("BR");} };
 	}
 	
 	if (adjCount == 2) {
