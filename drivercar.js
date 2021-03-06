@@ -71,17 +71,25 @@ class DriverCar {
 	update() {
 		var that = this;
 
-		// var carIsMoving = this.game.forward || this.game.backward || this.game.left || this.game.right;
-		// //var carIsMoving = !(this.game.forward || this.game.backward || this.game.left || this.game.right);
+		var isDriving = this.game.forward || this.game.backward || this.game.left || this.game.right;
 
-		// if (carIsMoving) {
-		// 	// if finished
-		// 	ASSET_MANAGER.adjustVolumeOnPath(.5, "./music/driving.mp3");
-		// 	ASSET_MANAGER.playAsset("./music/driving.mp3");
-		// 	//ASSET_MANAGER.autoRepeat("./music/driving.mp3");
-		// } else {
-		// 	//ASSET_MANAGER.adjustVolumeOnPath(0, "./music/driving.mp3");
-		// }
+		if (isDriving && this.active) {
+			ASSET_MANAGER.adjustVolumeOnPath(.1, "./music/driving.mp3");
+			if (ASSET_MANAGER.getAsset("./music/driving.mp3").paused) {
+				ASSET_MANAGER.playAsset("./music/driving.mp3");
+			}
+		} else {
+			ASSET_MANAGER.pauseAsset("./music/driving.mp3");
+		}
+		if (!isDriving && this.active) {
+			console.log("Car is active but not moving");
+			ASSET_MANAGER.adjustVolumeOnPath(.1, "./music/engine.mp3");
+			if (ASSET_MANAGER.getAsset("./music/engine.mp3").paused) {
+				ASSET_MANAGER.playAsset("./music/engine.mp3");
+			}
+		} else {
+			ASSET_MANAGER.pauseAsset("./music/engine.mp3");
+		}
 		
 		if (this.active) {
 			// Affirm focus
@@ -270,7 +278,10 @@ class DriverCar {
 				}
 				if (entity instanceof Car) {	// hit car
 					ASSET_MANAGER.adjustVolume(.1);
-					if (that.speed > that.MAX_SPEED / 2) ASSET_MANAGER.playAsset("./music/`Impact2.mp3");
+					if (ASSET_MANAGER.getAsset("./music/CarImpact2.mp3").paused) {
+						ASSET_MANAGER.playAsset("./music/CarImpact2.mp3");
+					}
+					if (that.speed > that.MAX_SPEED / 2) ASSET_MANAGER.playAsset("./music/CarImpact2.mp3");
 					vehicleToVehicle(that, entity);
 				}
 			};
