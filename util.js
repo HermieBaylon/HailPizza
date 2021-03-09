@@ -91,8 +91,9 @@ function vehicleToBuilding(vehicle, building) {
 		}
 	}
 	// Push
-	if (vehicle.pushed) {
+	if (vehicle.pushed || vehicle.pushSpeed != 0) {
 		vehicle.pushed = false;
+		vehicle.pushSpeed = 0;
 		return;
 	}
 	vehicle.pushSpeed = Math.max(vehicle.currentSpeed / 2, vehicle.MAX_SPEED / 4);
