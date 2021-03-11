@@ -23,6 +23,8 @@ class GameEngine {
         this.surfaceHeight = null;
 		this.blockExit = false;
 
+        this.theScore = 0;
+
         // if (this.keyE) {
         //     ASSET_MANAGER.playAsset("./music/driving.mp3");
         // }
@@ -37,6 +39,14 @@ class GameEngine {
         this.score = 0;
         this.displayScore = document.getElementById('score');
     };
+
+    getScore() {
+        return this.theScore;
+    }
+
+    incrementScore() {
+        this.theScore++;
+    }
 
     start() {
 		var that = this;

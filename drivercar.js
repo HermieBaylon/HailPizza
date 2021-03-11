@@ -41,6 +41,8 @@ class DriverCar {
 		this.game.car = this;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/drivercar.png");
+
+		this.theScore = 0;
 		
 		// Initialize bounding box
 		this.updateBB();
@@ -69,7 +71,9 @@ class DriverCar {
 	}
 	
 	update() {
+
 		var that = this;
+		console.log("The Score: "+that.game.getScore());
 
 		var isDriving = this.game.forward || this.game.backward || this.game.left || this.game.right;
 
@@ -298,6 +302,12 @@ class DriverCar {
 	};
 	
 	draw(ctx) {
+
+		ctx.font = "50px Fantasy";
+		ctx.textAlign = "center";
+		ctx.strokeStyle = 'White';
+		ctx.strokeText("SCORE: "+this.game.getScore(), (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
+
 		if (this.game.keyE) {
 			this.enterFlag = true;
 		}
@@ -331,7 +341,7 @@ class DriverCar {
 		}
 		
 		if (PARAMS.DEBUG) {
-			// Draw 4 Bounding Box points to represent corners
+			//Draw 4 Bounding Box points to represent corners
 			ctx.strokeStyle = 'Red';
 			for (var i = 0; i < this.BB.points.length; i++) {
 				ctx.beginPath();
