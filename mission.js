@@ -8,22 +8,21 @@ class Mission {
 		this.startText = "";
 		this.finishText1 = "";
 		this.finishText2 = "";
+		this.value = 20 + Math.round(Math.random() * 30);
 		this.numOrders = 0;
 		this.time = 0;
-
-		
-		this.score = 0;
 	}
 	
 	// Fill based on given key. Generates random if fail to find.
 	keyFill(key) {
 		// keys
 		var keys = ["tut1", "tut2"];
-		var startText = ["Ya got an order, bud. 30 minutes... 29 minutes ago.", 
+		var startText = ["Nice of ya to join us. Ya got an order.", 
 							"I got 2 for ya this time. Don't come back until they're both done."];
-		var finishText1 = ["Damn, I was banking on your drunk ass being late again.", "Who the fu... oh right."];
+		var finishText1 = ["Damn, I was banking on your drunk ass being late again.", "Oh shit, I forgot I ordered pizza..."];
 		var finishText2 = ["Fine, I'll pay this time. Tip? fuck outta here.", "Whatever, took long enough."];
 		var numOrders = [1, 2];
+		var values = [10 + Math.round(Math.random() * 10), 50];
 		// Search for key
 		let flag = false;
 		for (var i = 0; i < keys.length; i++) {
@@ -37,6 +36,7 @@ class Mission {
 				// Time/Orders
 				this.numOrders = numOrders[i];
 				this.time = 60 + (this.numOrders - 1) * 45;
+				this.value = values[i];
 			}
 		}
 		// if Key not found, generate a random mission.

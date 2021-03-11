@@ -73,7 +73,7 @@ class DriverCar {
 	update() {
 
 		var that = this;
-		console.log("The Score: "+that.game.getScore());
+		//console.log("The Score: "+that.game.getScore());
 
 		var isDriving = this.game.forward || this.game.backward || this.game.left || this.game.right;
 
@@ -86,7 +86,7 @@ class DriverCar {
 			ASSET_MANAGER.pauseAsset("./music/driving.mp3");
 		}
 		if (!isDriving && this.active) {
-			console.log("Car is active but not moving");
+			//console.log("Car is active but not moving");
 			ASSET_MANAGER.adjustVolumeOnPath(.1, "./music/engine.mp3");
 			if (ASSET_MANAGER.getAsset("./music/engine.mp3").paused) {
 				ASSET_MANAGER.playAsset("./music/engine.mp3");
@@ -306,7 +306,7 @@ class DriverCar {
 		ctx.font = "50px Fantasy";
 		ctx.textAlign = "center";
 		ctx.strokeStyle = 'White';
-		ctx.strokeText("SCORE: "+this.game.getScore(), (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
+		//ctx.strokeText("SCORE: "+this.game.driver.theScore, (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
 
 		if (this.game.keyE) {
 			this.enterFlag = true;

@@ -97,7 +97,6 @@ class GameEngine {
             e.preventDefault();
         }, false);
 		*/
-		
 		// Keyboard Controls
 		this.ctx.canvas.addEventListener("keydown", function (e) {
 			//console.log("KeyDown");
@@ -162,6 +161,8 @@ class GameEngine {
 					break;
 			}
 		}, false);
+		
+		
     };
 
     addEntity(entity) {
@@ -187,6 +188,7 @@ class GameEngine {
 			if (Math.abs(this.player.x - this.entities[i].x) > PARAMS.PAGE_WIDTH) drawFlag = false;
 			if (Math.abs(this.player.y - this.entities[i].y) > PARAMS.PAGE_HEIGHT) drawFlag = false;
 			if (this.entities[i] instanceof GoalPost) drawFlag = true;	// Edge case, goalpost controls it's own arrows
+			if (this.entities[i] instanceof Driver) drawFlag = true;				// edge case, player
 			if (drawFlag) { this.entities[i].draw(this.ctx); };
         }
 		this.camera.draw(this.ctx);
@@ -201,20 +203,21 @@ class GameEngine {
 		}
 		
         var entitiesCount = this.entities.length;
+		if (!this.camera.title) {
+			for (var i = 0; i < entitiesCount; i++) {
+				var entity = this.entities[i];
 
-        for (var i = 0; i < entitiesCount; i++) {
-            var entity = this.entities[i];
+				if (!entity.removeFromWorld) {
+					entity.update();
+				}
+			}
 
-            if (!entity.removeFromWorld) {
-                entity.update();
-            }
-        }
-
-        for (var i = this.entities.length - 1; i >= 0; --i) {
-            if (this.entities[i].removeFromWorld) {
-                this.entities.splice(i, 1);
-            }
-        }
+			for (var i = this.entities.length - 1; i >= 0; --i) {
+				if (this.entities[i].removeFromWorld) {
+					this.entities.splice(i, 1);
+				}
+			}
+		}
 		this.camera.update();
 		this.audio.update();
     };

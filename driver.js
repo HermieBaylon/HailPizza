@@ -178,7 +178,7 @@ class Driver {
 							ASSET_MANAGER.adjustVolumeOnPath(.5, "./music/achievement.mp3");
 							ASSET_MANAGER.playAsset("./music/achievement.mp3");
 						}
-						that.theScore++;
+						that.theScore += that.mission.value;
 						that.game.incrementScore();
 						entity.isVisible = false;
 						that.goal();
@@ -282,7 +282,7 @@ class Driver {
 	endMission() {
 		this.game.shopArrow.isVisible = true;
 		this.onMission = false;
-		this.score += 1;
+		this.score += this.mission.value;
 	}
 
 	
@@ -292,7 +292,9 @@ class Driver {
 		 ctx.font = "50px Fantasy";
 		 ctx.textAlign = "center";
 		 ctx.strokeStyle = 'White';
-		 ctx.strokeText("SCORE: "+this.theScore, (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
+		 ctx.strokeText("$"+this.theScore + ".00", (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
+		 ctx.strokeStyle = 'Black';
+		 ctx.fillText("$"+this.theScore + ".00", (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
 
 		if (this.dead) {
 			this.deadAnim.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);

@@ -6,7 +6,7 @@ class SceneManager {
 		this.game.camera = this;
 		this.x = 0;
 		this.y = 0;
-		this.displayText = "YOU'RE LATE. AGAIN. GET IN THE CAR.";
+		this.displayText = "";
 		this.controlText = "W/Up: Forward. S/Down: Backward. A,D/Left,Right: Pivot. E: Enter Vehicle. Space: Jump.";
 		this.tutorialFlag1 = true;
 		this.tutorialFlag2 = true;
@@ -62,7 +62,7 @@ class SceneManager {
 
  //    }
 
-	update() { // TODO replace with constants
+	update() {
 		let xMidpoint = PARAMS.PAGE_WIDTH / 2;
 		let yMidpoint = PARAMS.PAGE_HEIGHT / 2;
 		
@@ -70,8 +70,9 @@ class SceneManager {
 		this.y = Math.min(Math.max(this.game.player.y - yMidpoint, 0), PARAMS.MAP_HEIGHT - PARAMS.PAGE_HEIGHT);
 		
 		// User clicks on "Start your shift" then title screen disappears..
-		if (this.title && this.game.space) {
+		if (this.title && this.game.keyE) {
                 this.title = false;
+				this.displayText = "YOU'RE LATE. AGAIN. GET IN THE CAR.";
             }
 	}
 	
@@ -88,7 +89,7 @@ class SceneManager {
 		ctx.textAlign = "center";
 		ctx.strokeStyle = 'White';
 		ctx.strokeText(this.displayText, PARAMS.PAGE_WIDTH / 2, PARAMS.PAGE_HEIGHT - 50);
-		ctx.strokeStyle = 'White';
+		ctx.strokeStyle = 'Black';
 		ctx.fillText(this.displayText, PARAMS.PAGE_WIDTH / 2, PARAMS.PAGE_HEIGHT - 50);
 
 		// ctx.font = "50px Fantasy";
@@ -100,19 +101,23 @@ class SceneManager {
 		
 		// Title Screen
 		if (this.title) {
-			var width = 176;
-			var height = 88;
-			ctx.drawImage(ASSET_MANAGER.getAsset("./assets/hailpizza.png"), 0,0);
-			ctx.fillStyle = this.game.mouse && this.game.mouse.y > 0 && this.game.mouse.y < 768 ? "Grey" : "White";
-            ctx.fillText("PRESS SPACE TO START YOUR SHIFT", 300, 600);
+			let xMidpoint = PARAMS.PAGE_WIDTH / 2;
+			let yMidpoint = PARAMS.PAGE_HEIGHT / 2;
+			ctx.drawImage(ASSET_MANAGER.getAsset("./assets/hailpizza.png"), xMidpoint - 250, yMidpoint - 250);
+			//ctx.fillStyle = this.game.mouse && this.game.mouse.y > 0 && this.game.mouse.y < 768 ? "Grey" : "White";
+			ctx.textAlign = "center";
+			ctx.strokeStyle = 'White';
+            ctx.strokeText("PRESS THE E KEY TO START YOUR SHIFT", xMidpoint, PARAMS.PAGE_HEIGHT - 100);
+			ctx.strokeStyle = 'Black';
+            ctx.fillText("PRESS THE E KEY TO START YOUR SHIFT", xMidpoint, PARAMS.PAGE_HEIGHT - 100);
 		}
 		// controls only appears for prompt of game.
-		if (this.tutorialFlag1) {
+		 else if (this.tutorialFlag1) {
 			ctx.font = "20px Fantasy";
 			ctx.textAlign = "center";
 			ctx.strokeStyle = 'White';
 			ctx.strokeText(this.controlText, PARAMS.PAGE_WIDTH / 2, 100);
-			ctx.strokeStyle = 'White';
+			ctx.strokeStyle = 'Black';
 			ctx.fillText(this.controlText, PARAMS.PAGE_WIDTH / 2, 100);
 		}
 		

@@ -3,7 +3,6 @@ class AudioManager {
 		Object.assign(this, { game });
 		
 		this.game.audio = this;
-		this.selection = 0;
 		this.isPlaying = false;
 		
 		// Populate songs list
@@ -14,6 +13,7 @@ class AudioManager {
 		this.songs.push(new Audio('music/pizzaparty.mp3'));
 		this.songs.push(new Audio('music/forkboy.mp3'));
 		this.songs.push(new Audio('music/pepperoni.mp3'));
+		this.selection = Math.floor(Math.random() * this.songs.length);
 	}
 	
 	update() {
