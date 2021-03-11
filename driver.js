@@ -16,9 +16,11 @@ class Driver {
 		this.mission = null;
 		this.pushSpeed = 0;
 		this.pushDirection = this.direction;
-		this.score = 0;
+		//this.score = 0;
 		this.dead = false;
 		this.invulnerable = false;
+
+		this.theScore = 0;
 		
 		this.spritesheet = ASSET_MANAGER.getAsset("./assets/driver.png");
 		
@@ -56,6 +58,8 @@ class Driver {
 	}
 	
 	update() {
+
+		var that = this;
 
 		var isWalking = this.game.forward || this.game.backward || this.game.left || this.game.right;
 
@@ -174,6 +178,8 @@ class Driver {
 							ASSET_MANAGER.adjustVolumeOnPath(.5, "./music/achievement.mp3");
 							ASSET_MANAGER.playAsset("./music/achievement.mp3");
 						}
+						that.theScore++;
+						that.game.incrementScore();
 						entity.isVisible = false;
 						that.goal();
 					}
@@ -278,8 +284,16 @@ class Driver {
 		this.onMission = false;
 		this.score += 1;
 	}
+
+	
 	
 	draw(ctx) {
+
+		 ctx.font = "50px Fantasy";
+		 ctx.textAlign = "center";
+		 ctx.strokeStyle = 'White';
+		 ctx.strokeText("SCORE: "+this.theScore, (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
+
 		if (this.dead) {
 			this.deadAnim.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 			return;
@@ -308,7 +322,7 @@ class Driver {
 			ctx.strokeRect(this.nextBB.x - this.game.camera.x, this.nextBB.y - this.game.camera.y, this.nextBB.width, this.nextBB.height);
         }
         this.healthBar.draw(ctx);
-        this.game.score += this.score;
+        //this.game.score += this.score;
         //this.game.displayScore.innerHTML = this.game.score;
 	};
 };

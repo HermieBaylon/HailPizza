@@ -461,6 +461,8 @@ ASSET_MANAGER.downloadAll(function () {
 	
 	gameEngine.start();
 	//door.play();
+
+	
 });
 
 function getRoadVersion (tile, x, y) {

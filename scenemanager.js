@@ -90,6 +90,13 @@ class SceneManager {
 		ctx.strokeText(this.displayText, PARAMS.PAGE_WIDTH / 2, PARAMS.PAGE_HEIGHT - 50);
 		ctx.strokeStyle = 'White';
 		ctx.fillText(this.displayText, PARAMS.PAGE_WIDTH / 2, PARAMS.PAGE_HEIGHT - 50);
+
+		// ctx.font = "50px Fantasy";
+		// ctx.textAlign = "center";
+		// ctx.strokeStyle = 'White';
+		// ctx.strokeText("SCORE: ", (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
+		//ctx.strokeStyle = 'White';
+		//ctx.fillText(this.displayText, PARAMS.PAGE_WIDTH / 2, PARAMS.PAGE_HEIGHT - 50);
 		
 		// Title Screen
 		if (this.title) {
