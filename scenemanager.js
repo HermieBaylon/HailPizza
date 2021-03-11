@@ -31,7 +31,8 @@ class SceneManager {
 		//this.one = new Animator(this.spritesheet, 31, 113, 86, 480, 1, 0.3, 8, false, true); //one hp
 		//this.loadAnimations();
 		game.addEntity(this);
-		game.addEntity(new HealthBar(game, 10, 10));
+		//game.addEntity(new HealthBar(game, 10, 10));
+		this.healthBar = new HealthBar(game, 10, 10);
 		//game.addEntity(new Minimap(game, 860, 10, 150));
 		// Effects
 	}
@@ -120,6 +121,15 @@ class SceneManager {
 			ctx.strokeStyle = 'Black';
 			ctx.fillText(this.controlText, PARAMS.PAGE_WIDTH / 2, 100);
 		}
+
+		 ctx.font = "50px Fantasy";
+		 ctx.textAlign = "center";
+		 ctx.strokeStyle = 'White';
+		 ctx.strokeText("$"+this.game.driver.theScore + ".00", (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
+		 ctx.strokeStyle = 'Black';
+		 ctx.fillText("$"+this.game.driver.theScore + ".00", (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
+		 
+		 this.healthBar.draw(ctx);
 		
         if (PARAMS.DEBUG){
 			let coordText = "(" + Math.floor(this.game.player.x) + ","

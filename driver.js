@@ -289,13 +289,6 @@ class Driver {
 	
 	draw(ctx) {
 
-		 ctx.font = "50px Fantasy";
-		 ctx.textAlign = "center";
-		 ctx.strokeStyle = 'White';
-		 ctx.strokeText("$"+this.theScore + ".00", (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
-		 ctx.strokeStyle = 'Black';
-		 ctx.fillText("$"+this.theScore + ".00", (PARAMS.PAGE_WIDTH / 2) + 350, PARAMS.PAGE_HEIGHT - 700);
-
 		if (this.dead) {
 			this.deadAnim.drawFrame(this.game.clockTick, this.direction, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 1);
 			return;
