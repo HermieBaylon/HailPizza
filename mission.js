@@ -10,6 +10,9 @@ class Mission {
 		this.finishText2 = "";
 		this.numOrders = 0;
 		this.time = 0;
+
+		
+		this.score = 0;
 	}
 	
 	// Fill based on given key. Generates random if fail to find.
